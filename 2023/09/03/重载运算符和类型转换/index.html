@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/myblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/myblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/myblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/myblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/myblog/css/main.css">
+
+
+<link rel="stylesheet" href="/myblog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/myblog/lib/pace/pace-theme-bounce.min.css">
+  <script src="/myblog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wujx99.github.io","root":"/myblog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="基本概念使用与内置类型一致的含义当设计类的时候  执行io操作，移位运算符应该与内置的io类型保持一致 有&#x3D;&#x3D;也应该有!&#x3D;。 返回类型与内置类型应该兼容  赋值与复合赋值运算符类内有算术运算符或位运算符，也应该定义复合赋值运算符。 选择作为成员或者非成员  &#x3D;,[ ],( ),-&gt;必须是成员 复合赋值一般是成员 改变对象状态或与给定类型密切相关，如递增，解引用等应该是成员 具有对称性的运算符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重载运算符和类型转换">
+<meta property="og:url" content="https://wujx99.github.io/myblog/2023/09/03/%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/index.html">
+<meta property="og:site_name" content="blogs&amp;record">
+<meta property="og:description" content="基本概念使用与内置类型一致的含义当设计类的时候  执行io操作，移位运算符应该与内置的io类型保持一致 有&#x3D;&#x3D;也应该有!&#x3D;。 返回类型与内置类型应该兼容  赋值与复合赋值运算符类内有算术运算符或位运算符，也应该定义复合赋值运算符。 选择作为成员或者非成员  &#x3D;,[ ],( ),-&gt;必须是成员 复合赋值一般是成员 改变对象状态或与给定类型密切相关，如递增，解引用等应该是成员 具有对称性的运算符">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-03T14:49:12.000Z">
+<meta property="article:modified_time" content="2023-09-03T14:50:46.065Z">
+<meta property="article:author" content="jxWu">
+<meta property="article:tag" content="cpp">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://wujx99.github.io/myblog/2023/09/03/%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>重载运算符和类型转换 | blogs&record</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/myblog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">blogs&record</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/myblog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/myblog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/myblog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/myblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/myblog/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/myblog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/09/03/%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重载运算符和类型转换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-09-03 22:49:12 / 修改时间：22:50:46" itemprop="dateCreated datePublished" datetime="2023-09-03T22:49:12+08:00">2023-09-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/myblog/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/myblog/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p><strong>使用与内置类型一致的含义</strong><br>当设计类的时候</p>
+<ul>
+<li>执行io操作，移位运算符应该与内置的io类型保持一致</li>
+<li>有<code>==</code>也应该有<code>!=</code>。</li>
+<li>返回类型与内置类型应该兼容</li>
+</ul>
+<p><strong>赋值与复合赋值运算符</strong><br>类内有算术运算符或位运算符，也应该定义复合赋值运算符。</p>
+<p><strong>选择作为成员或者非成员</strong></p>
+<ul>
+<li><code>=</code>,<code>[ ]</code>,<code>( )</code>,<code>-&gt;</code>必须是成员</li>
+<li>复合赋值一般是成员</li>
+<li>改变对象状态或与给定类型密切相关，如递增，解引用等应该是成员</li>
+<li>具有<strong>对称性</strong>的运算符（两边的对象可能不同但是可以隐式转换）应该是非成员。</li>
+</ul>
+<p>如果<code>+</code>定义在<code>string</code>里，则下面就会出现问题，所有应该定义为非成员（传参时候可以隐式转换）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string s = <span class="string">&quot;world&quot;</span>;</span><br><span class="line">string t = s + <span class="string">&quot;!&quot;</span>; <span class="comment">// ok: we can add a const char* to a string</span></span><br><span class="line">string u = <span class="string">&quot;hi&quot;</span> + s; <span class="comment">// would be an error if + were a member of string</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong></p>
+<ol>
+<li>除了函数调用运算符<code>operator()</code>外不允许有默认参数。</li>
+<li>运算符函数至少含有一个类类型。</li>
+<li>成员运算符隐式绑定<code>this</code></li>
+<li>不能重载的运算符<code>::</code>,<code>.*</code>,<code>.</code>,<code>?:</code></li>
+<li>重载的运算符的<strong>优先级和结合律</strong>和内置运算符一样。</li>
+<li>某些运算符不应该重载。</li>
+</ol>
+<h1 id="函数调用运算符"><a href="#函数调用运算符" class="headerlink" title="函数调用运算符"></a>函数调用运算符</h1><p>如果类重载了<code>()</code>，那么可以像函数一样使用该类的对象，同时可以<strong>储存状态</strong>，就更加的灵活！</p>
+<p>如果类定义了<code>()</code>,就称为<strong>函数对象</strong>。</p>
+<p><strong>含有状态的函数对象类</strong><br>很<strong>经典</strong>的用法。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PrintString</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> 	<span class="built_in">PrintString</span>(ostream &amp;o = cout, <span class="type">char</span> c = <span class="string">&#x27; &#x27;</span>): <span class="built_in">os</span>(o), <span class="built_in">sep</span>(c) &#123; &#125;</span><br><span class="line"> 	<span class="comment">//（）运算符</span></span><br><span class="line"> 	<span class="function"><span class="type">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> string &amp;s)</span> <span class="type">const</span> </span>&#123; os &lt;&lt; s &lt;&lt; sep;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"> ostream &amp;os; <span class="comment">// stream on which to write</span></span><br><span class="line"> <span class="comment">//我们的状态</span></span><br><span class="line"> <span class="type">char</span> sep; <span class="comment">// character to print after each output</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如下使用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PrintString printer; 			<span class="comment">// uses the defaults; prints to cout</span></span><br><span class="line"><span class="built_in">printer</span>(s); 					<span class="comment">// prints s followed by a space on cout</span></span><br><span class="line"><span class="function">PrintString <span class="title">errors</span><span class="params">(cerr, <span class="string">&#x27;\n&#x27;</span>)</span></span>;</span><br><span class="line"><span class="built_in">errors</span>(s); 						<span class="comment">// prints s followed by a newline on cerr</span></span><br></pre></td></tr></table></figure>
+
+<p>函数对象常常作为<strong>泛型算法</strong>的实参，如<code>for_each</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for_each(vs.<span class="built_in">begin</span>(), vs.<span class="built_in">end</span>(), <span class="built_in">PrintString</span>(cerr, <span class="string">&#x27;\n&#x27;</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="lambda是函数对象"><a href="#lambda是函数对象" class="headerlink" title="lambda是函数对象"></a>lambda是函数对象</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sort words by size, but maintain alphabetical order for words of the same size</span></span><br><span class="line"><span class="built_in">stable_sort</span>(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>(),</span><br><span class="line"> 			[](<span class="type">const</span> string &amp;a, <span class="type">const</span> string &amp;b) &#123; <span class="keyword">return</span> a.<span class="built_in">size</span>() &lt; b.<span class="built_in">size</span>();&#125;);</span><br></pre></td></tr></table></figure>
+<p>lambda表达式类似于下面类的<strong>未命名对象</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ShorterString</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> 	<span class="function"><span class="type">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> string &amp;s1, <span class="type">const</span> string &amp;s2)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"> 	</span>&#123; <span class="keyword">return</span> s1.<span class="built_in">size</span>() &lt; s2.<span class="built_in">size</span>(); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>代替lambda表达式重写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stable_sort</span>(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>(), <span class="built_in">ShorterString</span>());<span class="comment">//第三个实参是新构建的对象</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>表示lambda及相应捕获行为的类</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get an iterator to the first element whose size() is &gt;= sz</span></span><br><span class="line"><span class="keyword">auto</span> wc = <span class="built_in">find_if</span>(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>(),[sz](<span class="type">const</span> string &amp;a)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SizeComp</span> &#123;</span><br><span class="line"> 	<span class="built_in">SizeComp</span>(<span class="type">size_t</span> n): <span class="built_in">sz</span>(n) &#123; &#125; <span class="comment">// parameter for each captured variable</span></span><br><span class="line"> <span class="comment">// call operator with the same return type, parameters, and body as the lambda</span></span><br><span class="line"> 	<span class="function"><span class="type">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> string &amp;s)</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> s.<span class="built_in">size</span>() &gt;= sz; &#125;</span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line"> 	<span class="type">size_t</span> sz; <span class="comment">// a data member for each variable captured by value</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>lambda表达式<strong>等价</strong>的版本</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get an iterator to the first element whose size() is &gt;= sz</span></span><br><span class="line"><span class="keyword">auto</span> wc = <span class="built_in">find_if</span>(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>(), <span class="built_in">SizeComp</span>(sz));</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>注意</strong></p>
+<ol>
+<li>默认情况下，lambda表达式不改变捕获的变量。所以是const的</li>
+<li>lambda不包含默认的构造函数，赋值运算符及默认的析构器。是否含有拷贝，移动构造器取决于数据成员类型。</li>
+</ol>
+<h2 id="标准库定义的函数对象"><a href="#标准库定义的函数对象" class="headerlink" title="标准库定义的函数对象"></a>标准库定义的函数对象</h2><p><strong>在算法中使用标准库函数对象</strong><br>比如默认排序算法是升序排列，我们加以修改为降序（使用标准库是因为我们方便写string的函数对象）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// passes a temporary function object that applies the &lt; operator to two strings</span></span><br><span class="line"><span class="built_in">sort</span>(svec.<span class="built_in">begin</span>(), svec.<span class="built_in">end</span>(), <span class="built_in">greater</span>&lt;string&gt;());</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>标准库规定函数对象对指针也适用，但是我们曾经锁骨比较指针会产生未定义的行为，可以借助标准库函数对象来实现（例如按地址排序）。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;string *&gt; nameTable; <span class="comment">// vector of pointers</span></span><br><span class="line"><span class="comment">// error: the pointers in nameTable are unrelated, so &lt; is undefined</span></span><br><span class="line"><span class="built_in">sort</span>(nameTable.<span class="built_in">begin</span>(), nameTable.<span class="built_in">end</span>(),</span><br><span class="line"> 			[](string *a, string *b) &#123; <span class="keyword">return</span> a &lt; b; &#125;);</span><br><span class="line"><span class="comment">// ok: library guarantees that less on pointer types is well defined</span></span><br><span class="line"><span class="built_in">sort</span>(nameTable.<span class="built_in">begin</span>(), nameTable.<span class="built_in">end</span>(), <span class="built_in">less</span>&lt;string*&gt;());</span><br></pre></td></tr></table></figure>
+
+<h2 id="可调用对象与function"><a href="#可调用对象与function" class="headerlink" title="*可调用对象与function"></a>*可调用对象与function</h2><p>c++中的<strong>可调用</strong>对象</p>
+<ul>
+<li>函数</li>
+<li>函数指针</li>
+<li>lambda表达式</li>
+<li>bind创建的对象（见10.3.4）</li>
+<li>重载了<code>()</code>的类</li>
+</ul>
+<p>不同类型的对象可能共享<strong>调用形式</strong>（返回类型和参数）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span>(<span class="type">int</span>, <span class="type">int</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>不同的类型可能具有相同的调用形式</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ordinary function</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123; <span class="keyword">return</span> i + j; &#125;</span><br><span class="line"><span class="comment">// lambda, which generates an unnamed function-object class</span></span><br><span class="line"><span class="keyword">auto</span> mod = [](<span class="type">int</span> i, <span class="type">int</span> j) &#123; <span class="keyword">return</span> i % j; &#125;;</span><br><span class="line"><span class="comment">// function-object class</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">div</span> &#123;</span><br><span class="line"> <span class="function"><span class="type">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> denominator, <span class="type">int</span> divisor)</span> </span>&#123; <span class="keyword">return</span> denominator / divisor; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面的三种共享了同一个调用形式</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span>(<span class="type">int</span>, <span class="type">int</span>)</span><br></pre></td></tr></table></figure>
+<p>下面看我们如何构造自己的桌面计算器！<br>首先我们要先建立一个<strong>函数表</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// maps an operator to a pointer to a function taking two ints and returning an int</span></span><br><span class="line">map&lt;string, <span class="type">int</span>(*)(<span class="type">int</span>,<span class="type">int</span>)&gt; binops;</span><br><span class="line"><span class="comment">// ok: add is a pointer to function of the appropriate type</span></span><br><span class="line">binops.<span class="built_in">insert</span>(&#123;<span class="string">&quot;+&quot;</span>, add&#125;); <span class="comment">// &#123;&quot;+&quot;, add&#125; is a pair </span></span><br></pre></td></tr></table></figure>
+<p>但是我们不能添加<code>mod</code>或<code>div</code>。因为和上面的<code>map&lt;string, int(*)(int,int)&gt;</code>不匹配</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">binops.<span class="built_in">insert</span>(&#123;<span class="string">&quot;%&quot;</span>, mod&#125;); <span class="comment">// error: mod is not a pointer to function</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>标准库function类型</strong><br>我们使用<code>function</code>（定义在functional头文件里）的<strong>新的标准库类型</strong>来解决上面的问题。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// table of callable objects corresponding to each binary operator</span></span><br><span class="line"><span class="comment">// all the callables must take two ints and return an int</span></span><br><span class="line"><span class="comment">// an element can be a function pointer, function object, or lambda</span></span><br><span class="line">map&lt;string, function&lt;<span class="type">int</span>(<span class="type">int</span>, <span class="type">int</span>)&gt;&gt; binops;</span><br><span class="line"><span class="comment">//列表初始化，可以是函数指针，函数对象或者lambda</span></span><br><span class="line">map&lt;string, function&lt;<span class="type">int</span>(<span class="type">int</span>, <span class="type">int</span>)&gt;&gt; binops = &#123;</span><br><span class="line"> &#123;<span class="string">&quot;+&quot;</span>, add&#125;, <span class="comment">// function pointer</span></span><br><span class="line"> &#123;<span class="string">&quot;-&quot;</span>, std::<span class="built_in">minus</span>&lt;<span class="type">int</span>&gt;()&#125;, <span class="comment">// library function object</span></span><br><span class="line"> &#123;<span class="string">&quot;/&quot;</span>, <span class="built_in">div</span>()&#125;, <span class="comment">// user-defined function object</span></span><br><span class="line"> &#123;<span class="string">&quot;*&quot;</span>, [](<span class="type">int</span> i, <span class="type">int</span> j) &#123; <span class="keyword">return</span> i * j; &#125;&#125;, <span class="comment">// unnamed</span></span><br><span class="line">lambda</span><br><span class="line"> &#123;<span class="string">&quot;%&quot;</span>, mod&#125; &#125;; <span class="comment">// named lambda object</span></span><br></pre></td></tr></table></figure>
+<p>我们如下使用它：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">binops[<span class="string">&quot;+&quot;</span>](<span class="number">10</span>, <span class="number">5</span>); <span class="comment">// calls add(10, 5)</span></span><br><span class="line">binops[<span class="string">&quot;-&quot;</span>](<span class="number">10</span>, <span class="number">5</span>); <span class="comment">// uses the call operator of the minus&lt;int&gt; object</span></span><br><span class="line">binops[<span class="string">&quot;/&quot;</span>](<span class="number">10</span>, <span class="number">5</span>); <span class="comment">// uses the call operator of the div object</span></span><br><span class="line">binops[<span class="string">&quot;*&quot;</span>](<span class="number">10</span>, <span class="number">5</span>); <span class="comment">// calls the lambda function object</span></span><br><span class="line">binops[<span class="string">&quot;%&quot;</span>](<span class="number">10</span>, <span class="number">5</span>); <span class="comment">// calls the lambda function object</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>重载的函数与function</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123; <span class="keyword">return</span> i + j; &#125;</span><br><span class="line"><span class="function">Sales_data <span class="title">add</span><span class="params">(<span class="type">const</span> Sales_data&amp;, <span class="type">const</span> Sales_data&amp;)</span></span>;</span><br><span class="line">map&lt;string, function&lt;<span class="type">int</span>(<span class="type">int</span>, <span class="type">int</span>)&gt;&gt; binops;</span><br><span class="line">binops.<span class="built_in">insert</span>( &#123;<span class="string">&quot;+&quot;</span>, add&#125; ); <span class="comment">// error: which add?</span></span><br></pre></td></tr></table></figure>
+<p>我们好像<strong>没有</strong>合适的<strong>匹配机制</strong>来决定是哪个<code>add</code>。我们有两种方法去解决这个问题。</p>
+<ol>
+<li>另起名字</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> (*fp)(<span class="type">int</span>,<span class="type">int</span>) = add; <span class="comment">// pointer to the version of add that takes two</span></span><br><span class="line">ints</span><br><span class="line">binops.<span class="built_in">insert</span>( &#123;<span class="string">&quot;+&quot;</span>, fp&#125; ); <span class="comment">// ok: fp points to the right version of add</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>lambda表达式</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ok: use a lambda to disambiguate which version of add we want to use</span></span><br><span class="line">binops.<span class="built_in">insert</span>( &#123;<span class="string">&quot;+&quot;</span>, [](<span class="type">int</span> a, <span class="type">int</span> b) &#123;<span class="keyword">return</span> <span class="built_in">add</span>(a, b);&#125; &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h1 id="重载，类型转换与运算符"><a href="#重载，类型转换与运算符" class="headerlink" title="重载，类型转换与运算符"></a>重载，类型转换与运算符</h1><h2 id="类型转换运算符"><a href="#类型转换运算符" class="headerlink" title="类型转换运算符"></a>类型转换运算符</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">operator</span> <span class="title">type</span><span class="params">()</span> <span class="type">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p>可以转换成任何能作为函数<strong>返回类型</strong>的类型（不能是函数类型或数组）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SmallInt</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> 	<span class="built_in">SmallInt</span>(<span class="type">int</span> i = <span class="number">0</span>): <span class="built_in">val</span>(i) &#123; <span class="keyword">if</span> (i &lt; <span class="number">0</span> || i &gt; <span class="number">255</span>) </span><br><span class="line"> 	<span class="keyword">throw</span> std::<span class="built_in">out_of_range</span>(<span class="string">&quot;Bad SmallInt value&quot;</span>); &#125; </span><br><span class="line"> 	<span class="function"><span class="keyword">operator</span> <span class="title">int</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> val; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"> 	std::<span class="type">size_t</span> val;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SmallInt si;</span><br><span class="line">si = <span class="number">4</span>; <span class="comment">// implicitly converts 4 to SmallInt then calls SmallInt::operator=</span></span><br><span class="line">si + <span class="number">3</span>; <span class="comment">// implicitly converts si to int followed by integer addition</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>类型转换运算符的意外结果</strong></p>
+<p>当<code>istream</code>类型含有向bool的类型转换的时候，下面代码是合法的（本身非法）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">42</span>;</span><br><span class="line">cin &lt;&lt; i; <span class="comment">// this code would be legal if the conversion to bool were not explicit!</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>显式的类型转换运算符</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SmallInt</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// the compiler won&#x27;t automatically apply this conversion</span></span><br><span class="line"> 	<span class="function"><span class="keyword">explicit</span> <span class="keyword">operator</span> <span class="title">int</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> val; &#125;</span><br><span class="line"> 	<span class="comment">// other members as before</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SmallInt si = <span class="number">3</span>; <span class="comment">// ok: the SmallInt constructor is not explicit</span></span><br><span class="line">si + <span class="number">3</span>; <span class="comment">// error: implicit is conversion required, but operator int is explicit</span></span><br><span class="line"><span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(si) + <span class="number">3</span>; <span class="comment">// ok: explicitly request the conversion</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>表达式用作条件，编译器会自动的应用显式的类型转换，这是例外。</p>
+</blockquote>
+<p><strong>转换为bool</strong></p>
+<p>io类型早期定义<code>void *</code>的转换规则来避免上面的意外，现在通过把向bool类型的转换<strong>变为显式</strong>来解决这个问题！</p>
+<blockquote>
+<p>operator bool一般定义成explicit的</p>
+</blockquote>
+<h2 id="避免有二义性的类型转换"><a href="#避免有二义性的类型转换" class="headerlink" title="避免有二义性的类型转换"></a>避免有二义性的类型转换</h2><p>还未看！</p>
+<h2 id="函数匹配与重载运算符"><a href="#函数匹配与重载运算符" class="headerlink" title="函数匹配与重载运算符"></a>函数匹配与重载运算符</h2><p>运算符也是函数，所以也会出现类型匹配的问题。<br>如果定义了两种<code>operator sym</code>运算符，一个是类内，一个是内置，一个是普通的该<strong>如何匹配</strong>？</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SmallInt</span> &#123; </span><br><span class="line">	<span class="keyword">friend</span> SmallInt <span class="keyword">operator</span>+(<span class="type">const</span> SmallInt&amp;, <span class="type">const</span> SmallInt&amp;);</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> 	<span class="built_in">SmallInt</span>(<span class="type">int</span> = <span class="number">0</span>); <span class="comment">// conversion from int</span></span><br><span class="line"> 	<span class="function"><span class="keyword">operator</span> <span class="title">int</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> val; &#125; <span class="comment">// conversion to int</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"> 	std::<span class="type">size_t</span> val;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面就出现了二义性错误</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SmallInt s1, s2;</span><br><span class="line">SmallInt s3 = s1 + s2; 	<span class="comment">// uses overloaded operator+</span></span><br><span class="line"><span class="type">int</span> i = s3 + <span class="number">0</span>; 		<span class="comment">// error: ambiguous</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>不要即提供向算术类型的转换，又提供重载的运算符，会遇到二义性错误。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/myblog/tags/cpp/" rel="tag"># cpp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/myblog/2023/09/03/c-c-%E4%B8%AD%E7%9A%84%E5%B7%A6%E5%80%BC%E5%92%8C%E5%8F%B3%E5%80%BC/" rel="prev" title="c/c++中的左值和右值">
+      <i class="fa fa-chevron-left"></i> c/c++中的左值和右值
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/myblog/2023/09/03/%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" rel="next" title="模板与泛型编程">
+      模板与泛型编程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.</span> <span class="nav-text">函数调用运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda%E6%98%AF%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.1.</span> <span class="nav-text">lambda是函数对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%BA%93%E5%AE%9A%E4%B9%89%E7%9A%84%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.2.</span> <span class="nav-text">标准库定义的函数对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%B0%83%E7%94%A8%E5%AF%B9%E8%B1%A1%E4%B8%8Efunction"><span class="nav-number">2.3.</span> <span class="nav-text">*可调用对象与function</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E8%BD%BD%EF%BC%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E4%B8%8E%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">重载，类型转换与运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.1.</span> <span class="nav-text">类型转换运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E6%9C%89%E4%BA%8C%E4%B9%89%E6%80%A7%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.2.</span> <span class="nav-text">避免有二义性的类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8C%B9%E9%85%8D%E4%B8%8E%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.3.</span> <span class="nav-text">函数匹配与重载运算符</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="jxWu"
+      src="/myblog/uploads/myimage.jpg">
+  <p class="site-author-name" itemprop="name">jxWu</p>
+  <div class="site-description" itemprop="description">record and up</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/myblog/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/myblog/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/myblog/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jxWu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/myblog/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/myblog/lib/anime.min.js"></script>
+  <script src="/myblog/lib/velocity/velocity.min.js"></script>
+  <script src="/myblog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/myblog/js/utils.js"></script>
+
+<script src="/myblog/js/motion.js"></script>
+
+
+<script src="/myblog/js/schemes/pisces.js"></script>
+
+
+<script src="/myblog/js/next-boot.js"></script>
+
+
+  <script defer src="/myblog/lib/three/three.min.js"></script>
+    <script defer src="/myblog/lib/three/three-waves.min.js"></script>
+    <script defer src="/myblog/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/myblog/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

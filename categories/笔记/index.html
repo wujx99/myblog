@@ -24,17 +24,15 @@
 
   <meta name="description" content="record and up">
 <meta property="og:type" content="website">
-<meta property="og:title" content="日程表">
-<meta property="og:url" content="https://wujx99.github.io/myblog/schedule/index.html">
+<meta property="og:title" content="blogs&amp;record">
+<meta property="og:url" content="https://wujx99.github.io/myblog/categories/%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="blogs&amp;record">
 <meta property="og:description" content="record and up">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-09-02T13:47:00.000Z">
-<meta property="article:modified_time" content="2023-09-02T13:59:05.066Z">
 <meta property="article:author" content="jxWu">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://wujx99.github.io/myblog/schedule/">
+<link rel="canonical" href="https://wujx99.github.io/myblog/categories/%E7%AC%94%E8%AE%B0/">
 
 
 <script id="page-configurations">
@@ -47,8 +45,7 @@
   };
 </script>
 
-  <title>日程表 | blogs&record
-</title>
+  <title>分类: 笔记 | blogs&record</title>
   
 
 
@@ -165,200 +162,114 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content category">
             
 
-    
-    
-    
-    <div class="post-block" lang="zh-CN">
-      <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h2 class="collection-header">笔记
+          <small>分类</small>
+        </h2>
+      </div>
 
-<h1 class="post-title" itemprop="name headline">日程表
-</h1>
+      
+    <div class="collection-year">
+      <span class="collection-header">2023</span>
+    </div>
 
-<div class="post-meta">
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-09-03T22:56:25+08:00"
+              content="2023-09-03">
+          09-03
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/myblog/2023/09/03/%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="url">
+            <span itemprop="name">模板与泛型编程</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-09-03T22:49:12+08:00"
+              content="2023-09-03">
+          09-03
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/myblog/2023/09/03/%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" itemprop="url">
+            <span itemprop="name">重载运算符和类型转换</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-09-02T23:21:21+08:00"
+              content="2023-09-02">
+          09-02
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/myblog/2023/09/02/%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98/" itemprop="url">
+            <span itemprop="name">cpp动态内存</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-09-02T22:28:01+08:00"
+              content="2023-09-02">
+          09-02
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/myblog/2023/09/02/%E6%8B%B7%E8%B4%9D%E6%8E%A7%E5%88%B6/" itemprop="url">
+            <span itemprop="name">cpp拷贝控制</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+    </div>
+  </div>
+  
+  
   
 
-</div>
+  
 
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <div class="event-list">
-          </div>
-          <script>
-(function() {
-  // Initialization
-  var calendar = {
-    orderBy     : 'startTime',
-    showLocation: false,
-    offsetMax   : 72,
-    offsetMin   : 4,
-    showDeleted : false,
-    singleEvents: true,
-    maxResults  : 250
-  };
-
-  // Read config form theme config file
-  Object.assign(calendar, {"calendar_id":"<required>","api_key":"<required>","orderBy":"startTime","offsetMax":24,"offsetMin":4,"showDeleted":false,"singleEvents":true,"maxResults":250});
-
-  var now = new Date();
-  var timeMax = new Date();
-  var timeMin = new Date();
-
-  timeMax.setHours(now.getHours() + calendar.offsetMax);
-  timeMin.setHours(now.getHours() - calendar.offsetMin);
-
-  // Build URL
-  const params = {
-    key         : calendar.api_key,
-    orderBy     : calendar.orderBy,
-    timeMax     : timeMax.toISOString(),
-    timeMin     : timeMin.toISOString(),
-    showDeleted : calendar.showDeleted,
-    singleEvents: calendar.singleEvents,
-    maxResults  : calendar.maxResults
-  };
-
-  var request_url = 'https://www.googleapis.com/calendar/v3/calendars/' + calendar.calendar_id + '/events?' + Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
-
-  fetchData();
-  var fetchDataTimer = setInterval(fetchData, 60000);
-  window.addEventListener('pjax:send', () => {
-    clearInterval(fetchDataTimer);
-  });
-
-  function fetchData() {
-    var eventList = document.querySelector('.event-list');
-    if (!eventList) return;
-
-    fetch(request_url).then(response => {
-      return response.json();
-    }).then(data => {
-      if (data.items.length === 0) {
-        eventList.innerHTML = '<hr>';
-        return;
-      }
-      // Clean the event list
-      eventList.innerHTML = '';
-      var prevEnd = 0; // used to decide where to insert an <hr>
-
-      data.items.forEach(event => {
-        // Parse data
-        var utc   = new Date().getTimezoneOffset() * 60000;
-        var start = event.start.dateTime = new Date(event.start.dateTime || (new Date(event.start.date).getTime() + utc));
-        var end   = event.end.dateTime = new Date(event.end.dateTime || (new Date(event.end.date).getTime() + utc));
-
-        tense = judgeTense(now, start, end); // 0:now 1:future -1:past
-
-        if (tense === 1 && prevEnd < now) {
-          eventList.innerHTML += '<hr>';
-        }
-
-        eventDOM = buildEventDOM(tense, event);
-        eventList.innerHTML += eventDOM;
-
-        prevEnd = end;
-      });
-    });
-  }
-
-  function getRelativeTime(current, previous) {
-    var msPerMinute = 60 * 1000;
-    var msPerHour = msPerMinute * 60;
-    var msPerDay = msPerHour * 24;
-    var msPerMonth = msPerDay * 30;
-    var msPerYear = msPerDay * 365;
-
-    var elapsed = current - previous;
-    var tense = elapsed > 0 ? 'ago' : 'later';
-
-    elapsed = Math.abs(elapsed);
-
-    if      ( elapsed < msPerHour  ) {
-      return Math.round(elapsed / msPerMinute) + ' minutes ' + tense;
-    }
-    else if ( elapsed < msPerDay   ) {
-      return Math.round(elapsed / msPerHour) + ' hours ' + tense;
-    }
-    else if ( elapsed < msPerMonth ) {
-      return 'about ' + Math.round(elapsed / msPerDay) + ' days ' + tense;
-    }
-    else if ( elapsed < msPerYear  ) {
-      return 'about ' + Math.round(elapsed / msPerMonth) + ' months ' + tense;
-    }
-    else {
-      return 'about' + Math.round(elapsed / msPerYear) + ' years' + tense;
-    }
-  }
-
-  function judgeTense(now, eventStart, eventEnd) {
-    if      (eventEnd   < now) { return -1; }
-    else if (eventStart > now) { return  1; }
-    else                       { return  0; }
-  }
-
-  function buildEventDOM(tense, event) {
-    var tenseClass = '';
-    var start      = event.start.dateTime;
-    var end        = event.end.dateTime;
-    switch(tense) {
-      case 0 : // now
-        tenseClass = 'event-now';
-        break;
-      case 1 : // future
-        tenseClass = 'event-future';
-        break;
-      case -1: // past
-        tenseClass = 'event-past';
-        break;
-      default:
-        throw 'Time data error';
-    }
-    var durationFormat = {
-      weekday: 'short',
-      hour   : '2-digit',
-      minute : '2-digit'
-    };
-    var relativeTimeStr = (tense === 0) ? 'NOW' : getRelativeTime(now, start);
-    var durationStr = start.toLocaleTimeString([], durationFormat) + ' - ' + end.toLocaleTimeString([], durationFormat);
-
-    var locationDOM = '';
-    if (calendar.showLocation && event.location) {
-      locationDOM = '<span class="event-location event-details">' + event.location + '</span>';
-    }
-
-    var eventContent = `<div class="event ${tenseClass}">
-        <h2 class="event-summary">
-          ${event.summary}
-          <span class="event-relative-time">${relativeTimeStr}</span>
-        </h2>
-        ${locationDOM}
-        <span class="event-duration event-details">${durationStr}</span>
-      </div>`;
-    return eventContent;
-  }
-})();
-</script>
-
-        
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
