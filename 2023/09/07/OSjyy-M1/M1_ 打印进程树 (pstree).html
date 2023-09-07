@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)https://jyywiki.cn/OS/2023/labs/M1.html -->
+<html class="h-100"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="./M1_ 打印进程树 (pstree)_files/base.css" rel="stylesheet">
+  <script src="./M1_ 打印进程树 (pstree)_files/saved_resource"></script>
+  <link href="./M1_ 打印进程树 (pstree)_files/css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="https://jyywiki.cn/static/img/favicon.png" type="image/x-icon">
+
+  <style>
+    .font-sans {
+      font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+    }
+    .font-serif {
+      font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
+    }
+  </style>
+  <link rel="stylesheet" href="./M1_ 打印进程树 (pstree)_files/katex.min.css">
+  <script defer="" src="./M1_ 打印进程树 (pstree)_files/katex.min.js.下载"></script>
+  <script defer="" src="./M1_ 打印进程树 (pstree)_files/auto-render.min.js.下载" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          renderMathInElement(document.body, {
+            // customised options
+            // &#8226; auto-render specific keys, e.g.:
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            // &#8226; rendering keys, e.g.:
+            throwOnError : false
+          });
+      });
+  </script>
+
+
+  
+
+<style>
+.article {
+  -webkit-hyphens: auto;
+}
+form {
+  margin-block-end: 0;
+}
+img {
+  display: inline-block;
+}
+code { font-size: 85%; }
+pre {
+  font-size: 95%;
+  line-height: 120%;
+}
+blockquote {
+  font-size: 95%;
+}
+p {
+  font-size: 105%;
+  text-indent: 2em;
+}
+li {
+  font-size: 105%;
+}
+blockquote p {
+  text-indent: 0em;
+}
+.float-right {
+  padding-left: 10px;
+}
+.float-left {
+  padding-right: 10px;
+}
+a {
+  color: rgb(29 78 216);
+}
+strong {
+  font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+}
+.box        {
+  border-radius: 2px; padding: 1px 4px 2px 4px;
+  font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+  font-size: 95%;
+}
+.box-blue,  .badge-primary  { background-color: rgba(66, 139, 202, 0.5); color: #1d4ed8; }
+.box-green, .badge-success  { background-color: rgba(92, 184, 92, 0.5);  color: #15803d; }
+.box-red,   .badge-danger   { background-color: rgba(217, 83, 79, 0.5);  color: #b91c1c; }
+.box-yellow,.badge-warning  { background-color: rgba(240, 173, 78, 0.5); color: #a16207; }
+.box-gray   { background-color: #a0a0a0; }
+
+.badge {
+  padding: 1 4 1 4;
+  display: inline-block;
+  border-radius: 0.25rem;
+  border: 1px solid;
+}
+.message p {
+  text-indent: 0em;
+  margin-top: 1px;
+}
+.message h1, h2, h3, h4, h5 {
+  font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+}
+.message h2 {
+  font-size: 120%;
+  margin-top: 5px;
+  margin-bottom: 2px;
+}
+.message li {
+  list-style: disc;
+  margin-left: 2em;
+}
+li > p {
+  text-indent: 0em;
+}
+block-quote h4 {
+  float: left;
+  display: inline-block;
+}
+.center {
+  display: block;
+  margin: auto;
+}
+hr {
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.fa-gradient {
+	background: -webkit-gradient(linear, left top, left bottom, from(rgb(99, 27, 103)), to(#333));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+</style>
+
+
+  <title>M1: 打印进程树 (pstree)</title>
+<style>/* ! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]{display:none}*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.z-50{z-index:50}.float-right{float:right}.float-left{float:left}.mx-4{margin-left:1rem;margin-right:1rem}.mx-auto{margin-left:auto;margin-right:auto}.my-1{margin-top:0.25rem;margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.ml-8{margin-left:2rem}.mr-1{margin-right:0.25rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.flex{display:flex}.w-20{width:5rem}.w-full{width:100%}.max-w-screen-md{max-width:768px}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.appearance-none{-webkit-appearance:none;appearance:none}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-y-2 > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(2px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(2px * var(--tw-divide-y-reverse))}.divide-dashed > :not([hidden]) ~ :not([hidden]){border-style:dashed}.divide-white > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(255 255 255 / var(--tw-divide-opacity))}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-transparent{border-color:transparent}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-black{--tw-gradient-from:#000 var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-purple-500{--tw-gradient-to:rgb(168 85 247 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #a855f7 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-700{--tw-gradient-to:rgb(126 34 206 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #7e22ce var(--tw-gradient-via-position), var(--tw-gradient-to)}.p-2{padding:0.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-2{padding-bottom:0.5rem}.pb-8{padding-bottom:2rem}.pt-10{padding-top:2.5rem}.pt-2{padding-top:0.5rem}.text-justify{text-align:justify}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.font-sans{font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"}.font-serif{font-family:ui-serif, Georgia, Cambria, "Times New Roman", Times, serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-semibold{font-weight:600}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15 / var(--tw-text-opacity))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.placeholder-gray-400::placeholder{--tw-placeholder-opacity:1;color:rgb(156 163 175 / var(--tw-placeholder-opacity))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:border-transparent:focus{border-color:transparent}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-purple-600:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(147 51 234 / var(--tw-ring-opacity))}@media (min-width: 768px){.md\:px-8{padding-left:2rem;padding-right:2rem}}@media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (min-width: 1280px){.xl\:px-8{padding-left:2rem;padding-right:2rem}}@media (min-width: 1536px){.\32xl\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+
+<body class="d-flex flex-column h-100">
+  
+  
+
+<div>
+
+<div class="px-2 py-1 w-full fixed z-50 bg-gradient-to-r from-black via-purple-700 via-purple-500 shadow-lg" style="-webkit-backdrop-filter: saturate(150%) blur(4px); backdrop-filter: saturate(150%) blur(4px)">
+  <form>
+    <a href="https://jyywiki.cn/index.html"><span class="text-lg px-2 text-white">Yanyan's Wiki</span></a>
+    <a href="https://jyywiki.cn/OS/2023/index.html"><span class="text-sm px-2 text-white">操作系统 (2023)</span></a>
+    <input maxlength="9" id="token-input" class="float-right appearance-none border border-transparent px-2 py-1 w-20 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded text-xs focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent font-mono" type="text" placeholder="TOKEN" oninput="login();">
+  </form>
+</div>
+
+<div class="article container mx-auto md:px-8 lg:px-8 xl:px-8 2xl:px-8 shadow-lg border pb-8 pt-10 max-w-screen-md text-justify divide-y-2 divide-white">
+  <div><h1 id="m1-pstree" class=" text-2xl mt-2 font-sans">M1: 打印进程树 (pstree)</h1>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="_1" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-red" style=" padding-bottom: 0;">⏰ 截止日期</h4>
+<p class=" font-serif my-1"><strong>Soft Deadline: 2023 年 3 月 19 日 23:59:59。</strong></p>
+<p class=" font-serif my-1">你需要首先阅读<a href="https://jyywiki.cn/OS/2023/labs/Labs.html" class=" text-amber-900">实验须知</a>，其中包含了代码获取方法、提交方法、如何查看提交结果等。</p>
+<p class=" font-serif my-1">在命令行中 <code>git pull origin M1</code> 下载框架代码。</p>
+</blockquote>
+<p class=" font-serif my-1"><span></span></p>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="_2" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-red" style=" padding-bottom: 0;">⚠️ 学术诚信</h4>
+<p class=" font-serif my-1">正如课堂上所说，主动 “参考” 他人的代码、使用他人测试用例都是不严格要求自己的行为。为了使你变得更强，遵守学术诚信可以使你获得真正的训练。坚信<strong>计算机世界里没有玄学</strong>，无论是 C 代码、汇编代码还是处理器，都可以看作是严格的数学对象，可以使你在遇到问题时少一些焦躁，冷静下来分析下一步应该做什么。</p>
+<p class=" font-serif my-1">具体到这个实验，你应当主动地避免阅读任何人 (包括互联网) 上打印进程树或进程列表的代码，但可以查看 API (如 readdir 等) 的使用方法和例程。遇到问题时尽量自己调试解决，但可以向他人请教调试的技巧，例如 “我遇到了 XX 现象”，但不知道下一步应该怎么做。</p>
+<p class=" font-serif my-1">为了确保你对操作系统有真实的了解，<red><strong>本课程禁止直接使用 AI 生成的代码和直接复制互联网上的代码</strong>。</red>你应当主动不要求 AI 写代码或从互联网上复制代码，但你可以询问 AI 或在互联网上搜索 API 的使用方法。</p>
+</blockquote>
+<p class=" font-serif my-1"><span></span></p>
+<p class=" font-serif my-1"><oj-status course="OS2023" module="M1"></oj-status></p><div class="divide-y divide-dashed">
+    <div class="flex font-semibold">
+      OS2023-M1 提交结果
+    </div>
+    
+  </div>
+<p></p>
+<h2 id="1" class=" text-xl mt-2 pb-2 font-sans">1. 背景</h2>
+<p class=" font-serif my-1">因为程序可以看成状态机，操作系统能 “同时运行多个程序” 的能力就是状态机管理的能力。自然，操作系统也应该提供 “监测状态机状态” 的功能，例如显示在一段时间内，各个程序 (进程、状态机) 的活跃程度。没错，这就是大家熟悉的<a href="https://www.cyberciti.biz/tips/top-linux-monitoring-tools.html" class=" text-amber-900">任务管理器</a>。下面的图片展示了 Plasma Desktop 的任务管理器，能够显示系统资源的使用情况和进程的信息。</p>
+<p class=" font-serif my-1"><img alt="" class="center" src="./M1_ 打印进程树 (pstree)_files/plasma-system-monitor.png" width="500px"></p>
+<p class=" font-serif my-1">我们只要能实现获取进程列表、进程占用 CPU 内存信息等，是不是我们也可以实现类似的功能呢？根据《操作系统》课程重要的基本原理<strong>合理的需求一定有合适的方法满足</strong>，操作系统一定会提供进程相关的对象和获取信息的 API。如果你是操作系统的设计者，你会提供怎样的 API (syscall)？</p>
+<p class=" font-serif my-1">一个可行的想法是操作系统可以提供类似迭代器的 API，可以在某个时刻对进程列表进行 “快照”，然后程序可以通过 API 迭代快照里的进程。</p>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code><span class="n">Snapshot</span><span class="w"> </span><span class="o">*</span><span class="nf">CreateProcessSnapshot</span><span class="p">();</span><span class="w"> </span><span class="c1">// 迭代开始</span>
+<span class="n">Process</span><span class="w"> </span><span class="o">*</span><span class="nf">FirstProcess</span><span class="p">(</span><span class="n">Snapshot</span><span class="w"> </span><span class="o">*</span><span class="n">snapshot</span><span class="p">);</span><span class="w"> </span><span class="c1">// 取得第一个进程</span>
+<span class="n">Process</span><span class="w"> </span><span class="o">*</span><span class="nf">NextProcess</span><span class="p">(</span><span class="n">Process</span><span class="w"> </span><span class="o">*</span><span class="n">process</span><span class="p">);</span><span class="w"> </span><span class="c1">// 获得下一个进程</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">ReleaseProcessSnapshot</span><span class="p">(</span><span class="n">Snapshot</span><span class="w"> </span><span class="o">*</span><span class="n">snapshot</span><span class="p">);</span><span class="w"> </span><span class="c1">// 迭代结束</span>
+</code></pre></div>
+
+<p class=" font-serif my-1">高级语言可以进一步封装，例如借助 WMI (Windows Management Instrumentation) 库：</p>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code><span class="kn">import</span> <span class="nn">wmi</span>
+<span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">wmi</span><span class="o">.</span><span class="n">WMI</span><span class="p">()</span><span class="o">.</span><span class="n">Win32_Process</span><span class="p">():</span>
+    <span class="o">...</span>
+</code></pre></div>
+
+<p class=" font-serif my-1">UNIX 操作系统的设计者用另一种方法使应用程序能访问进程列表：操作系统会不断更新一个对象 (文本文件) 的内容，这样应用程序就能用文件 API (open, read, close) 来获取进程列表，例如大家可以用熟悉的 C 语言 <code>FILE *</code> 访问。例如，今天我们可以考虑一个名为 <code>/system/processes.json</code> 的文本，每当进程创建或退出，这个文件的内容就会更新：</p>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"pid"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"parent"</span><span class="p">:</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/bin/init"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"pid"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"parent"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/bin/bash"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p class=" font-serif my-1">UNIX 采用了 Everything is a File 的设计。换句话说，我们可以<strong>把操作系统的状态变成文件系统的一部分</strong>，从而可以使用我们熟悉的 read, write 等 API 访问操作系统中的各类信息。在这个实验中，我们学习 UNIX/Linux 是如何把操作系统的状态放在文件系统中的。虽然这个实验里你只需要读取进程列表和进程之间的父子关系，但用类似的办法，也可以从 Linux 系统中读取出 CPU 占用率、内存使用等信息——于是你也可以实现自己的任务管理器了！</p>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="_3" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-green" style=" padding-bottom: 0;">❓ 思考题</h4>
+<p class=" font-serif my-1"><strong>优点和缺点</strong></p>
+<p class=" font-serif my-1">Everything is a file 和提供 type-safe 的 API 都不是完美的。前者对人类用户来说更好用，例如可以用 UNIX 命令行工具任意解析而不需要写代码，但带来很多 “隐藏的规约”；后者把规约写在 API 里，可以在你犯错时更好地保护你，但 “上手” 也稍稍困难一些：Windows Kernel + GDI 的 Windows API 就在 1,000 个以上。</p>
+<p class=" font-serif my-1">我们预见到大语言模型和程序合成 (“低代码”) 技术能够从根本上改变我们开发的方式，操作系统 API 会逐渐成为一种只有库函数使用的 “汇编语言”。</p>
+</blockquote>
+<h2 id="2" class=" text-xl mt-2 pb-2 font-sans">2. 实验描述</h2>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="_4" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-blue" style=" padding-bottom: 0;">实验要求</h4>
+<p class=" font-serif my-1"><strong>实现 <code>pstree</code> 打印进程之间的树状的父子关系</strong></p>
+<p class=" font-serif my-1">Linux 系统中可以同时运行多个程序。运行的程序称为<strong>进程</strong>。除了所有进程的根之外，每个进程都有它唯一的父进程，你的任务就是把这棵树在命令行中输出。你可以自由选择展示树的方式 (例如使用缩进表示父子关系，这是最容易的)。</p>
+</blockquote>
+<p class=" font-serif my-1">Linux 系统自带了 <code>pstree</code> 命令，进程树会以非常漂亮的格式排版 (每个进程的第一个孩子都与它处在同一行，之后的孩子保持相同的缩进)：</p>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code>systemd─┬─accounts-daemon─┬─{gdbus}
+        │                 └─{gmain}
+        ├─acpid
+        ├─agetty
+        ├─atd
+        ├─cron
+        ├─dbus-daemon
+        ├─dhclient
+        ├─2*[iscsid]
+        ├─lvmetad
+        ├─lxcfs───10*[{lxcfs}]
+        ├─mdadm
+        ├─polkitd─┬─{gdbus}
+        │         └─{gmain}
+        ├─rsyslogd─┬─{in:imklog}
+        │          ├─{in:imuxsock}
+        │          └─{rs:main Q:Reg}
+        ...
+</code></pre></div>
+
+<p class=" font-serif my-1">Linux 的 psmisc 中 <code>pstree</code> 的实现大约有 1,300 行，支持多种命令行参数。这个实验里实现最简单的就行。大家可以先玩一下 Linux 的 <code>pstree</code>，使用 <code>man</code> 命令查看 <code>pstree</code> 支持的功能，并试一试。在这个实验中，我们需要实现它的简化版：</p>
+<h3 id="21" class=" text-lg mt-2 pb-2 font-sans">2.1 总览</h3>
+<p class=" font-serif my-1"></p><center>pstree [<u>OPTION</u>]…</center>
+<h3 id="22" class=" text-lg mt-2 pb-2 font-sans">2.2 描述</h3>
+<p class=" font-serif my-1">把系统中的进程按照父亲-孩子的树状结构打印到终端。</p>
+<ul class=" list-disc font-serif">
+<li class=" ml-8"><code>-p</code> 或 <code>--show-pids</code>: 打印每个进程的进程号。</li>
+<li class=" ml-8"><code>-n</code> 或 <code>--numeric-sort</code>: 按照pid的数值从小到大顺序输出一个进程的直接孩子。</li>
+<li class=" ml-8"><code>-V</code> 或 <code>--version</code>: 打印版本信息。</li>
+</ul>
+<p class=" font-serif my-1">你可以在命令行中观察系统的 <code>pstree</code> 的执行行为 (如执行 <code>pstree -V</code>、<code>pstree --show-pids</code> 等)。这些参数可能任意组合，但你不需要处理单字母参数合并的情况，例如 <code>-np</code>。</p>
+<h3 id="23" class=" text-lg mt-2 pb-2 font-sans">2.3 解释</h3>
+<p class=" font-serif my-1">上述实验要求描述是参照 man page 的格式写出的，其中有很多 UNIX 命令行工具遵守的共同约定 (UNIX 的资深用户对此了如指掌；但对给初学者，尤其是从出生以来就生活在 GUI 环境中而不是遇事就读手册的大家造成了很大的困扰)，例如 <a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html" class=" text-amber-900">POSIX 对命令行参数有一定的约定</a>，<strong>读完以后，你立即发现你对手册的理解增加了</strong> (手册的格式竟然也是 POSIX 标准的一部分！)：</p>
+<ol class=" list-decimal font-serif">
+<li class=" ml-8">中括号扩起的参数是可选参数，<code>[]</code> 后的 <code>…</code> 代表参数的 0 次或多次重复。因此 <code>-p</code>, <code>-n</code>, <code>-V</code> 都是可选的参数。</li>
+<li class=" ml-8">同一个选项可以有不同的名字。在 <code>pstree</code> 中，<code>-p</code> 和 <code>--show-pids</code> 的含义是一样的。</li>
+<li class=" ml-8">若不另行说明，整数范围在 32 位有符号整数范围内；但如果数值和文件大小有关，则其合法的范围是是 0 到系统最大支持的文件大小。</li>
+</ol>
+<p class=" font-serif my-1">此外，<code>main</code> 函数的返回值代表了命令执行的状态，其中 <code>EXIT_SUCCESS</code> 表示命令执行成功，<code>EXIT_FAILURE</code> 表示执行失败。对于 POSIX 来说，0 代表成功，非 0 代表失败：例如 <code>diff</code> 返回 1 表示比较的文件不同，返回 2 表示读取文件失败 (<code>cmp</code> 的行为也类似)。UNIX Shell 对返回值有<a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html" class=" text-amber-900">额外的处理</a>。这解释了为什么一些 OJ 会明确要求 main 函数返回值为 0，当返回非 0 时将被认为是 Runtime Error。</p>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="specification" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-blue" style=" padding-bottom: 0;">Specification</h4>
+<p class=" font-serif my-1">** Online Judge 对返回值的要求**</p>
+<p class=" font-serif my-1">按照 UNIX 惯例，<code>main</code> 函数返回非 0 将在 Online Judge 中被判定为 Runtime Error。</p>
+</blockquote>
+<p class=" font-serif my-1"><strong>如果不知道这些约定，使用 Linux/Unix 的时候就会举步维艰。Unix 世界有一套自己定义的 “游戏规则”。</strong>也难怪会有笑话：</p>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<p class=" font-serif my-1">Unix is <em>user-friendly</em> — it's just choosy about who its friends are.</p>
+</blockquote>
+<p class=" font-serif my-1">当然，在渐渐熟悉游戏规则以后就会发现，这套设计在 1970 年代有限的计算机算力和使用者的负担之间达成了优雅的平衡——Shell 总是可以帮助你用最短的时间把 quick and dirty 的事情搞定：UNIX 哲学强调 <em>Keep it simple, stupid</em> 和 <em>Everything is a file</em>.</p>
+<h2 id="3" class=" text-xl mt-2 pb-2 font-sans">3. 正确性标准</h2>
+<p class=" font-serif my-1">你可以任意选择树的形态，以下输出都是合法的：</p>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code>$ ./pstree-64
+systemd─┬─accounts-daemon─┬─
+        │
+        ...
+
+$ ./pstree-64
+systemd
+ |
+ +--accounts-daemon-
+ |
+ ...
+
+$ ./pstree-64
+systemd
+  accounts-daemon
+    ...
+</code></pre></div>
+
+<p class=" font-serif my-1">只要输出系统中的进程即可；此外，允许进程列表有轻微出入。细心的同学可能发现你第一个版本的 <code>pstree</code> 可能和系统输出不太一样。在线评测会容忍你输出的一些缺陷；此外，作为第一个实验，我们会手下留情，没有非常强劲的测试数据。但你仍然需要确保：</p>
+<ol class=" list-decimal font-serif">
+<li class=" ml-8">正确列出系统中的进程，并正确实现参数组合的行为；</li>
+<li class=" ml-8">编写可移植的代码。我们会同时测试 32-bit 和 64-bit 的版本。</li>
+</ol>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="_5" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-blue" style=" padding-bottom: 0;">提示</h4>
+<p class=" font-serif my-1"><strong>在 Hard Test 上 Wrong Answer？</strong></p>
+<p class=" font-serif my-1">试一试 <code>pstree -V &gt; /dev/null</code>，你会发现输出并没有到 <code>/dev/null</code>。我们希望你的行为和系统中的 <code>pstree -V</code> 基本一致：输出到正确的输出流、包含 <code>pstree</code> 的基本信息，但版本描述可以不同。</p>
+</blockquote>
+<h2 id="4" class=" text-xl mt-2 pb-2 font-sans">4. 实验指南：把大象装进冰箱</h2>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="_6" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-blue" style=" padding-bottom: 0;">想自己尝试？</h4>
+<p class=" font-serif my-1">鼓励大家忽略下面的教程，自己动手搞定，遇到不明白的地方可以求助 Google (Bing, Stackoverflow, ...)。完成之后可以看一下实验指南，看自己的理解是否有可以改进的空间。</p>
+</blockquote>
+<ul class=" list-disc font-serif">
+<li class=" ml-8">“把大象放进冰箱总共分几步？” “三步，第一步把冰箱门打开；第二步把大象放进去，第三步把冰箱门带上。” — 赵本山、宋丹丹《钟点工》</li>
+</ul>
+<p class=" font-serif my-1">如果你觉得打印进程树这个问题比较困难，我们也把问题分解一下：</p>
+<ol class=" list-decimal font-serif">
+<li class=" ml-8">得到命令行的参数，根据要求设置标志变量的数值；</li>
+<li class=" ml-8">得到系统中所有进程的编号 (每个进程都会有唯一的编号) 保存到列表里；</li>
+<li class=" ml-8">对列表里的每个编号，得到它的的父亲是谁；</li>
+<li class=" ml-8">在内存中把树建好，按命令行参数要求排序；</li>
+<li class=" ml-8">把树打印到终端上。</li>
+</ol>
+<p class=" font-serif my-1">因为人的脑容量有限，通常解决问题的办法就是把比较复杂的问题分解成小问题，再把小问题继续分解下去。而在学校里所做的训练就是<strong>建立问题分解的思路和培养解决问题的能力</strong>。</p>
+<h3 id="41" class=" text-lg mt-2 pb-2 font-sans">4.1. 命令行参数</h3>
+<p class=" font-serif my-1">我们的框架中已经包含了以下代码，功能是输出为 main 函数传递的参数——把进程看作状态机，main 函数的参数是进程 “初始状态” 的一部分，它是由进程的创建者决定的，也就是你在终端中执行类似 “<code>./a.out hello world</code>” 时指定的。</p>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">argc</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="c1">// C 标准保证</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"argv[%d] = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">argv</span><span class="p">[</span><span class="n">argc</span><span class="p">]);</span><span class="w"> </span><span class="c1">// C 标准保证</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class=" font-serif my-1">首先，尝试编译运行这个程序，并且这个程序传入不同，并且观察程序的输出。你会确认 <code>argv[0], ..., argv[argc-1]</code> 就是所有命令行的参数，这是操作系统与 C 程序之间的约定。getopt (<code>man 3 getopt</code>) 库可以处理命令行参数；当然，你也可以直接自己动手解析。</p>
+<h3 id="42" class=" text-lg mt-2 pb-2 font-sans">4.2. 开始做实验</h3>
+<p class=" font-serif my-1">之后会反复编译运行这个程序，所以<strong>编译和测试自动化</strong>非常重要。比较常见的项目组织是编写 Makefile，在命令行中使用 <code>make</code> 实现编译，<code>make test</code> 完成测试。我们已经为大家提供了 Makefile，欢迎大家仔细阅读。IDE 和编辑器 (例如 vscode) 都支持运行和调试的配置。我们强烈建议同学们在你们熟悉的编程环境中完成编译运行的配置，以最大化你的编程效率。</p>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="_7" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-blue" style=" padding-bottom: 0;">提示</h4>
+<p class=" font-serif my-1">回想一下大家做 OJ 题的过程。在编程的过程中，难免会经历修改代码 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\to</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.3669em;"></span><span class="mrel">→</span></span></span></span></span> 编译 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\to</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.3669em;"></span><span class="mrel">→</span></span></span></span></span> 运行 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\to</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.3669em;"></span><span class="mrel">→</span></span></span></span></span> 修改代码……这样的循环。你会选择怎么做呢？新手每次都键入命令 (或者他发现 Ctrl-p 可以重复命令)。</p>
+<ul class=" list-disc font-serif">
+<li class=" ml-8">之后，有同学人发现，可以把命令写在一行里，比如 <code>gcc a.c &amp;&amp; ./a.out</code>，一键就能编译运行了。</li>
+<li class=" ml-8">再之后会发现可以写个 Makefile (就像这个实验一样)，用 <code>make test</code> 跑完所有测试。</li>
+<li class=" ml-8">再之后会发现可以每次在文件改动以后自动运行所有测试……有个神奇的命令叫 <code>inotifywait</code>。</li>
+</ul>
+<p class=" font-serif my-1">即便现在有 IDE 和丰富的插件，UNIX 哲学依然是无处不在的 (甚至是这些 IDE 的组成基础)，说得更具体一点，“只要你敢想，就一定能做到”。祝大家编程愉快。</p>
+<p class=" font-serif my-1">最后，以下两点有助于调试时放平心态：(1) <strong>机器永远是对的</strong>；(2) <strong>未测代码永远是错的</strong>。</p>
+</blockquote>
+<h3 id="43" class=" text-lg mt-2 pb-2 font-sans">4.3. 得到系统中进程的编号</h3>
+<p class=" font-serif my-1">进程是操作系统中的对象，因此操作系统一定提供了 API 访问它们。已经剧透过，系统里的<strong>每个进程都有唯一的编号</strong>，它在 C 语言中的类型是 <code>pid_t</code>。不知道这是什么？Google 一把就知道啦。你能找到 glibc 对它的<a href="https://www.gnu.org/software/libc/manual/html_node/Process-Identification.html" class=" text-amber-900">官方文档解释</a>。以后遇到问题要自己找答案哦！</p>
+<p class=" font-serif my-1">操作系统以什么样的方式让你获取系统里的进程呢？之前也提示过：</p>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<p class=" font-serif my-1">Everything is a file.</p>
+</blockquote>
+<p class=" font-serif my-1">一切皆文件，进程信息当然也可以是 “一切” 的一部分。Linux 提供了 <a href="https://en.wikipedia.org/wiki/Procfs" class=" text-amber-900">procfs</a>，目录是 <code>/proc</code>。如果你进去看一眼，就会发现除了一些比如 <code>cpuinfo</code> 这样的文件，还有很多以数字命名的目录——聪明的你也许已经猜到了，每个目录的名字就是进程号，目录里存储了进程相关的运行时数据。</p>
+<p class=" font-serif my-1">我们鼓励大家先玩一玩 procfs，里面可有很多有趣的东西！你可以用 <code>cat</code> 可以打印文件的内容，对照文档 (或者 ChatGPT)，你会发现原来我们以为离我们很遥远的 “观测进程执行”，简单得只要解析文本文件就可以了！例如，每个进程的父进程也隐藏在 <code>/proc/[pid]/</code> 中的某个文件里。试试 <code>man 5 proc</code>，里面有详细的文档。很多 Online Judge 都使用 procfs 读取进程的运行时间/内存数据。</p>
+<h3 id="43_1" class=" text-lg mt-2 pb-2 font-sans">4.3. 遍历所有进程</h3>
+<p class=" font-serif my-1">了解了 procfs 之后，我们的问题就变得简单一些了：只要能得到 <code>/proc</code> 目录下的所有以数字为开头的目录，我们就遍历了系统中的进程。因此你会去互联网上搜索如何用 C 语言遍历目录。之后，你可以用你熟悉的方式打开 procfs 里的文件：</p>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="s">"r"</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// 用fscanf, fgets等函数读取</span>
+<span class="w">  </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// 错误处理</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class=" font-serif my-1">procfs 里的信息足够让你写一个非常不错的任务管理器。那么，“真正” 的任务管理器，例如 ps 命令，是否也是基于 procfs 实现的呢？这就是一个典型的 “好问题”：他帮助你建立你的实验作业和真实系统之间的联系。操作系统课程也给了大家足够的工具，使得同学们可以把任务管理器打开，查看它调用的操作系统 API。我们在课堂上已经演示过 gcc 和 xedit 的例子，就用 strace 工具就能查看进程运行时的系统调用序列：</p>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code>$ strace ps
+...
+openat(AT_FDCWD, "/proc/1/stat", O_RDONLY)           = 6
+read(6, "1 (systemd) S 0 1 1 0 -1 4194560"..., 1024) = 190
+close(6)                                             = 0
+...
+</code></pre></div>
+
+<h3 id="44" class=" text-lg mt-2 pb-2 font-sans">4.4. 建树和打印</h3>
+<p class=" font-serif my-1">这是算法/数据结构课程的内容，也是经典的编程面试题之一——互联网公司很可能会用类似的题目来考察面试者的基本能力。如果你没有头绪，试着定义一个递归函数 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>T</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">[</mo><msub><mi>s</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>s</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>s</mi><mi>n</mi></msub><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">f(T) = [s_1,s_2,\ldots,s_n]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right: 0.1389em;">T</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3011em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3011em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.1514em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mclose">]</span></span></span></span></span> 把 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi></mrow><annotation encoding="application/x-tex">T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.1389em;">T</span></span></span></span></span> 打印成多行文本 (第 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> 行是字符串 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">s_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.5806em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3117em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span>)。</p>
+<ol class=" list-decimal font-serif">
+<li class=" ml-8">对于叶子节点，直接输出一个格式化字符串 (例如使用 <code>asprintf</code>)；</li>
+<li class=" ml-8">如果不是叶子节点，对它所有子树 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>T</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><msub><mi>T</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">T_1, T_2, \ldots T_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.8778em; vertical-align: -0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3011em;"><span class="" style="top: -2.55em; margin-left: -0.1389em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3011em;"><span class="" style="top: -2.55em; margin-left: -0.1389em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3361em;"><span class="" style="top: -2.55em; margin-left: -0.1389em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right: 0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> 分别求 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>i</mi></msub><mo stretchy="false">(</mo><msub><mi>T</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f_i(T_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3117em;"><span class="" style="top: -2.55em; margin-left: -0.1076em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3117em;"><span class="" style="top: -2.55em; margin-left: -0.1389em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>，得到 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6944em;"></span><span class="mord mathnormal" style="margin-right: 0.0315em;">k</span></span></span></span></span> 个多行的文本；</li>
+<li class=" ml-8">把这些字符串拼到适当的位置，加上一些连接线：</li>
+</ol>
+<div class="codehilite"><pre class=" bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span></span><code>(root)─+─T1(line 1)
+       | T1(line 2)
+       | T1(line 3)
+       +─T2(1)
+       |
+...
+</code></pre></div>
+
+<p class=" font-serif my-1">然后你会发现你并不需要真的实现 <span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>T</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(T)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right: 0.1389em;">T</span><span class="mclose">)</span></span></span></span></span>，而是一遍递归一边打印就行。</p>
+<h3 id="45" class=" text-lg mt-2 pb-2 font-sans">4.5. 写出正确的代码</h3>
+<blockquote class=" bg-gray-200 p-2 rounded mb-2 mt-2 mx-4">
+<h4 id="_8" class=" pt-2 pb-2 font-sans float-left text-sm box border mr-1 mt-1 box-blue" style=" padding-bottom: 0;">完成了？</h4>
+<p class=" font-serif my-1">是时候问问自己：我的程序对吗？</p>
+</blockquote>
+<p class=" font-serif my-1">虽然在这个实验里，我们的测试用例相对简单；但在未来的实验中，Online Judge 可能会在各种奇葩的条件下运行你的程序哦！除了你们做的 OJ 题中会有复杂的逻辑 (参数的组合) 导致 bug 之外，和系统打交道的编程可有更多的麻烦之处：</p>
+<ol class=" list-decimal font-serif">
+<li class=" ml-8">你的程序遵守 POSIX 的返回值规定吗？如果你的 main 函数返回了非 0 的数值，我们将认为程序报告了错误——在非法的输入上返回 0，以及在合法的输入上返回非 0 都将导致 Wrong Answer。</li>
+<li class=" ml-8">程序够 roubust 吗？它会不会在一些非法的输入上 crash？如果系统里的进程很多呢？如果内存不够了呢？如果 <code>open</code> 或者 <code>malloc</code> 失败了呢？要知道，crash 一般是因为 <a href="https://en.wikipedia.org/wiki/Undefined_behavior" class=" text-amber-900">undefined behavior (UB)</a> 导致的——UB 没把所有的文件都删掉真是谢天谢地了。</li>
+<li class=" ml-8">万一我得到进程号以后，进去发现文件没了 (进程终止了)，怎么办？会不会有这种情况？万一有我的程序会不会 crash……？</li>
+<li class=" ml-8">进程的信息一直在变，文件的内容也一直在变 (两次 <code>cat</code> 的结果不同)。那我会不会读到不一致的信息(前一半是旧信息、新一半是新信息)？这两个问题都是 race condition 导致的；我们将会在并发部分回到这个话题。</li>
+<li class=" ml-8">如果我不确信这些事会不会发生，我有没有写一个程序，至少在压力环境下测试一下它们有没有可能发生？嗯，如果我同时运行很多程序，每个程序都不断扫描目录、读取文件，也观察不到这个问题，至少应该可以放点心。</li>
+</ol>
+<p class=" font-serif my-1">随着课程的深入，这些问题都会得到解答。</p>
+<p class=" font-serif my-1">当你的程序越来越复杂，这些问题也许将会成为你挥之不去的阴影。这就对了——从 Intel 的 CPU 到 Linux Kernel 都有数不清的 bug。你也许听说过 “形式化验证”，但事实也证明，经过验证正确的编译器 (CertComp) 和操作系统 (seL4, FSCQ, ...) 都依然存在 bug，尽管它们的可靠性依然比程序员手写的高得多。</p>
+<p class=" font-serif my-1">写出正确的代码远比想象中困难——目前地球上还没人能保证复杂的系统没有 bug 和漏洞。我个人热切盼望着没有 bug 的那一天的到来，不过似乎遥不可及。不过也不用太绝望，这门课里会教给大家一些有关 “写代码” 的知识，更重要的是正确的思维方式 (“世界观”)：操作系统会提供什么、该提供什么、不该提供什么、应该怎么提供。</p></div>
+</div>
+
+<div class="container text-xs py-3">
+  <span class="text-muted">
+    <center><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="./M1_ 打印进程树 (pstree)_files/cc-4.0.png"></a>
+    &nbsp;&nbsp;&nbsp;<a style="color:inherit" href="https://beian.miit.gov.cn/">苏 ICP 备 2020049101 号</a>
+    </center>
+  </span>
+</div>
+
+</div>
+
+<script src="./M1_ 打印进程树 (pstree)_files/jquery.min.js.下载"></script>
+
+<script>
+function get_token() {
+  var match = document.cookie.match(new RegExp('(^| )token=([^;]+)'));
+  if (match) return match[2];
+  else return "";
+}
+var token = get_token();
+var hint = "token", box = $("#token-input");
+
+if (token == "") { }
+else { box.val(token); }
+
+function login() {
+  var token = box.val()
+  if (!token) {
+    document.cookie = ''
+  } else {
+    document.cookie = 'token=' + token + '; expires=Fri, 31 Dec 9999 23:59:59 GMT;'
+  }
+}
+</script>
+
+
+
+
+</body></html>

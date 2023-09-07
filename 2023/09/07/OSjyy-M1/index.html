@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/myblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/myblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/myblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/myblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/myblog/css/main.css">
+
+
+<link rel="stylesheet" href="/myblog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/myblog/lib/pace/pace-theme-bounce.min.css">
+  <script src="/myblog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wujx99.github.io","root":"/myblog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="关于osjyy的minilab0的实现。对应的实验描述文件见本blog对应的文件夹内。 pstree 说实话里面的实现画树print_tree的递归的嵌套还是很难的，人脑的模拟状态机总是会漏掉和回溯过程，但是应该要学会gdb更好的调优 一些编程的tips，比如如何向函数传参，使用&amp;传地址。 学习如何使用man工具  实现pstree.c123456789101112131415161718">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSjyy:M1">
+<meta property="og:url" content="https://wujx99.github.io/myblog/2023/09/07/OSjyy-M1/index.html">
+<meta property="og:site_name" content="blogs&amp;record">
+<meta property="og:description" content="关于osjyy的minilab0的实现。对应的实验描述文件见本blog对应的文件夹内。 pstree 说实话里面的实现画树print_tree的递归的嵌套还是很难的，人脑的模拟状态机总是会漏掉和回溯过程，但是应该要学会gdb更好的调优 一些编程的tips，比如如何向函数传参，使用&amp;传地址。 学习如何使用man工具  实现pstree.c123456789101112131415161718">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-07T01:26:38.000Z">
+<meta property="article:modified_time" content="2023-09-07T01:48:48.394Z">
+<meta property="article:author" content="jxWu">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="OSjyy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://wujx99.github.io/myblog/2023/09/07/OSjyy-M1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OSjyy:M1 | blogs&record</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/myblog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">blogs&record</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/myblog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/myblog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/myblog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/myblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/myblog/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/myblog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/09/07/OSjyy-M1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OSjyy:M1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-09-07 09:26:38 / 修改时间：09:48:48" itemprop="dateCreated datePublished" datetime="2023-09-07T09:26:38+08:00">2023-09-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>关于osjyy的minilab0的实现。对应的实验描述文件见本blog对应的文件夹内。</p>
+<h1 id="pstree"><a href="#pstree" class="headerlink" title="pstree"></a>pstree</h1><ol>
+<li>说实话里面的实现画树<code>print_tree</code>的递归的嵌套还是很难的，人脑的模拟状态机总是会漏掉和回溯过程，但是应该要学会gdb更好的调优</li>
+<li>一些编程的tips，比如如何向函数传参，使用<code>&amp;</code>传地址。</li>
+<li>学习如何使用<code>man</code>工具</li>
+</ol>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><figure class="highlight c"><figcaption><span>pstree.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;inttypes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;malloc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="type">pid_t</span> P[<span class="number">1000</span>] ;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> n;</span><br><span class="line">&#125; plist;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">List_Init</span><span class="params">(plist *<span class="built_in">list</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">List_Append</span><span class="params">(plist *<span class="built_in">list</span>, <span class="type">pid_t</span> value)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">List_Show</span><span class="params">(plist *<span class="built_in">list</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//打印进程对应的子进程</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_tree</span><span class="params">(plist *son, plist *farther, <span class="type">pid_t</span> fart,<span class="type">int</span> table_number, <span class="type">int</span> show_number)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这个递归函数可是太费劲了。。。。</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">print_tree</span><span class="params">(plist *son, plist *farther, <span class="type">pid_t</span> fart, <span class="type">int</span> table_number,<span class="type">int</span> show_number)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(fart == <span class="number">0</span>) <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,<span class="number">0</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="type">int</span> new_line = <span class="number">1</span>; <span class="comment">//是否打印新的一行</span></span><br><span class="line">  table_number++; <span class="comment">// </span></span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; farther-&gt;n; i++)&#123;  </span><br><span class="line">    <span class="comment">//对每个fart的子进程</span></span><br><span class="line">    <span class="keyword">if</span>(farther-&gt;P[i] == fart)&#123;</span><br><span class="line">      <span class="keyword">if</span>(new_line) &#123;</span><br><span class="line">        <span class="comment">//如果是第一个打印</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;  ^^%d^^  &quot;</span>, son-&gt;P[i]);</span><br><span class="line">        new_line--;</span><br><span class="line">      &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//打印table键的数目</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; table_number<span class="number">-1</span>;i++) <span class="built_in">printf</span>(<span class="string">&quot;    **%d**    &quot;</span>, table_number<span class="number">-1</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;&amp;&amp;%d&amp;&amp;&quot;</span>, son-&gt;P[i]);</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      print_tree(son, farther, son-&gt;P[i], table_number, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; argc; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    assert(argv[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argv[%d] = %s\n&quot;</span>, i, argv[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  assert(!argv[argc]);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// every bit represent a command</span></span><br><span class="line">  <span class="type">uint8_t</span> command = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// resolve command line argument</span></span><br><span class="line">  <span class="type">char</span> *<span class="built_in">array</span>[] = &#123;<span class="string">&quot;-p&quot;</span>, <span class="string">&quot;-n&quot;</span>, <span class="string">&quot;-v&quot;</span>, <span class="string">&quot;--show-pids&quot;</span>, <span class="string">&quot;--numric-sorts&quot;</span>, <span class="string">&quot;--version&quot;</span>&#125;;</span><br><span class="line">  <span class="type">int</span> array_size = <span class="keyword">sizeof</span>(<span class="built_in">array</span>) / <span class="keyword">sizeof</span>(<span class="type">char</span> *);</span><br><span class="line">  assert(array_size == <span class="number">6</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; array_size; i++)</span><br><span class="line">  &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> p_lock = <span class="number">1</span>, n_lock = <span class="number">1</span>, v_lock = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; argc; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    assert(argv[i]);</span><br><span class="line">    <span class="comment">// every command only set the corresponding bit once</span></span><br><span class="line">    <span class="keyword">if</span> (p_lock &amp;&amp; (<span class="built_in">strcmp</span>(argv[i], <span class="string">&quot;-p&quot;</span>) == <span class="number">0</span> || <span class="built_in">strcmp</span>(argv[i], <span class="string">&quot;--show-pids&quot;</span>) == <span class="number">0</span>))</span><br><span class="line">    &#123;</span><br><span class="line">      command += <span class="number">1</span>; <span class="comment">// set the bit of p command</span></span><br><span class="line">      p_lock = <span class="number">0</span>;   <span class="comment">// lock on</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (n_lock &amp;&amp; (<span class="built_in">strcmp</span>(argv[i], <span class="string">&quot;-n&quot;</span>) == <span class="number">0</span> || <span class="built_in">strcmp</span>(argv[i], <span class="string">&quot;--numic-sorts&quot;</span>) == <span class="number">0</span>))</span><br><span class="line">    &#123;</span><br><span class="line">      command += <span class="number">2</span>;</span><br><span class="line">      n_lock = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (v_lock &amp;&amp; (<span class="built_in">strcmp</span>(argv[i], <span class="string">&quot;-v&quot;</span>) == <span class="number">0</span> || <span class="built_in">strcmp</span>(argv[i], <span class="string">&quot;--version&quot;</span>) == <span class="number">0</span>))</span><br><span class="line">    &#123;</span><br><span class="line">      command += <span class="number">4</span>;</span><br><span class="line">      v_lock = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;command = %d\n&quot;</span>, command);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 遍历/proc目录获取进程号</span></span><br><span class="line">  plist son, farther;</span><br><span class="line">  List_Init(&amp;son);</span><br><span class="line">  List_Init(&amp;farther);</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="type">char</span> filepath[<span class="number">256</span>]; <span class="comment">// 保存文件地址buffer</span></span><br><span class="line">  <span class="type">char</span> temp[<span class="number">6</span>];       <span class="comment">// proc_id buffer</span></span><br><span class="line"></span><br><span class="line">  <span class="type">char</span> *proc_path = <span class="string">&quot;/proc/&quot;</span>;</span><br><span class="line">  DIR *dir = opendir(proc_path);</span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span>;</span></span><br><span class="line">  <span class="keyword">while</span> ((entry = readdir(dir)) != <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="type">char</span> *result;</span><br><span class="line">    <span class="type">pid_t</span> proc_id = strtol(entry-&gt;d_name, &amp;result, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (*result == <span class="string">&#x27;\0&#x27;</span>) <span class="comment">// 如果进程号是0呢？</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//如果是proc的话就保存到son</span></span><br><span class="line">      List_Append(&amp;son, proc_id);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//对每个proc寻找farther proc</span></span><br><span class="line">      <span class="built_in">strcpy</span>(filepath, proc_path);</span><br><span class="line"></span><br><span class="line">      <span class="built_in">sprintf</span>(temp, <span class="string">&quot;%d&quot;</span>, proc_id);</span><br><span class="line">      <span class="built_in">strcat</span>(filepath, temp);</span><br><span class="line"></span><br><span class="line">      <span class="built_in">strcat</span>(filepath, <span class="string">&quot;/stat&quot;</span>);</span><br><span class="line">      </span><br><span class="line">      <span class="comment">//printf(&quot;%s\n&quot;, filepath); //输出文件路径</span></span><br><span class="line"></span><br><span class="line">      FILE *fp = fopen(filepath, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">      <span class="keyword">if</span> (fp)</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="type">char</span> str[<span class="number">10</span>];</span><br><span class="line">        <span class="comment">// 用fscanf, fgets等函数读取</span></span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">fscanf</span>(fp, <span class="string">&quot;%s&quot;</span>, str) != EOF)</span><br><span class="line">        &#123;</span><br><span class="line">            count++;</span><br><span class="line">            <span class="keyword">if</span> (count == <span class="number">4</span>) <span class="keyword">break</span>;  <span class="comment">//根据手册&quot;/proc/[pid]/stat第四个字符串是farther proc</span></span><br><span class="line">        &#125;</span><br><span class="line">        fclose(fp);</span><br><span class="line"></span><br><span class="line">        <span class="type">pid_t</span> farther_proc;</span><br><span class="line">        <span class="type">char</span>* result;</span><br><span class="line">        farther_proc = strtol(str, &amp;result, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//加入到farther中</span></span><br><span class="line">        List_Append(&amp;farther, farther_proc);</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">// 错误处理</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  closedir(dir);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//显示父子对应的进程号</span></span><br><span class="line"> List_Show(&amp;son);</span><br><span class="line"> List_Show(&amp;farther);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"> print_tree(&amp;son, &amp;farther, <span class="number">0</span>, <span class="number">0</span> ,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">List_Init</span><span class="params">(plist *<span class="built_in">list</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">list</span>-&gt;n = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">List_Append</span><span class="params">(plist *<span class="built_in">list</span>, <span class="type">pid_t</span> value)</span></span><br><span class="line">&#123; <span class="comment">// 参考python中的append()函数</span></span><br><span class="line">  <span class="built_in">list</span>-&gt;P[<span class="built_in">list</span>-&gt;n++] = value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">List_Show</span><span class="params">(plist *<span class="built_in">list</span>)</span></span><br><span class="line">&#123; <span class="comment">// 打印列表</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;len=%d values=&quot;</span>, <span class="built_in">list</span>-&gt;n);</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">list</span>-&gt;n; ++i)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, <span class="built_in">list</span>-&gt;P[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><ol>
+<li>在使用函数<code>strtoul</code>的时候传入第二个参数<code>result</code>下面的情况会报错”segmention fault(core dump)”</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> * *result;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%ld&quot;</span>, strtoul(<span class="string">&quot;12&quot;</span>,result, <span class="number">0</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在实践中是这么写参数<code>result</code>的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> * result;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%ld&quot;</span>, strtoul(<span class="string">&quot;12&quot;</span>,&amp;result, <span class="number">0</span>));</span><br><span class="line">    <span class="comment">//printf(&quot;%c&quot;, *result);</span></span><br><span class="line">    <span class="keyword">if</span>(*result == <span class="string">&#x27;\0&#x27;</span>) <span class="built_in">printf</span>(<span class="string">&quot;is zero&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>为什么报错”‘.&#x2F;a.out’ terminated by signal SIGSEGV (Address boundary error)”</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="type">char</span> *filename  =  <span class="built_in">strcat</span>(<span class="string">&quot;/proc&quot;</span>,<span class="string">&quot;3213&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,filename);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用下面这个版本就好了</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">char</span> *firstName = <span class="string">&quot;/proc&quot;</span>;</span><br><span class="line">    <span class="type">char</span> *lastName = <span class="string">&quot;3213&quot;</span>;</span><br><span class="line">    <span class="type">char</span> *name = (<span class="type">char</span> *) <span class="built_in">malloc</span>(<span class="built_in">strlen</span>(firstName) + <span class="built_in">strlen</span>(lastName));</span><br><span class="line">    <span class="built_in">strcpy</span>(name, firstName);</span><br><span class="line">    <span class="built_in">strcat</span>(name, lastName);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, name);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h1><ol>
+<li>太丑了</li>
+</ol>
+<h1 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h1><ol>
+<li>读取文件,其中xxx是文件名</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    FILE *fp = fopen(<span class="string">&quot;xxx&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (fp)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">char</span> str[<span class="number">10</span>];</span><br><span class="line">        <span class="comment">// 用fscanf, fgets等函数读取</span></span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">fscanf</span>(fp, <span class="string">&quot;%s&quot;</span>, str) != EOF)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, str);</span><br><span class="line">            count++;</span><br><span class="line">            <span class="keyword">if</span> (count == <span class="number">4</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n%s\n&quot;</span>, str);</span><br><span class="line">        fclose(fp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 错误处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>测试目录的读写，这里的文件读写过程很像是一个迭代器。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;inttypes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;malloc.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> *proc_path = <span class="string">&quot;/proc&quot;</span>;</span><br><span class="line">    DIR *dir = opendir(proc_path);</span><br><span class="line">    </span><br><span class="line">     <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> * <span class="title">entry</span>;</span></span><br><span class="line">    <span class="keyword">while</span> ((entry = readdir(dir)) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">char</span> * result;</span><br><span class="line">        <span class="type">pid_t</span> proc_id= strtol(entry-&gt;d_name, &amp;result, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;  %d&quot;</span>,proc_id);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;result &quot;</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;  %s\n&quot;</span>, result);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    closedir(dir);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/myblog/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+              <a href="/myblog/tags/OSjyy/" rel="tag"># OSjyy</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/myblog/2023/09/05/cs144-lab1/" rel="prev" title="cs144:lab1">
+      <i class="fa fa-chevron-left"></i> cs144:lab1
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/myblog/2023/09/07/cs144-lab2/" rel="next" title="cs144:lab2">
+      cs144:lab2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pstree"><span class="nav-number">1.</span> <span class="nav-text">pstree</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B"><span class="nav-number">4.</span> <span class="nav-text">改进</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tips"><span class="nav-number">5.</span> <span class="nav-text">Tips</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="jxWu"
+      src="/myblog/uploads/myimage.jpg">
+  <p class="site-author-name" itemprop="name">jxWu</p>
+  <div class="site-description" itemprop="description">record and up</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/myblog/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/myblog/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/myblog/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jxWu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/myblog/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/myblog/lib/anime.min.js"></script>
+  <script src="/myblog/lib/velocity/velocity.min.js"></script>
+  <script src="/myblog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/myblog/js/utils.js"></script>
+
+<script src="/myblog/js/motion.js"></script>
+
+
+<script src="/myblog/js/schemes/pisces.js"></script>
+
+
+<script src="/myblog/js/next-boot.js"></script>
+
+
+  <script defer src="/myblog/lib/three/three.min.js"></script>
+    <script defer src="/myblog/lib/three/three-waves.min.js"></script>
+    <script defer src="/myblog/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/myblog/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
