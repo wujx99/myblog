@@ -5,7 +5,10 @@ tags:
 - cpp
 - effective c++
 ---
+《effective c++》读书笔记
+<!-- more -->
 # 简介
+
 ## 术语
 - declaration：
 - `object`:包括内置类型和用户自定义类型
