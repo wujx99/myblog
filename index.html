@@ -169,6 +169,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">jyyos代码导读和课程记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-27 11:51:23" itemprop="dateCreated datePublished" datetime="2023-09-27T11:51:23+08:00">2023-09-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-09-28 15:32:35" itemprop="dateModified" datetime="2023-09-28T15:32:35+08:00">2023-09-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>代码阅读见github</p>
+<h1 id="lecture03"><a href="#lecture03" class="headerlink" title="lecture03"></a>lecture03</h1><h2 id="firmware"><a href="#firmware" class="headerlink" title="firmware"></a>firmware</h2><p>硬件与程序员的约定</p>
+<p>状态机的初始状态，有cpu reset的状态和firmware加载后的状态。这个程序模拟了firmware加载了我们的代码，然后我们自己用类似系统调用的方式调用fireware的代码。我们使用qemu来模拟这个加载过程，并且qemu是可以<strong>调试</strong>的，使用gdb监听local host来调试。并且展示了<code>init.gdb</code>的调试技巧还有watch point的技巧来帮助简化流程。见<code>Makefile</code>文件的详解。</p>
+<h2 id="hello-os"><a href="#hello-os" class="headerlink" title="hello-os"></a>hello-os</h2><p>直接在计算机硬件上运行hello world程序。</p>
+<p>但是我们需要很多框架代码和库。可以看提供实验的代码和框架（比较复杂）<br>我们<code>am.h</code>中的api只有简单的几个，但是我们却可以真正的在操作系统运行起来</p>
+<p><code>kernel.c</code>是一个50行的操作系统</p>
+<p>tips：</p>
+<ol>
+<li>vscode如何配置补全和宏，配置<code>compile_commands.json</code>,使用<code>bear -- make</code>就可以生成</li>
+<li><code>$(AM_HOME)/Makefile</code>是很难读的，这时候就要想一下该如何处理—&gt;转换成状态机，观察执行时的状态去理解。而<strong>不是</strong>只看状态机的描述！使用<code>make -nB</code>命令打印make执行状态而不执行</li>
+<li><code>make -nB</code>输出的结果并不好读，但是用unix哲学和改善文本的可读性来说实现。然后用Ai等的的工具，就可以获得比较好读的.<img src="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img01.png" class="">
+然后就可以看到命令的执行的过程，一些编译选项<strong>定义的宏</strong>，配置的<code>include</code>的路径等信息都一清二楚。</li>
+<li>可以看到磁盘镜像时怎么生成的<img src="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img02.png" class=""></li>
+</ol>
+<h1 id="lecture04"><a href="#lecture04" class="headerlink" title="lecture04"></a>lecture04</h1><h2 id="model"><a href="#model" class="headerlink" title="model"></a>model</h2><p>利用python的generator的特性去实现。<br>重要的是<code>os-model.py</code>的这一行</p>
+<figure class="highlight python"><figcaption><span>os-model.py</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> syscall <span class="keyword">in</span> OperatingSystem.SYSCALLS:</span><br><span class="line">        src = src.replace(<span class="string">f&#x27;sys_<span class="subst">&#123;syscall&#125;</span>&#x27;</span>,        <span class="comment"># sys_write(...)</span></span><br><span class="line">                          <span class="string">f&#x27;yield &quot;<span class="subst">&#123;syscall&#125;</span>&quot;, &#x27;</span>)  <span class="comment">#  -&gt; yield &#x27;write&#x27;, (...)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>os-real.h</code>是对应的真实的c语言的实现</p>
+<p>tips</p>
+<ol>
+<li>在程序开始前和结束后，执行一些代码的trick(避免提前的return，导致main靠后的释放资源的代码不能执行)<figure class="highlight c"><figcaption><span>os-real.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Constructor called before main()</span></span><br><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">void</span> __attribute__((constructor))</span><br><span class="line">srand_init() &#123;</span><br><span class="line">  srand(time(<span class="number">0</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Destructor called after main()</span></span><br><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">void</span> __attribute__((destructor))</span><br><span class="line">thread_join() &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nthreads; i++) &#123;</span><br><span class="line">    pthread_join(threads[i], <span class="literal">NULL</span>);  <span class="comment">// Wait for thread terminations</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="mosaic"><a href="#mosaic" class="headerlink" title="mosaic"></a>mosaic</h2><p>500行建模操作系统，一个更加完善的模型。可以输出程序运行的状态图。</p>
+<p>所有的不确定性都来自于系统调用，所以我们就可以数出所有的运行的可能性。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/09/21/cmake/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -755,64 +842,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/09/05/std-string-view/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
-      <meta itemprop="name" content="jxWu">
-      <meta itemprop="description" content="record and up">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blogs&record">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/myblog/2023/09/05/std-string-view/" class="post-title-link" itemprop="url">std::string_view</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-09-05 19:23:47 / 修改时间：19:24:28" itemprop="dateCreated datePublished" datetime="2023-09-05T19:23:47+08:00">2023-09-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -884,7 +913,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/myblog/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -897,7 +926,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/myblog/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
