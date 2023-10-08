@@ -56,6 +56,7 @@
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img25.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img26.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img27.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img34.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img28.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img29.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img30.png">
@@ -63,7 +64,7 @@
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img32.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img33.png">
 <meta property="article:published_time" content="2023-09-27T03:51:23.000Z">
-<meta property="article:modified_time" content="2023-10-06T15:05:18.515Z">
+<meta property="article:modified_time" content="2023-10-07T05:02:16.488Z">
 <meta property="article:author" content="jxWu">
 <meta property="article:tag" content="操作系统">
 <meta property="article:tag" content="jyyos">
@@ -238,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-06 23:05:18" itemprop="dateModified" datetime="2023-10-06T23:05:18+08:00">2023-10-06</time>
+                <time title="修改时间：2023-10-07 13:02:16" itemprop="dateModified" datetime="2023-10-07T13:02:16+08:00">2023-10-07</time>
               </span>
 
           
@@ -498,8 +499,14 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace ./a.out _exit </span><br></pre></td></tr></table></figure>
 <img src="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img26.png" class="">
 
-<h1 id="lecture16"><a href="#lecture16" class="headerlink" title="lecture16"></a>lecture16</h1><p>如何把minimal.S加载成为第一个程序init，如何这个init调用了exit了，会怎么样？为什么systemd是进程树的根</p>
+<h1 id="lecture16"><a href="#lecture16" class="headerlink" title="lecture16"></a>lecture16</h1><p>这一节的内容和示例代码会解决下面的问题：<br>如何把minimal.S加载成为第一个程序init，如何这个init调用了exit了，会怎么样？为什么systemd是进程树的根？</p>
+<p>Linux的模型：</p>
 <img src="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img27.png" class="">
+
+<ol>
+<li>为什么systemd是进程树的根？</li>
+</ol>
+<img src="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img34.png" class="">
 
 <h2 id="minix"><a href="#minix" class="headerlink" title="minix"></a>minix</h2><p>最早的操作系统，写的一个makefile</p>
 <h2 id="linux"><a href="#linux" class="headerlink" title="*linux"></a>*linux</h2><p>很经典，要反复的观看！！！！</p>
@@ -626,7 +633,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/myblog/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

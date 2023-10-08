@@ -169,7 +169,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/10/06/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
@@ -183,7 +183,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/myblog/2023/10/06/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/" class="post-title-link" itemprop="url">jyyos代码导读和课程记录（17-28）</a>
+            <a href="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/" class="post-title-link" itemprop="url">jyyos代码导读和课程记录（17-28）</a>
         </h2>
 
         <div class="post-meta">
@@ -194,7 +194,240 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-10-06 23:04:30 / 修改时间：23:05:09" itemprop="dateCreated datePublished" datetime="2023-10-06T23:04:30+08:00">2023-10-06</time>
+              <time title="创建时间：2023-10-08 23:47:59 / 修改时间：23:51:31" itemprop="dateCreated datePublished" datetime="2023-10-08T23:47:59+08:00">2023-10-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="lecture17"><a href="#lecture17" class="headerlink" title="lecture17"></a>lecture17</h1><p>进程的这个状态机可以用（M，R）来表示，R很简单，但是M是什么呢？<br>有两个基本的问题</p>
+<ol>
+<li>下面程序的输出是什么？<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%p\n&quot;</span>, main);</span><br></pre></td></tr></table></figure></li>
+<li>何种指针访问不会触发segment fault？<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *p = random();</span><br><span class="line">*p; <span class="comment">// 什么时候访问合法？ </span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>进程地址空间管理<br>三个API：mmap,munmap,mprotect</p>
+<p>使用mmap：两个例子，一个见下mmap-alloc，一个是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/dev/sda&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    mm = mmap.mmap(fp.fileno(),prot=mmap.PROT_READ, length=<span class="number">128</span> &lt;&lt; <span class="number">30</span>)</span><br><span class="line">    hexdump.hexdump(mm[:<span class="number">512</span>])</span><br></pre></td></tr></table></figure>
+
+<p>入侵地址空间：一个展示</p>
+<h2 id="minimal"><a href="#minimal" class="headerlink" title="minimal"></a>minimal</h2><img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img01.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img02.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img03.png" class="">
+
+<h2 id="mmap-alloc"><a href="#mmap-alloc" class="headerlink" title="mmap-alloc"></a>mmap-alloc</h2><p>瞬间分配</p>
+<h1 id="lecture18"><a href="#lecture18" class="headerlink" title="lecture18"></a>lecture18</h1><h2 id="dsu"><a href="#dsu" class="headerlink" title="dsu"></a>dsu</h2><img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img04.png" class="">
+
+<blockquote>
+<p>里面有一个彩蛋，padding的代码时做测试用的，为的是能够触发func的代码在页边界的情况</p>
+</blockquote>
+<p>好的代码：</p>
+<ol>
+<li>不言自明</li>
+<li>不言自证</li>
+<li>帮助理解状态机</li>
+</ol>
+<p>有一些比较经典的资料等等细节</p>
+<h2 id="calc"><a href="#calc" class="headerlink" title="calc"></a>calc</h2><p>一个绝对不可读的代码，一个计算器的小程序</p>
+<h2 id="thread-os"><a href="#thread-os" class="headerlink" title="*thread-os"></a>*thread-os</h2><p>用好工具，现在我们来调试这个代码（这个代码不懂，就不要想lab2了）<br>AskGPT: Can I print process memory maps inside gdb?<br>AskGPT: Can I visualize a process-internal data structure in gdb?</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img06.png" class="">
+
+<p>上面两条给了我们指明了前进的道路</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img05.png" class="">
+
+<p>AskGPT: How to use Python to parse and check&#x2F;visualize C&#x2F;C++ program state in GDB?</p>
+<p>然后就写了<code>visualize.py</code>.这里注册了一个<code>rdump</code>的命令，就可以使用来格式化一些数据！！</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img07.png" class="">
+
+<p>我们也注册了一个<code>pdump</code>的命令！</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img08.png" class="">
+
+<p>行号的实现也是ask GPT</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img09.png" class="">
+
+
+
+
+<p>更进一步我们可以做任何事情tui window api &amp; gdbgui</p>
+<p>再有想象力一点：</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img10.png" class="">
+
+<p>最后我们一个总结</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img11.png" class="">
+
+<h1 id="lecture19"><a href="#lecture19" class="headerlink" title="lecture19"></a>lecture19</h1><p>UNIX shell<br>os（kernel） &#x3D; API + 对象</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img12.png" class="">
+
+<p>shell 是一门把用户指令翻译成系统调用的<strong>编程语言</strong></p>
+<ol>
+<li>基于文本替换的快速工作流搭建<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img13.png" class=""></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -</span><br><span class="line">vim &lt;(<span class="built_in">ls</span>)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>job control(类似于window窗口的X，[], –)<br>how to use?<blockquote>
+<p>jyy推荐的手册<code>man sh</code></p>
+</blockquote>
+</li>
+</ol>
+<h2 id="sh"><a href="#sh" class="headerlink" title="sh"></a>sh</h2><p>复刻经典：一个freestanding的shell，看Makefile可以看到是没有任何库函数的，直接ld sh.o</p>
+<p>怎么阅读这个<code>sh.c</code>的代码？</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img14.png" class="">
+
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img15.png" class="">
+
+<p>除了用strace，还有gdb，下面展示管道syscall是怎么实现的.查看<code>init.gdb</code>,再查看我们的脚本<code>visualize.py</code></p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img16.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img17.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img18.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img19.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img20.png" class="">
+
+<h1 id="lecture20"><a href="#lecture20" class="headerlink" title="lecture20"></a>lecture20</h1><p>如何使用musl作为我们的libc呢？ask GPT</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img21.png" class="">
+
+<blockquote>
+<p>任务：调试出musl的源码</p>
+</blockquote>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img22.png" class="">
+
+
+<p>perror,所有的系统调用的错误都封装好了。</p>
+<p>动态内存的管理<br>这个好像和lab1相关， 用区间树，但是多线程安全就很困难，所以要更加谨慎的使用数据结构。</p>
+<blockquote>
+<p>这节也很有启发性</p>
+</blockquote>
+<h2 id="musl"><a href="#musl" class="headerlink" title="musl"></a>musl</h2><p>调试进去源码</p>
+<h2 id="memset"><a href="#memset" class="headerlink" title="memset"></a>memset</h2><p>我们的标准库怎么上锁？printf的buffer上锁了但是我们的示例代码没有上锁</p>
+<h2 id="env"><a href="#env" class="headerlink" title="env"></a>env</h2><p>libc最重要的是对os对象的封装</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img23.png" class="">
+
+<p>在下面的代码中</p>
+<figure class="highlight c"><figcaption><span>env.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">char</span> **environ;</span><br></pre></td></tr></table></figure>
+<p><code>environ</code>这个变量是谁赋值的？肯定不是os，在debug musl的代码可以找到一个<code>start_c</code>的函数按照手册做了这个事情。</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img24.png" class="">
+
+<blockquote>
+<p>启示，先调musl的代码，不懂的地方看手册</p>
+</blockquote>
+<h1 id="lecture21-可执行文件和加载-上"><a href="#lecture21-可执行文件和加载-上" class="headerlink" title="lecture21 可执行文件和加载(上)"></a>lecture21 可执行文件和加载(上)</h1><p>everything is file 在计算机里数据就是everything</p>
+<p>可执行文件就是描述状态机初始状态的数据结构。那环境变量是怎么设置？上一节的<code>env</code>已经给出了答案。</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img25.png" class="">
+
+
+<p>ELF文件时谁生成的？是gcc一个一个字节写的，但是多个文件还需要链接，这也带来如下的复杂性。</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img27.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img28.png" class="">
+
+
+<p>ELF不好读是因为违背了数据的局部性原则</p>
+<h2 id="loader-flat"><a href="#loader-flat" class="headerlink" title="loader-flat"></a>loader-flat</h2><p>字符串（minimal.S）直接加载到内存里面去运行它！这个<code>minimal.S</code>是一个位置无关的代码，并且用<code>objcopy</code>仅仅复制<code>.o</code>的代码部分</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./loader minimal.bin</span><br></pre></td></tr></table></figure>
+
+<p>所有的loader都是这个原理</p>
+<h2 id="loader-static"><a href="#loader-static" class="headerlink" title="*loader-static"></a>*loader-static</h2><p>在操作系统上实现ELF loader<br>这就是一个简单的实现(用户态的)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./a.out /usr/bin/busybox <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>操作系统的execve其实也可以用mmap实现，其实execve可以设计成库函数(如这个示例代码所示<code>execve_</code>)</p>
+</blockquote>
+<p>.&#x2F;a.out代码执行过程</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img26.png" class="">
+
+<p>把应该搬运的东西准备好，然后按照手册initial process stack就好了！！！</p>
+<p>最后一段汇编的间接跳转。</p>
+<p>框架代码也有一个ELF文件的加载器，启动加载器<code>boot-main</code>，只不过没有mmap，但可以用io代替。</p>
+<h2 id="dlbox"><a href="#dlbox" class="headerlink" title="*dlbox"></a>*dlbox</h2><p>实现运行库和代码分离,例如linux只有一份libc（通过虚拟内存的共享实现的，只有动态链接的查表才能实现），并且可以实现补丁和加载。所有也就有了版本号，来进行依赖。</p>
+<p>直接讲动态链接是不太现实的！这只是一个数据结构！换一种方式，自己设计一个二进制文件的格式（假设编译器生成位置无关的代码）</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img30.png" class="">
+
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img29.png" class="">
+
+<p>动态链接最重要的是根据符号找到地址！</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img31.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img32.png" class="">
+
+<p>下面就是我们自己链接器&#x2F;加载器的工具链<code>dlbox</code></p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img33.png" class="">
+
+<p>最重要的dlbox中的<code>dlopen</code></p>
+<h1 id="lecture22-可执行文件和加载-下"><a href="#lecture22-可执行文件和加载-下" class="headerlink" title="lecture22 可执行文件和加载(下)"></a>lecture22 可执行文件和加载(下)</h1><h2 id="dlbox-1"><a href="#dlbox-1" class="headerlink" title="dlbox"></a>dlbox</h2><p>上一节还遗留了一些细节！给上节的简单模型加上一些没有cover的细节</p>
+<ol>
+<li>下面的问题<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img34.png" class="">
+解决办法是PLT <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img35.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img36.png" class=""></li>
+</ol>
+<blockquote>
+<p>ldd 的工具 man ldd see also ld.so(8)</p>
+</blockquote>
+<h2 id="custom-loader"><a href="#custom-loader" class="headerlink" title="custom-loader"></a>custom-loader</h2><p>更多的细节，现在是真正的loader了。</p>
+<p>动态链接的二进制危机，execve后第一条指令在哪里？ld的starti。</p>
+<p>ask GPT：What are the first a few steps exected after execve() of a ELF dynamic link binary?</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img38.png" class="">
+
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img37.png" class="">
+
+
+<p>ask GPT：How can I compile an ELF binary that use an alternative dynamic loader than the default ld.so?</p>
+<p>所以我们能让计算机执行ld.S作为“loader”</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img39.png" class="">
+
+
+<blockquote>
+<p>readelf输出终于可以看的懂了！</p>
+</blockquote>
+<p>为什么不在加载的时候执行静态链接？</p>
+<p>代码解决了，那数据呢？</p>
+<hr>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/10/08/accelerate-tedious-workflow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/myblog/2023/10/08/accelerate-tedious-workflow/" class="post-title-link" itemprop="url">accelerate tedious workflow</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-08 10:21:29" itemprop="dateCreated datePublished" datetime="2023-10-08T10:21:29+08:00">2023-10-08</time>
             </span>
 
           
@@ -431,7 +664,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-06 23:05:18" itemprop="dateModified" datetime="2023-10-06T23:05:18+08:00">2023-10-06</time>
+                <time title="修改时间：2023-10-07 13:02:16" itemprop="dateModified" datetime="2023-10-07T13:02:16+08:00">2023-10-07</time>
               </span>
 
           
@@ -691,8 +924,14 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace ./a.out _exit </span><br></pre></td></tr></table></figure>
 <img src="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img26.png" class="">
 
-<h1 id="lecture16"><a href="#lecture16" class="headerlink" title="lecture16"></a>lecture16</h1><p>如何把minimal.S加载成为第一个程序init，如何这个init调用了exit了，会怎么样？为什么systemd是进程树的根</p>
+<h1 id="lecture16"><a href="#lecture16" class="headerlink" title="lecture16"></a>lecture16</h1><p>这一节的内容和示例代码会解决下面的问题：<br>如何把minimal.S加载成为第一个程序init，如何这个init调用了exit了，会怎么样？为什么systemd是进程树的根？</p>
+<p>Linux的模型：</p>
 <img src="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img27.png" class="">
+
+<ol>
+<li>为什么systemd是进程树的根？</li>
+</ol>
+<img src="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/img34.png" class="">
 
 <h2 id="minix"><a href="#minix" class="headerlink" title="minix"></a>minix</h2><p>最早的操作系统，写的一个makefile</p>
 <h2 id="linux"><a href="#linux" class="headerlink" title="*linux"></a>*linux</h2><p>很经典，要反复的观看！！！！</p>
@@ -968,64 +1207,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/09/09/shared-library/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
-      <meta itemprop="name" content="jxWu">
-      <meta itemprop="description" content="record and up">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blogs&record">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/myblog/2023/09/09/shared-library/" class="post-title-link" itemprop="url">shared library</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-09-09 13:39:14 / 修改时间：13:39:44" itemprop="dateCreated datePublished" datetime="2023-09-09T13:39:14+08:00">2023-09-09</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1097,7 +1278,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/myblog/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
