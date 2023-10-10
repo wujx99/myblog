@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"wujx99.github.io","root":"/myblog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="lecture17进程的这个状态机可以用（M，R）来表示，R很简单，但是M是什么呢？有两个基本的问题  下面程序的输出是什么？1printf(&quot;%p\n&quot;, main); 何种指针访问不会触发segment fault？12char *p &#x3D; random();*p; &#x2F;&#x2F; 什么时候访问合法？   进程地址空间管理三个API：mmap,munmap,mprotect 使用mma">
+  <meta name="description" content="lecture17进程的这个状态机可以用（M，R）来表示，R 很简单，但是 M 是什么呢？有两个基本的问题  下面程序的输出是什么？  1printf(&quot;%p\n&quot;, main);   何种指针访问不会触发 segment fault？  12char *p &#x3D; random();*p; &#x2F;&#x2F; 什么时候访问合法？  进程地址空间管理三个 API：mmap,munmap,mpro">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jyyos代码导读和课程记录（17-28）">
 <meta property="og:url" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/index.html">
 <meta property="og:site_name" content="blogs&amp;record">
-<meta property="og:description" content="lecture17进程的这个状态机可以用（M，R）来表示，R很简单，但是M是什么呢？有两个基本的问题  下面程序的输出是什么？1printf(&quot;%p\n&quot;, main); 何种指针访问不会触发segment fault？12char *p &#x3D; random();*p; &#x2F;&#x2F; 什么时候访问合法？   进程地址空间管理三个API：mmap,munmap,mprotect 使用mma">
+<meta property="og:description" content="lecture17进程的这个状态机可以用（M，R）来表示，R 很简单，但是 M 是什么呢？有两个基本的问题  下面程序的输出是什么？  1printf(&quot;%p\n&quot;, main);   何种指针访问不会触发 segment fault？  12char *p &#x3D; random();*p; &#x2F;&#x2F; 什么时候访问合法？  进程地址空间管理三个 API：mmap,munmap,mpro">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img01.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img02.png">
@@ -68,8 +68,42 @@
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img38.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img37.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img39.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img40.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img41.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img43.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img42.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img44.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img45.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img46.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img47.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img48.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img50.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img49.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img51.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img52.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img53.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img54.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img55.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img56.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img57.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img58.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img59.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img60.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img61.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img62.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img63.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img64.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img65.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img66.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img67.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img68.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img69.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img70.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img71.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img72.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img73.png">
 <meta property="article:published_time" content="2023-10-08T15:47:59.000Z">
-<meta property="article:modified_time" content="2023-10-08T15:51:31.456Z">
+<meta property="article:modified_time" content="2023-10-10T15:34:15.682Z">
 <meta property="article:author" content="jxWu">
 <meta property="article:tag" content="操作系统">
 <meta property="article:tag" content="jyyos">
@@ -236,10 +270,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-10-08 23:47:59 / 修改时间：23:51:31" itemprop="dateCreated datePublished" datetime="2023-10-08T23:47:59+08:00">2023-10-08</time>
+              <time title="创建时间：2023-10-08 23:47:59" itemprop="dateCreated datePublished" datetime="2023-10-08T23:47:59+08:00">2023-10-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-10 23:34:15" itemprop="dateModified" datetime="2023-10-10T23:34:15+08:00">2023-10-10</time>
+              </span>
 
           
 
@@ -252,13 +292,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="lecture17"><a href="#lecture17" class="headerlink" title="lecture17"></a>lecture17</h1><p>进程的这个状态机可以用（M，R）来表示，R很简单，但是M是什么呢？<br>有两个基本的问题</p>
+        <h1 id="lecture17"><a href="#lecture17" class="headerlink" title="lecture17"></a>lecture17</h1><p>进程的这个状态机可以用（M，R）来表示，R 很简单，但是 M 是什么呢？<br>有两个基本的问题</p>
 <ol>
-<li>下面程序的输出是什么？<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%p\n&quot;</span>, main);</span><br></pre></td></tr></table></figure></li>
-<li>何种指针访问不会触发segment fault？<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *p = random();</span><br><span class="line">*p; <span class="comment">// 什么时候访问合法？ </span></span><br></pre></td></tr></table></figure></li>
+<li>下面程序的输出是什么？</li>
 </ol>
-<p>进程地址空间管理<br>三个API：mmap,munmap,mprotect</p>
-<p>使用mmap：两个例子，一个见下mmap-alloc，一个是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%p\n&quot;</span>, main);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>何种指针访问不会触发 segment fault？</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *p = random();</span><br><span class="line">*p; <span class="comment">// 什么时候访问合法？</span></span><br></pre></td></tr></table></figure>
+
+<p>进程地址空间管理<br>三个 API：mmap,munmap,mprotect</p>
+<p>使用 mmap：两个例子，一个见下 mmap-alloc，一个是：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/dev/sda&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    mm = mmap.mmap(fp.fileno(),prot=mmap.PROT_READ, length=<span class="number">128</span> &lt;&lt; <span class="number">30</span>)</span><br><span class="line">    hexdump.hexdump(mm[:<span class="number">512</span>])</span><br></pre></td></tr></table></figure>
 
 <p>入侵地址空间：一个展示</p>
@@ -270,7 +316,7 @@
 <h1 id="lecture18"><a href="#lecture18" class="headerlink" title="lecture18"></a>lecture18</h1><h2 id="dsu"><a href="#dsu" class="headerlink" title="dsu"></a>dsu</h2><img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img04.png" class="">
 
 <blockquote>
-<p>里面有一个彩蛋，padding的代码时做测试用的，为的是能够触发func的代码在页边界的情况</p>
+<p>里面有一个彩蛋，padding 的代码时做测试用的，为的是能够触发 func 的代码在页边界的情况</p>
 </blockquote>
 <p>好的代码：</p>
 <ol>
@@ -280,7 +326,7 @@
 </ol>
 <p>有一些比较经典的资料等等细节</p>
 <h2 id="calc"><a href="#calc" class="headerlink" title="calc"></a>calc</h2><p>一个绝对不可读的代码，一个计算器的小程序</p>
-<h2 id="thread-os"><a href="#thread-os" class="headerlink" title="*thread-os"></a>*thread-os</h2><p>用好工具，现在我们来调试这个代码（这个代码不懂，就不要想lab2了）<br>AskGPT: Can I print process memory maps inside gdb?<br>AskGPT: Can I visualize a process-internal data structure in gdb?</p>
+<h2 id="thread-os"><a href="#thread-os" class="headerlink" title="*thread-os"></a>*thread-os</h2><p>用好工具，现在我们来调试这个代码（这个代码不懂，就不要想 lab2 了）<br>AskGPT: Can I print process memory maps inside gdb?<br>AskGPT: Can I visualize a process-internal data structure in gdb?</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img06.png" class="">
 
 <p>上面两条给了我们指明了前进的道路</p>
@@ -293,13 +339,10 @@
 <p>我们也注册了一个<code>pdump</code>的命令！</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img08.png" class="">
 
-<p>行号的实现也是ask GPT</p>
+<p>行号的实现也是 ask GPT</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img09.png" class="">
 
-
-
-
-<p>更进一步我们可以做任何事情tui window api &amp; gdbgui</p>
+<p>更进一步我们可以做任何事情 tui window api &amp; gdbgui</p>
 <p>再有想象力一点：</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img10.png" class="">
 
@@ -314,79 +357,78 @@
 <li>基于文本替换的快速工作流搭建<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img13.png" class=""></li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">strace ./a.out &amp;| vim -</span><br><span class="line">vim &lt;(<span class="built_in">ls</span>)</span><br></pre></td></tr></table></figure>
+
 <ol start="2">
-<li>job control(类似于window窗口的X，[], –)<br>how to use?<blockquote>
-<p>jyy推荐的手册<code>man sh</code></p>
+<li>job control(类似于 window 窗口的 X，[], –)<br>how to use?<blockquote>
+<p>jyy 推荐的手册<code>man sh</code></p>
 </blockquote>
 </li>
 </ol>
-<h2 id="sh"><a href="#sh" class="headerlink" title="sh"></a>sh</h2><p>复刻经典：一个freestanding的shell，看Makefile可以看到是没有任何库函数的，直接ld sh.o</p>
+<h2 id="sh"><a href="#sh" class="headerlink" title="sh"></a>sh</h2><p>复刻经典：一个 freestanding 的 shell，看 Makefile 可以看到是没有任何库函数的，直接 ld sh.o</p>
 <p>怎么阅读这个<code>sh.c</code>的代码？</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img14.png" class="">
 
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img15.png" class="">
 
-<p>除了用strace，还有gdb，下面展示管道syscall是怎么实现的.查看<code>init.gdb</code>,再查看我们的脚本<code>visualize.py</code></p>
+<p>除了用 strace，还有 gdb，下面展示管道 syscall 是怎么实现的.查看<code>init.gdb</code>,再查看我们的脚本<code>visualize.py</code></p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img16.png" class="">
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img17.png" class="">
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img18.png" class="">
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img19.png" class="">
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img20.png" class="">
 
-<h1 id="lecture20"><a href="#lecture20" class="headerlink" title="lecture20"></a>lecture20</h1><p>如何使用musl作为我们的libc呢？ask GPT</p>
+<h1 id="lecture20"><a href="#lecture20" class="headerlink" title="lecture20"></a>lecture20</h1><p>如何使用 musl 作为我们的 libc 呢？ask GPT</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img21.png" class="">
 
 <blockquote>
-<p>任务：调试出musl的源码</p>
-</blockquote>
+<p>任务：调试出 musl 的源码</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img22.png" class="">
-
-
+</blockquote>
 <p>perror,所有的系统调用的错误都封装好了。</p>
-<p>动态内存的管理<br>这个好像和lab1相关， 用区间树，但是多线程安全就很困难，所以要更加谨慎的使用数据结构。</p>
+<p>动态内存的管理<br>这个好像和 lab1 相关， 用区间树，但是多线程安全就很困难，所以要更加谨慎的使用数据结构。</p>
 <blockquote>
 <p>这节也很有启发性</p>
 </blockquote>
 <h2 id="musl"><a href="#musl" class="headerlink" title="musl"></a>musl</h2><p>调试进去源码</p>
-<h2 id="memset"><a href="#memset" class="headerlink" title="memset"></a>memset</h2><p>我们的标准库怎么上锁？printf的buffer上锁了但是我们的示例代码没有上锁</p>
-<h2 id="env"><a href="#env" class="headerlink" title="env"></a>env</h2><p>libc最重要的是对os对象的封装</p>
+<h2 id="memset"><a href="#memset" class="headerlink" title="memset"></a>memset</h2><p>我们的标准库怎么上锁？printf 的 buffer 上锁了但是我们的示例代码没有上锁</p>
+<h2 id="env"><a href="#env" class="headerlink" title="env"></a>env</h2><p>libc 最重要的是对 os 对象的封装</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img23.png" class="">
 
 <p>在下面的代码中</p>
 <figure class="highlight c"><figcaption><span>env.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">char</span> **environ;</span><br></pre></td></tr></table></figure>
-<p><code>environ</code>这个变量是谁赋值的？肯定不是os，在debug musl的代码可以找到一个<code>start_c</code>的函数按照手册做了这个事情。</p>
+
+<p><code>environ</code>这个变量是谁赋值的？肯定不是 os，在 debug musl 的代码可以找到一个<code>start_c</code>的函数按照手册做了这个事情。</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img24.png" class="">
 
 <blockquote>
-<p>启示，先调musl的代码，不懂的地方看手册</p>
+<p>启示，先调 musl 的代码，不懂的地方看手册</p>
 </blockquote>
-<h1 id="lecture21-可执行文件和加载-上"><a href="#lecture21-可执行文件和加载-上" class="headerlink" title="lecture21 可执行文件和加载(上)"></a>lecture21 可执行文件和加载(上)</h1><p>everything is file 在计算机里数据就是everything</p>
+<h1 id="lecture21-可执行文件和加载-上"><a href="#lecture21-可执行文件和加载-上" class="headerlink" title="lecture21 可执行文件和加载(上)"></a>lecture21 可执行文件和加载(上)</h1><p>everything is file 在计算机里数据就是 everything</p>
 <p>可执行文件就是描述状态机初始状态的数据结构。那环境变量是怎么设置？上一节的<code>env</code>已经给出了答案。</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img25.png" class="">
 
-
-<p>ELF文件时谁生成的？是gcc一个一个字节写的，但是多个文件还需要链接，这也带来如下的复杂性。</p>
+<p>ELF 文件时谁生成的？是 gcc 一个一个字节写的，但是多个文件还需要链接，这也带来如下的复杂性。</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img27.png" class="">
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img28.png" class="">
 
-
-<p>ELF不好读是因为违背了数据的局部性原则</p>
+<p>ELF 不好读是因为违背了数据的局部性原则</p>
 <h2 id="loader-flat"><a href="#loader-flat" class="headerlink" title="loader-flat"></a>loader-flat</h2><p>字符串（minimal.S）直接加载到内存里面去运行它！这个<code>minimal.S</code>是一个位置无关的代码，并且用<code>objcopy</code>仅仅复制<code>.o</code>的代码部分</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./loader minimal.bin</span><br></pre></td></tr></table></figure>
 
-<p>所有的loader都是这个原理</p>
-<h2 id="loader-static"><a href="#loader-static" class="headerlink" title="*loader-static"></a>*loader-static</h2><p>在操作系统上实现ELF loader<br>这就是一个简单的实现(用户态的)</p>
+<p>所有的 loader 都是这个原理</p>
+<h2 id="loader-static"><a href="#loader-static" class="headerlink" title="*loader-static"></a>*loader-static</h2><p>在操作系统上实现 ELF loader<br>这就是一个简单的实现(用户态的)</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./a.out /usr/bin/busybox <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
 <blockquote>
-<p>操作系统的execve其实也可以用mmap实现，其实execve可以设计成库函数(如这个示例代码所示<code>execve_</code>)</p>
+<p>操作系统的 execve 其实也可以用 mmap 实现，其实 execve 可以设计成库函数(如这个示例代码所示<code>execve_</code>)</p>
 </blockquote>
-<p>.&#x2F;a.out代码执行过程</p>
+<p>.&#x2F;a.out 代码执行过程</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img26.png" class="">
 
-<p>把应该搬运的东西准备好，然后按照手册initial process stack就好了！！！</p>
+<p>把应该搬运的东西准备好，然后按照手册 initial process stack 就好了！！！</p>
 <p>最后一段汇编的间接跳转。</p>
-<p>框架代码也有一个ELF文件的加载器，启动加载器<code>boot-main</code>，只不过没有mmap，但可以用io代替。</p>
-<h2 id="dlbox"><a href="#dlbox" class="headerlink" title="*dlbox"></a>*dlbox</h2><p>实现运行库和代码分离,例如linux只有一份libc（通过虚拟内存的共享实现的，只有动态链接的查表才能实现），并且可以实现补丁和加载。所有也就有了版本号，来进行依赖。</p>
+<p>框架代码也有一个 ELF 文件的加载器，启动加载器<code>boot-main</code>，只不过没有 mmap，但可以用 io 代替。</p>
+<h2 id="dlbox"><a href="#dlbox" class="headerlink" title="*dlbox"></a>*dlbox</h2><p>实现运行库和代码分离,例如 linux 只有一份 libc（通过虚拟内存的共享实现的，只有动态链接的查表才能实现），并且可以实现补丁和加载。所有也就有了版本号，来进行依赖。</p>
 <p>直接讲动态链接是不太现实的！这只是一个数据结构！换一种方式，自己设计一个二进制文件的格式（假设编译器生成位置无关的代码）</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img30.png" class="">
 
@@ -399,36 +441,158 @@
 <p>下面就是我们自己链接器&#x2F;加载器的工具链<code>dlbox</code></p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img33.png" class="">
 
-<p>最重要的dlbox中的<code>dlopen</code></p>
-<h1 id="lecture22-可执行文件和加载-下"><a href="#lecture22-可执行文件和加载-下" class="headerlink" title="lecture22 可执行文件和加载(下)"></a>lecture22 可执行文件和加载(下)</h1><h2 id="dlbox-1"><a href="#dlbox-1" class="headerlink" title="dlbox"></a>dlbox</h2><p>上一节还遗留了一些细节！给上节的简单模型加上一些没有cover的细节</p>
+<p>最重要的 dlbox 中的<code>dlopen</code></p>
+<h1 id="lecture22-可执行文件和加载-下"><a href="#lecture22-可执行文件和加载-下" class="headerlink" title="lecture22 可执行文件和加载(下)"></a>lecture22 可执行文件和加载(下)</h1><h2 id="dlbox-1"><a href="#dlbox-1" class="headerlink" title="dlbox"></a>dlbox</h2><p>上一节还遗留了一些细节！给上节的简单模型加上一些没有 cover 的细节</p>
 <ol>
 <li>下面的问题<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img34.png" class="">
-解决办法是PLT <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img35.png" class="">
+解决办法是 PLT<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img35.png" class="">
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img36.png" class=""></li>
 </ol>
 <blockquote>
 <p>ldd 的工具 man ldd see also ld.so(8)</p>
 </blockquote>
-<h2 id="custom-loader"><a href="#custom-loader" class="headerlink" title="custom-loader"></a>custom-loader</h2><p>更多的细节，现在是真正的loader了。</p>
-<p>动态链接的二进制危机，execve后第一条指令在哪里？ld的starti。</p>
+<h2 id="custom-loader"><a href="#custom-loader" class="headerlink" title="custom-loader"></a>custom-loader</h2><p>更多的细节，现在是真正的 loader 了。</p>
+<p>动态链接的二进制危机，execve 后第一条指令在哪里？ld 的 starti。</p>
 <p>ask GPT：What are the first a few steps exected after execve() of a ELF dynamic link binary?</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img38.png" class="">
 
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img37.png" class="">
 
-
 <p>ask GPT：How can I compile an ELF binary that use an alternative dynamic loader than the default ld.so?</p>
-<p>所以我们能让计算机执行ld.S作为“loader”</p>
+<p>所以我们能让计算机执行 ld.S 作为“loader”</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img39.png" class="">
 
-
 <blockquote>
-<p>readelf输出终于可以看的懂了！</p>
+<p>readelf 输出终于可以看的懂了！</p>
 </blockquote>
 <p>为什么不在加载的时候执行静态链接？</p>
 <p>代码解决了，那数据呢？</p>
-<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> FILE *<span class="built_in">stdout</span>;  <span class="comment">//库一般不共享数据，所以stdout的FILE *一般保存在a.out,而不是libc</span></span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> *__lib_private;</span><br></pre></td></tr></table></figure>
 
+<p>也有两种情况，一种是在本地库里（gcc 链接），一个是在外部库（loader 链接）。</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img40.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img41.png" class="">
+
+<h2 id="hook"><a href="#hook" class="headerlink" title="*hook"></a>*hook</h2><img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img43.png" class="">
+<p>程序虽然是状态机，但是不可能以指令来理解它，我们需要借助 strace 和 hook 的工具理解。</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img42.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img44.png" class="">
+
+<blockquote>
+<p>dom tree?</p>
+</blockquote>
+<h1 id="lecture23-应用视角的操作系统-回顾"><a href="#lecture23-应用视角的操作系统-回顾" class="headerlink" title="lecture23 应用视角的操作系统(回顾)"></a>lecture23 应用视角的操作系统(回顾)</h1><img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img45.png" class="">
+
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img46.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img47.png" class="">
+
+<p>os 是状态机的管理者，os&#x3D; API + 对象</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img48.png" class="">
+
+<p>状态机-建模理解我们的世界</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img50.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img49.png" class="">
+
+<p>状态机：建模理解程序世界</p>
+<ol>
+<li><p>trace 和调试器</p>
+</li>
+<li><p>profiler 和性能摘要</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img51.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img52.png" class="">
+</li>
+<li><p>model checker 和 verifier</p>
+</li>
+</ol>
+<blockquote>
+<p>程序就是状态机，计算机也是状态机；我们要查看哪些状态！</p>
+</blockquote>
+<h1 id="lecture24-进程的实现"><a href="#lecture24-进程的实现" class="headerlink" title="lecture24 进程的实现"></a>lecture24 进程的实现</h1><blockquote>
+<p>这里插入了处理器的调度,只要理解个大概就好了</p>
+</blockquote>
+<h2 id="thread-os-1"><a href="#thread-os-1" class="headerlink" title="thread-os"></a>thread-os</h2><p>内核线程和进程之间到底差了什么？一个 vr 眼镜。</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img53.png" class="">
+<p>下面就是 AM 对这个过程的抽象</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span>     <span class="title function_">vme_init</span> <span class="params">(<span class="type">void</span> *(*alloc)(<span class="type">int</span>), <span class="type">void</span> (*<span class="built_in">free</span>)(<span class="type">void</span> *))</span>;</span><br><span class="line"><span class="type">void</span>     <span class="title function_">protect</span>  <span class="params">(AddrSpace *as)</span>; <span class="comment">//AddrSpace就是f</span></span><br><span class="line"><span class="type">void</span>     <span class="title function_">unprotect</span><span class="params">(AddrSpace *as)</span>;</span><br><span class="line"><span class="type">void</span>     <span class="title function_">map</span>      <span class="params">(AddrSpace *as, <span class="type">void</span> *va, <span class="type">void</span> *pa, <span class="type">int</span> prot)</span>;</span><br><span class="line">Context *<span class="title function_">ucontext</span> <span class="params">(AddrSpace *as, Area kstk, <span class="type">void</span> *entry)</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="large"><a href="#large" class="headerlink" title="large"></a>large</h2><p>虚假的地址空间！</p>
+<ol>
+<li>映射了，但没有真的映射<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img54.png" class=""></li>
+<li>映射了很多次，但是只有一个<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img55.png" class=""></li>
+</ol>
+<h2 id="vm"><a href="#vm" class="headerlink" title="vm"></a>vm</h2><p>上面的 2 可以直接验证<br>AskGPT: How to print the corresponding physical address of agiven virtual address in Linux user space in C?</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img56.png" class="">
+
+<h2 id="cow-test"><a href="#cow-test" class="headerlink" title="cow-test"></a>cow-test</h2><ol start="3">
+<li>复制了，但是没有完全复制</li>
+</ol>
+<p>考虑 fork_execve 的过程，不可能真的复制了。只有写的内存需要拷贝。</p>
+<h1 id="lecture25-存储设备原理"><a href="#lecture25-存储设备原理" class="headerlink" title="lecture25 存储设备原理"></a>lecture25 存储设备原理</h1><p>为什么要有内存和外存？（快和持久是一对矛盾）</p>
+<p>持久化储存：<strong>磁</strong></p>
+<p>1D：磁带—-&gt;1.5D(1D _ n)：磁鼓—-&gt;2.5D(2D _ n)：磁盘</p>
+<p>软盘：磁盘的盘片与读写头分离</p>
+<p>持久化储存：<strong>坑</strong></p>
+<p>CD（光盘）：容易批量制造，如何克服只读的困扰—-&gt;DVD</p>
+<p>持久化储存：<strong>电</strong></p>
+<p>SSD：Flash Memory</p>
+<blockquote>
+<p>放电不干净，就会导致上千次读写后就是满电。所以优盘的芯片很重要</p>
+</blockquote>
+<p>USB CD 卡 SSD 的区别：都是 NAND Flash，但是芯片不同（软件定义的磁盘）</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img57.png" class="">
+
+<h1 id="lecture26-输入输出设备"><a href="#lecture26-输入输出设备" class="headerlink" title="lecture26 输入输出设备"></a>lecture26 输入输出设备</h1><p>把存储连接到了我们的电脑上，输入输出设备是怎么和 cpu 协作进行完成任务的。</p>
+<p><strong>输入，输出设备原理</strong><br>cpu 的一根线！</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img58.png" class="">
+
+<p>原理上是上面这样，但是实际上 cpu 不可能连接那么多的线。</p>
+<p>规范设备的抽象，这样就能理解，设备提供了哪些抽象和接口</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img59.png" class="">
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img60.png" class="">
+
+<p>所以有了 memory mapped io（MMIO）把设备 register 映射到地址空间</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img61.png" class="">
+
+<p>我们的计算机有哪些设备：Linux 有 device tree 的机制</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img62.png" class="">
+
+<p>随着越来越多的设备，直接固定地址映射是很封闭的。我们通过<strong>总线</strong>来管理</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img63.png" class="">
+
+<p>今天 pci 总线承担这个任务，然后再<strong>桥接</strong>usb 总线等</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img64.png" class="">
+
+<p>中断控制器：一个特殊的 io 设备</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img65.png" class="">
+
+<p>中断没能解决的问题：大存储的”memcoy” —–&gt;<strong>DMA</strong>(可以看作一个 io 设备)</p>
+<p>实际的实现（DMA 连接到总线和内存—-&gt;pci 总线自带支持 DMA）</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img66.png" class="">
+
+<p>io 设备和 cpu 的界限比较模糊，比如打印机</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img67.png" class="">
+
+<p>参考 opengl 写 shader 的过程，就是给 gpu 传递指令，然后 gpu 像素并行计算。</p>
+<blockquote>
+<p>gpu:执行两层 for 循环的专用 io 设备</p>
+</blockquote>
+<p>现代的 gpu–&gt;一个通用的处理器</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img68.png" class="">
+
+<h1 id="lecture27-设备驱动程序与文件系统"><a href="#lecture27-设备驱动程序与文件系统" class="headerlink" title="lecture27 设备驱动程序与文件系统"></a>lecture27 设备驱动程序与文件系统</h1><img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img69.png" class="">
+
+<p>查看&#x2F;dev</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img70.png" class="">
+
+<p>虚拟设备</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img71.png" class="">
+
+<p>ioclt 的复杂性</p>
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img72.png" class="">
+
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img73.png" class="">
+
+<h2 id="launcher"><a href="#launcher" class="headerlink" title="launcher"></a>launcher</h2>
     </div>
 
     
@@ -450,7 +614,10 @@
     <a href="/myblog/2023/10/08/accelerate-tedious-workflow/" rel="prev" title="accelerate tedious workflow">
       <i class="fa fa-chevron-left"></i> accelerate tedious workflow
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/myblog/2023/10/09/xv6%E5%AF%BC%E8%AF%BB/" rel="next" title="xv6导读">
+      xv6导读 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -509,7 +676,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture17"><span class="nav-number">1.</span> <span class="nav-text">lecture17</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#minimal"><span class="nav-number">1.1.</span> <span class="nav-text">minimal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap-alloc"><span class="nav-number">1.2.</span> <span class="nav-text">mmap-alloc</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture18"><span class="nav-number">2.</span> <span class="nav-text">lecture18</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dsu"><span class="nav-number">2.1.</span> <span class="nav-text">dsu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#calc"><span class="nav-number">2.2.</span> <span class="nav-text">calc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-os"><span class="nav-number">2.3.</span> <span class="nav-text">*thread-os</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture19"><span class="nav-number">3.</span> <span class="nav-text">lecture19</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sh"><span class="nav-number">3.1.</span> <span class="nav-text">sh</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture20"><span class="nav-number">4.</span> <span class="nav-text">lecture20</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#musl"><span class="nav-number">4.1.</span> <span class="nav-text">musl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memset"><span class="nav-number">4.2.</span> <span class="nav-text">memset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#env"><span class="nav-number">4.3.</span> <span class="nav-text">env</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture21-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E5%8A%A0%E8%BD%BD-%E4%B8%8A"><span class="nav-number">5.</span> <span class="nav-text">lecture21 可执行文件和加载(上)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#loader-flat"><span class="nav-number">5.1.</span> <span class="nav-text">loader-flat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loader-static"><span class="nav-number">5.2.</span> <span class="nav-text">*loader-static</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dlbox"><span class="nav-number">5.3.</span> <span class="nav-text">*dlbox</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture22-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E5%8A%A0%E8%BD%BD-%E4%B8%8B"><span class="nav-number">6.</span> <span class="nav-text">lecture22 可执行文件和加载(下)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dlbox-1"><span class="nav-number">6.1.</span> <span class="nav-text">dlbox</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#custom-loader"><span class="nav-number">6.2.</span> <span class="nav-text">custom-loader</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture17"><span class="nav-number">1.</span> <span class="nav-text">lecture17</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#minimal"><span class="nav-number">1.1.</span> <span class="nav-text">minimal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap-alloc"><span class="nav-number">1.2.</span> <span class="nav-text">mmap-alloc</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture18"><span class="nav-number">2.</span> <span class="nav-text">lecture18</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dsu"><span class="nav-number">2.1.</span> <span class="nav-text">dsu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#calc"><span class="nav-number">2.2.</span> <span class="nav-text">calc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-os"><span class="nav-number">2.3.</span> <span class="nav-text">*thread-os</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture19"><span class="nav-number">3.</span> <span class="nav-text">lecture19</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sh"><span class="nav-number">3.1.</span> <span class="nav-text">sh</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture20"><span class="nav-number">4.</span> <span class="nav-text">lecture20</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#musl"><span class="nav-number">4.1.</span> <span class="nav-text">musl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memset"><span class="nav-number">4.2.</span> <span class="nav-text">memset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#env"><span class="nav-number">4.3.</span> <span class="nav-text">env</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture21-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E5%8A%A0%E8%BD%BD-%E4%B8%8A"><span class="nav-number">5.</span> <span class="nav-text">lecture21 可执行文件和加载(上)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#loader-flat"><span class="nav-number">5.1.</span> <span class="nav-text">loader-flat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loader-static"><span class="nav-number">5.2.</span> <span class="nav-text">*loader-static</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dlbox"><span class="nav-number">5.3.</span> <span class="nav-text">*dlbox</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture22-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E5%8A%A0%E8%BD%BD-%E4%B8%8B"><span class="nav-number">6.</span> <span class="nav-text">lecture22 可执行文件和加载(下)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dlbox-1"><span class="nav-number">6.1.</span> <span class="nav-text">dlbox</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#custom-loader"><span class="nav-number">6.2.</span> <span class="nav-text">custom-loader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hook"><span class="nav-number">6.3.</span> <span class="nav-text">*hook</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture23-%E5%BA%94%E7%94%A8%E8%A7%86%E8%A7%92%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%9B%9E%E9%A1%BE"><span class="nav-number">7.</span> <span class="nav-text">lecture23 应用视角的操作系统(回顾)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture24-%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">8.</span> <span class="nav-text">lecture24 进程的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-os-1"><span class="nav-number">8.1.</span> <span class="nav-text">thread-os</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#large"><span class="nav-number">8.2.</span> <span class="nav-text">large</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vm"><span class="nav-number">8.3.</span> <span class="nav-text">vm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cow-test"><span class="nav-number">8.4.</span> <span class="nav-text">cow-test</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture25-%E5%AD%98%E5%82%A8%E8%AE%BE%E5%A4%87%E5%8E%9F%E7%90%86"><span class="nav-number">9.</span> <span class="nav-text">lecture25 存储设备原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture26-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E8%AE%BE%E5%A4%87"><span class="nav-number">10.</span> <span class="nav-text">lecture26 输入输出设备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture27-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">11.</span> <span class="nav-text">lecture27 设备驱动程序与文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#launcher"><span class="nav-number">11.1.</span> <span class="nav-text">launcher</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -525,7 +692,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/myblog/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
