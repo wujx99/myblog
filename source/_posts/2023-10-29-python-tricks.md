@@ -1,6 +1,5 @@
 ---
 title: python tricks
-date: 2023-10-28 09:43:16
+date: 2023-10-29 15:01:54
 tags:
-- python
 ---

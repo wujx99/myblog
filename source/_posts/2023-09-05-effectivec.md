@@ -3,7 +3,7 @@ title: effective c++
 date: 2023-09-05 15:26:18
 tags:
 - cpp
-- effective c++
+- book
 ---
 《effective c++》读书笔记
 <!-- more -->
