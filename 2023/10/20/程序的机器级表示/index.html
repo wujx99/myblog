@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"wujx99.github.io","root":"/myblog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="这里是csapp的对应章节的学习。 在程序的编码的过程中生成汇编等要加上-Og的编译选项。 程序编码在c向asm的映射之中，我们写c的时候并不能看到底层状态，只能看到变量等，而这些状态的实现都是通过reg。  pc 整数reg 条件码 一组向量寄存器  数据格式  访问信息寄存器由于历史等原因   操作上指定符  数据传输指令主要是指的mov指令。  传输的数据长度不同（movb, movw）">
+  <meta name="description" content="这里是csapp的对应章节的学习。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="程序的机器级表示">
 <meta property="og:url" content="https://wujx99.github.io/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/index.html">
 <meta property="og:site_name" content="blogs&amp;record">
-<meta property="og:description" content="这里是csapp的对应章节的学习。 在程序的编码的过程中生成汇编等要加上-Og的编译选项。 程序编码在c向asm的映射之中，我们写c的时候并不能看到底层状态，只能看到变量等，而这些状态的实现都是通过reg。  pc 整数reg 条件码 一组向量寄存器  数据格式  访问信息寄存器由于历史等原因   操作上指定符  数据传输指令主要是指的mov指令。  传输的数据长度不同（movb, movw）">
+<meta property="og:description" content="这里是csapp的对应章节的学习。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img01.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img02.png">
@@ -47,8 +47,9 @@
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img16.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img17.png">
 <meta property="article:published_time" content="2023-10-20T04:23:16.000Z">
-<meta property="article:modified_time" content="2023-10-23T13:04:05.886Z">
+<meta property="article:modified_time" content="2023-10-25T03:59:10.046Z">
 <meta property="article:author" content="jxWu">
+<meta property="article:tag" content="csapp">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://wujx99.github.io/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img01.png">
 
@@ -220,7 +221,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-23 21:04:05" itemprop="dateModified" datetime="2023-10-23T21:04:05+08:00">2023-10-23</time>
+                <time title="修改时间：2023-10-25 11:59:10" itemprop="dateModified" datetime="2023-10-25T11:59:10+08:00">2023-10-25</time>
               </span>
 
           
@@ -234,137 +235,104 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>这里是csapp的对应章节的学习。</p>
-<p>在程序的编码的过程中生成汇编等要加上<code>-Og</code>的编译选项。</p>
-<h1 id="程序编码"><a href="#程序编码" class="headerlink" title="程序编码"></a>程序编码</h1><p>在c向asm的映射之中，我们写c的时候并不能看到底层状态，只能看到变量等，而这些状态的实现都是通过reg。</p>
+        <p>这里是csapp的对应章节的学习。 <span id="more"></span>
+在程序的编码的过程中生成汇编等要加上<code>-Og</code>的编译选项。</p>
+<h1 id="程序编码">程序编码</h1>
+<p>在c向asm的映射之中，我们写c的时候并不能看到底层状态，只能看到变量等，而这些状态的实现都是通过reg。
+- pc - 整数reg - 条件码 - 一组向量寄存器</p>
+<h1 id="数据格式">数据格式</h1>
+<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img01.png" class="">
+<h1 id="访问信息">访问信息</h1>
+<h2 id="寄存器">寄存器</h2>
+<p>由于历史等原因 <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img02.png" class=""></p>
+<h2 id="操作上指定符">操作上指定符</h2>
+<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img03.png" class="">
+<h2 id="数据传输指令">数据传输指令</h2>
+<p>主要是指的<code>mov</code>指令。 - 传输的数据长度不同（movb,
+movw）</p>
 <ul>
-<li>pc</li>
-<li>整数reg</li>
-<li>条件码</li>
-<li>一组向量寄存器</li>
+<li>对目标寄存器剩余空间的管理（零拓展movzbq, movzwl，符号拓展movzbq,
+movslq）</li>
 </ul>
-<h1 id="数据格式"><a href="#数据格式" class="headerlink" title="数据格式"></a>数据格式</h1><img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img01.png" class="">
-
-<h1 id="访问信息"><a href="#访问信息" class="headerlink" title="访问信息"></a>访问信息</h1><h2 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h2><p>由于历史等原因</p>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img02.png" class="">
-
-<h2 id="操作上指定符"><a href="#操作上指定符" class="headerlink" title="操作上指定符"></a>操作上指定符</h2><img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img03.png" class="">
-
-<h2 id="数据传输指令"><a href="#数据传输指令" class="headerlink" title="数据传输指令"></a>数据传输指令</h2><p>主要是指的<code>mov</code>指令。</p>
-<ul>
-<li><p>传输的数据长度不同（movb, movw）</p>
-</li>
-<li><p>对目标寄存器剩余空间的管理（零拓展movzbq, movzwl，符号拓展movzbq, movslq）</p>
-</li>
-</ul>
-<h2 id="栈访问"><a href="#栈访问" class="headerlink" title="栈访问"></a>栈访问</h2><p>栈是向上的（地址上小下大）</p>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img04.png" class="">
-
-<h1 id="算术和逻辑操作"><a href="#算术和逻辑操作" class="headerlink" title="算术和逻辑操作"></a>算术和逻辑操作</h1><p>分为四类：加载有效地址，一元操作，二元操作和移位。</p>
+<h2 id="栈访问">栈访问</h2>
+<p>栈是向上的（地址上小下大） <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img04.png" class=""></p>
+<h1 id="算术和逻辑操作">算术和逻辑操作</h1>
+<p>分为四类：加载有效地址，一元操作，二元操作和移位。
+&gt;注意右移，算术右移和逻辑右移是有区别的</p>
+<h1 id="控制">控制</h1>
+<h2 id="条件码">条件码</h2>
+<p>有四类条件码： - CF - ZF - SF - OF</p>
+<p>如果进行<code>t=a+b</code>那么条件码就会如下的设置：
+<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img05.png" class=""></p>
 <blockquote>
-<p>注意右移，算术右移和逻辑右移是有区别的</p>
+<p>有些指令能够自动的设置条件码，有些不行。我们有专门设置条件码的指令：CMP，
+TEST（这样就不会直接计算）</p>
 </blockquote>
-<h1 id="控制"><a href="#控制" class="headerlink" title="控制"></a>控制</h1><h2 id="条件码"><a href="#条件码" class="headerlink" title="条件码"></a>条件码</h2><p>有四类条件码：</p>
-<ul>
-<li>CF</li>
-<li>ZF</li>
-<li>SF</li>
-<li>OF</li>
-</ul>
-<p>如果进行<code>t=a+b</code>那么条件码就会如下的设置：</p>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img05.png" class="">
-
-<blockquote>
-<p>有些指令能够自动的设置条件码，有些不行。我们有专门设置条件码的指令：CMP， TEST（这样就不会直接计算）</p>
-</blockquote>
-<h2 id="访问条件码"><a href="#访问条件码" class="headerlink" title="访问条件码"></a>访问条件码</h2><p>但是我们不允许直接获得条件码的值（原因可能是，所以我们有SET指令来设置我们自己的一个字节的buffer来保存我们条件码的<strong>计算结果</strong>）</p>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img06.png" class="">
-
+<h2 id="访问条件码">访问条件码</h2>
+<p>但是我们不允许直接获得条件码的值（原因可能是，所以我们有SET指令来设置我们自己的一个字节的buffer来保存我们条件码的<strong>计算结果</strong>）
+<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img06.png" class=""></p>
 <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img07.png" class="">
 <p>如我们看到的针对无符号数和有符号数的设置有着明显的不同！</p>
-<h2 id="跳转指令"><a href="#跳转指令" class="headerlink" title="跳转指令"></a>跳转指令</h2><p>跳转指令不仅有直接跳转，也融合条件码提取</p>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img08.png" class="">
-
-
-<h2 id="跳转指令的编码"><a href="#跳转指令的编码" class="headerlink" title="跳转指令的编码"></a>跳转指令的编码</h2><p>为了后面的链接的过程，我们一般使用pc相对寻址</p>
-<h2 id="实现条件分支"><a href="#实现条件分支" class="headerlink" title="实现条件分支"></a>实现条件分支</h2><p>有两种方法，一种是conditional-control，还有一种是conditional-moves(这个有很大的限制！！)</p>
-<p>条件控制的例子：</p>
-<figure class="highlight c"><figcaption><span>if-with-conditional-control.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> lt_cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> ge_cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> <span class="title function_">absdiff_se</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> y)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (x &lt; y)</span><br><span class="line">    &#123;</span><br><span class="line">        lt_cnt++;</span><br><span class="line">        result = y - x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ge_cnt++;</span><br><span class="line">        result = x - y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h2 id="跳转指令">跳转指令</h2>
+<p>跳转指令不仅有直接跳转，也融合条件码提取 <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img08.png" class=""></p>
+<h2 id="跳转指令的编码">跳转指令的编码</h2>
+<p>为了后面的链接的过程，我们一般使用pc相对寻址</p>
+<h2 id="实现条件分支">实现条件分支</h2>
+<p>有两种方法，一种是conditional-control，还有一种是conditional-moves(这个有很大的限制！！)</p>
+<p>条件控制的例子： <figure class="highlight c"><figcaption><span>if-with-conditional-control.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> lt_cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> ge_cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">long</span> <span class="title function_">absdiff_se</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> y)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (x &lt; y)</span><br><span class="line">    &#123;</span><br><span class="line">        lt_cnt++;</span><br><span class="line">        result = y - x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ge_cnt++;</span><br><span class="line">        result = x - y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight c"><figcaption><span>pesudo.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">gotodiff_se</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> y)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (x &gt;= y)</span><br><span class="line">        <span class="keyword">goto</span> x_ge_y;</span><br><span class="line">    lt_cnt++;</span><br><span class="line">    result = y - x;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">x_ge_y:</span><br><span class="line">    ge_cnt++;</span><br><span class="line">    result = x - y;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>条件移动的例子：</p>
-<figure class="highlight c"><figcaption><span>if-with-conditional-moves.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">absdiff</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> y)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (x &lt; y)</span><br><span class="line">        result = y - x;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = x - y;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p>条件移动的例子： <figure class="highlight c"><figcaption><span>if-with-conditional-moves.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">absdiff</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> y)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (x &lt; y)</span><br><span class="line">        result = y - x;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result = x - y;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight c"><figcaption><span>pesudo.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">cmovdiff</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> y)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> rval = y-x;</span><br><span class="line">    <span class="type">long</span> eval = x-y;</span><br><span class="line">    <span class="type">long</span> ntest = x &gt;= y;</span><br><span class="line">    <span class="comment">/* Line below requires</span></span><br><span class="line"><span class="comment">        single instruction: */</span></span><br><span class="line">    <span class="keyword">if</span> (ntest) rval = eval;</span><br><span class="line">    <span class="keyword">return</span> rval;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img09.png" class="">
 <p>注意，我们为条件传送也设计了指令，但是在这里就不赘述了。</p>
-<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><ul>
-<li><p>do-while<br>通用形式</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">do</span><br><span class="line">    body-statement</span><br><span class="line">    while (test-expr);</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>while<br>通用形式</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while (test-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">goto test;</span><br><span class="line">loop:</span><br><span class="line">body-statement</span><br><span class="line">test:</span><br><span class="line">t = test-expr;</span><br><span class="line">if (t)</span><br><span class="line">goto loop;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>for<br>通用形式</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for (init-expr; test-expr; update-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<h2 id="循环">循环</h2>
+<ul>
+<li><p>do-while 通用形式 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">do</span><br><span class="line">    body-statement</span><br><span class="line">    while (test-expr);</span><br></pre></td></tr></table></figure> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>while 通用形式 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while (test-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">goto test;</span><br><span class="line">loop:</span><br><span class="line">body-statement</span><br><span class="line">test:</span><br><span class="line">t = test-expr;</span><br><span class="line">if (t)</span><br><span class="line">goto loop;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>for 通用形式 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for (init-expr; test-expr; update-expr)</span><br><span class="line">    body-statement</span><br></pre></td></tr></table></figure> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">    init-expr;</span><br><span class="line">    goto test;</span><br><span class="line">loop:</span><br><span class="line">    body-statement</span><br><span class="line">    update-expr;</span><br><span class="line">test:</span><br><span class="line">    t = test-expr;</span><br><span class="line">    if (t)</span><br><span class="line">        goto loop;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p></li>
 </ul>
-<h2 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h2><figure class="highlight c"><figcaption><span>switch.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n,</span></span><br><span class="line"><span class="params">               <span class="type">long</span> *dest)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> val = x;</span><br><span class="line">    <span class="keyword">switch</span> (n)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">        val *= <span class="number">13</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">102</span>:</span><br><span class="line">        val += <span class="number">10</span>;</span><br><span class="line">    <span class="comment">/* Fall through */</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">103</span>:</span><br><span class="line">        val += <span class="number">11</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">104</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="number">106</span>:</span><br><span class="line">        val *= val;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        val = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    *dest = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="switch">switch</h2>
+<figure class="highlight c"><figcaption><span>switch.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n,</span></span><br><span class="line"><span class="params">               <span class="type">long</span> *dest)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> val = x;</span><br><span class="line">    <span class="keyword">switch</span> (n)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">100</span>:</span><br><span class="line">        val *= <span class="number">13</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">102</span>:</span><br><span class="line">        val += <span class="number">10</span>;</span><br><span class="line">    <span class="comment">/* Fall through */</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">103</span>:</span><br><span class="line">        val += <span class="number">11</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">104</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="number">106</span>:</span><br><span class="line">        val *= val;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        val = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    *dest = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight c"><figcaption><span>pesudo.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">switch_eg_impl</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> n,</span></span><br><span class="line"><span class="params">                    <span class="type">long</span> *dest)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* Table of code pointers */</span></span><br><span class="line">    <span class="type">static</span> <span class="type">void</span> *jt[<span class="number">7</span>] = &#123;</span><br><span class="line">        &amp;&amp;loc_A, &amp;&amp;loc_def, &amp;&amp;loc_B,</span><br><span class="line">        &amp;&amp;loc_C, &amp;&amp;loc_D, &amp;&amp;loc_def,</span><br><span class="line">        &amp;&amp;loc_D&#125;;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> index = n - <span class="number">100</span>;</span><br><span class="line">    <span class="type">long</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &gt; <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">goto</span> loc_def;</span><br><span class="line">    <span class="comment">/* Multiway branch */</span></span><br><span class="line">    <span class="keyword">goto</span> *jt[index];</span><br><span class="line"></span><br><span class="line">loc_A: <span class="comment">/* Case 100 */</span></span><br><span class="line">    val = x * <span class="number">13</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_B: <span class="comment">/* Case 102 */</span></span><br><span class="line">    x = x + <span class="number">10</span>;</span><br><span class="line"><span class="comment">/* Fall through */</span></span><br><span class="line">loc_C: <span class="comment">/* Case 103 */</span></span><br><span class="line">    val = x + <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_D: <span class="comment">/* Cases 104, 106 */</span></span><br><span class="line">    val = x * x;</span><br><span class="line">    <span class="keyword">goto</span> done;</span><br><span class="line">loc_def: <span class="comment">/* Default case */</span></span><br><span class="line">    val = <span class="number">0</span>;</span><br><span class="line">done:</span><br><span class="line">    *dest = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><figcaption><span>switch.s</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">	.file	&quot;switch.c&quot;</span><br><span class="line">	.text</span><br><span class="line">	.globl	switch_eg</span><br><span class="line">	.type	switch_eg, @function</span><br><span class="line">switch_eg:</span><br><span class="line">.LFB0:</span><br><span class="line">	.cfi_startproc</span><br><span class="line">	endbr64</span><br><span class="line">	subq	$100, %rsi</span><br><span class="line">	cmpq	$6, %rsi</span><br><span class="line">	ja	.L8</span><br><span class="line">	leaq	.L4(%rip), %rcx</span><br><span class="line">	movslq	(%rcx,%rsi,4), %rax</span><br><span class="line">	addq	%rcx, %rax</span><br><span class="line">	notrack jmp	*%rax</span><br><span class="line">	.section	.rodata</span><br><span class="line">	.align 4</span><br><span class="line">	.align 4</span><br><span class="line">.L4:</span><br><span class="line">	.long	.L7-.L4</span><br><span class="line">	.long	.L8-.L4</span><br><span class="line">	.long	.L6-.L4</span><br><span class="line">	.long	.L5-.L4</span><br><span class="line">	.long	.L3-.L4</span><br><span class="line">	.long	.L8-.L4</span><br><span class="line">	.long	.L3-.L4</span><br><span class="line">	.text</span><br><span class="line">.L7:</span><br><span class="line">	leaq	(%rdi,%rdi,2), %rax</span><br><span class="line">	leaq	(%rdi,%rax,4), %rdi</span><br><span class="line">	jmp	.L2</span><br><span class="line">.L6:</span><br><span class="line">	addq	$10, %rdi</span><br><span class="line">.L5:</span><br><span class="line">	addq	$11, %rdi</span><br><span class="line">.L2:</span><br><span class="line">	movq	%rdi, (%rdx)</span><br><span class="line">	ret</span><br><span class="line">.L3:</span><br><span class="line">	imulq	%rdi, %rdi</span><br><span class="line">	jmp	.L2</span><br><span class="line">.L8:</span><br><span class="line">	movl	$0, %edi</span><br><span class="line">	jmp	.L2</span><br><span class="line">	.cfi_endproc</span><br><span class="line">.LFE0:</span><br><span class="line">	.size	switch_eg, .-switch_eg</span><br><span class="line">	.ident	&quot;GCC: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0&quot;</span><br><span class="line">	.section	.note.GNU-stack,&quot;&quot;,@progbits</span><br><span class="line">	.section	.note.gnu.property,&quot;a&quot;</span><br><span class="line">	.align 8</span><br><span class="line">	.long	1f - 0f</span><br><span class="line">	.long	4f - 1f</span><br><span class="line">	.long	5</span><br><span class="line">0:</span><br><span class="line">	.string	&quot;GNU&quot;</span><br><span class="line">1:</span><br><span class="line">	.align 8</span><br><span class="line">	.long	0xc0000002</span><br><span class="line">	.long	3f - 2f</span><br><span class="line">2:</span><br><span class="line">	.long	0x3</span><br><span class="line">3:</span><br><span class="line">	.align 8</span><br><span class="line">4:</span><br></pre></td></tr></table></figure>
-
-<h1 id="procedures"><a href="#procedures" class="headerlink" title="procedures"></a>procedures</h1><p>要对procedure提供机器机器级别的支持<br>以P对Q的调用为例</p>
-<ul>
-<li>传递控制：pc指针正确的指向</li>
-<li>传递数据</li>
-<li>分配和释放内存</li>
-</ul>
-<h2 id="run-time-stack"><a href="#run-time-stack" class="headerlink" title="run-time stack"></a>run-time stack</h2><img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img10.png" class="">
-
-<h2 id="转移控制"><a href="#转移控制" class="headerlink" title="转移控制"></a>转移控制</h2><p>通过下面的两个指令来完成</p>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img11.png" class="">
-
-<h2 id="传送数据"><a href="#传送数据" class="headerlink" title="传送数据"></a>传送数据</h2><p>x86-64中有6个整型的参数。分别是rdi,rsi,rdx,rcx,r8,r9.如果大于6个就需要栈来传递。</p>
+<h1 id="procedures">procedures</h1>
+<p>要对procedure提供机器机器级别的支持 以P对Q的调用为例 -
+传递控制：pc指针正确的指向 - 传递数据 - 分配和释放内存</p>
+<h2 id="run-time-stack">run-time stack</h2>
+<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img10.png" class="">
+<h2 id="转移控制">转移控制</h2>
+<p>通过下面的两个指令来完成 <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img11.png" class=""></p>
+<h2 id="传送数据">传送数据</h2>
+<p>x86-64中有6个整型的参数。分别是rdi,rsi,rdx,rcx,r8,r9.如果大于6个就需要栈来传递。</p>
 <figure class="highlight c"><figcaption><span>data_transfer.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">proc</span><span class="params">(  <span class="type">long</span> a1, <span class="type">long</span> *a1p,</span></span><br><span class="line"><span class="params">            <span class="type">int</span> a2, <span class="type">int</span> *a2p,</span></span><br><span class="line"><span class="params">            <span class="type">short</span> a3, <span class="type">short</span> *a3p,</span></span><br><span class="line"><span class="params">            <span class="type">char</span> a4, <span class="type">char</span> *a4p)</span></span><br><span class="line">&#123;</span><br><span class="line">    *a1p += a1;</span><br><span class="line">    *a2p += a2;</span><br><span class="line">    *a3p += a3;</span><br><span class="line">    *a4p += a4;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img12.png" class="">
-
-<h2 id="栈上的局部存储"><a href="#栈上的局部存储" class="headerlink" title="栈上的局部存储"></a>栈上的局部存储</h2><p>栈上<strong>要有</strong>局部存储：</p>
-<ul>
-<li>reg不足导致不能存储本地数据</li>
-<li>对局部变量<code>&amp;</code>,因此需要产生地址</li>
-<li>某些数据是array 或者 struct</li>
-</ul>
-<p><strong>地址运算符</strong>的例子：</p>
-<figure class="highlight c"><figcaption><span>address_operator.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">swap_add</span><span class="params">(<span class="type">long</span> *xp, <span class="type">long</span> *yp)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> x = *xp;</span><br><span class="line">    <span class="type">long</span> y = *yp; </span><br><span class="line">    *xp = y;</span><br><span class="line">    *yp = x;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">long</span> <span class="title function_">caller</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> arg1 = <span class="number">534</span>;</span><br><span class="line">    <span class="type">long</span> arg2 = <span class="number">1057</span>;</span><br><span class="line">    <span class="type">long</span> sum = swap_add(&amp;arg1, &amp;arg2);</span><br><span class="line">    <span class="type">long</span> diff = arg1 - arg2;</span><br><span class="line">    <span class="keyword">return</span> sum * diff;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img13.png" class="">
-
-<p>下面是一个更加复杂的例子：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">call_proc</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> x1 = <span class="number">1</span>; <span class="type">int</span> x2 = <span class="number">2</span>;</span><br><span class="line">    <span class="type">short</span> x3 = <span class="number">3</span>; <span class="type">char</span> x4 = <span class="number">4</span>;</span><br><span class="line">    proc(x1, &amp;x1, x2, &amp;x2, x3, &amp;x3, x4, &amp;x4);</span><br><span class="line">    <span class="keyword">return</span> (x1+x2)*(x3-x4);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img14.png" class="">
-
+<h2 id="栈上的局部存储">栈上的局部存储</h2>
+<p>栈上<strong>要有</strong>局部存储： - reg不足导致不能存储本地数据 -
+对局部变量<code>&amp;</code>,因此需要产生地址 - 某些数据是array 或者
+struct</p>
+<p><strong>地址运算符</strong>的例子： <figure class="highlight c"><figcaption><span>address_operator.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">swap_add</span><span class="params">(<span class="type">long</span> *xp, <span class="type">long</span> *yp)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> x = *xp;</span><br><span class="line">    <span class="type">long</span> y = *yp; </span><br><span class="line">    *xp = y;</span><br><span class="line">    *yp = x;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">long</span> <span class="title function_">caller</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> arg1 = <span class="number">534</span>;</span><br><span class="line">    <span class="type">long</span> arg2 = <span class="number">1057</span>;</span><br><span class="line">    <span class="type">long</span> sum = swap_add(&amp;arg1, &amp;arg2);</span><br><span class="line">    <span class="type">long</span> diff = arg1 - arg2;</span><br><span class="line">    <span class="keyword">return</span> sum * diff;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img13.png" class=""></p>
+<p>下面是一个更加复杂的例子： <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">call_proc</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> x1 = <span class="number">1</span>; <span class="type">int</span> x2 = <span class="number">2</span>;</span><br><span class="line">    <span class="type">short</span> x3 = <span class="number">3</span>; <span class="type">char</span> x4 = <span class="number">4</span>;</span><br><span class="line">    proc(x1, &amp;x1, x2, &amp;x2, x3, &amp;x3, x4, &amp;x4);</span><br><span class="line">    <span class="keyword">return</span> (x1+x2)*(x3-x4);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img14.png" class=""></p>
 <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img15.png" class="">
-
-<h2 id="寄存器上的局部存储"><a href="#寄存器上的局部存储" class="headerlink" title="寄存器上的局部存储"></a>寄存器上的局部存储</h2><p>寄存器是唯一所有procedure共享的资源。</p>
+<h2 id="寄存器上的局部存储">寄存器上的局部存储</h2>
+<p>寄存器是唯一所有procedure共享的资源。</p>
 <p>有些寄存器在Q的执行过程中不会被使用。我们<strong>就不用保存</strong>这样的寄存器到栈上。为了统一，x86-64划分了<strong>被调用者保存</strong>寄存器：rbx，rbp，r12-r15。这些寄存器值默认Q返回的时候不会被修改，这就需要去维护。</p>
 <p>除了rsp，其他都是<strong>调用者保存</strong>寄存器。</p>
 <blockquote>
 <p>调用保存可以理解是一种责任机制。</p>
 </blockquote>
-<p>下面的例子：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">P</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> y)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> u = Q(y);</span><br><span class="line">    <span class="type">long</span> v = Q(x);</span><br><span class="line">    <span class="keyword">return</span> u + v;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img16.png" class="">
-
-<h2 id="递归procedure"><a href="#递归procedure" class="headerlink" title="递归procedure"></a>递归procedure</h2><p>我们提供机制已经可以实现递归的调用了。下面的例子来理解这个过程。</p>
+<p>下面的例子： <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">P</span><span class="params">(<span class="type">long</span> x, <span class="type">long</span> y)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> u = Q(y);</span><br><span class="line">    <span class="type">long</span> v = Q(x);</span><br><span class="line">    <span class="keyword">return</span> u + v;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img16.png" class=""></p>
+<h2 id="递归procedure">递归procedure</h2>
+<p>我们提供机制已经可以实现递归的调用了。下面的例子来理解这个过程。</p>
 <blockquote>
 <p>可以这么理解，被调用者寄存器和返回地址是<strong>私有</strong>的状态（会push到栈，所以可以自由使用）。而调用者保存寄存器就是<strong>桥梁</strong>。</p>
 </blockquote>
 <figure class="highlight c"><figcaption><span>recursive.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">rfact</span><span class="params">(<span class="type">long</span> n)</span></span><br><span class="line">    &#123;</span><br><span class="line">    <span class="type">long</span> result;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">        result = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        result=n* rfact(n<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <img src="/myblog/2023/10/20/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/img17.png" class="">
-
-<h1 id="数值的分配和访问"><a href="#数值的分配和访问" class="headerlink" title="数值的分配和访问"></a>数值的分配和访问</h1><h1 id="异质数据结构"><a href="#异质数据结构" class="headerlink" title="异质数据结构"></a>异质数据结构</h1><h1 id="机器级程序中控制和数据的结合"><a href="#机器级程序中控制和数据的结合" class="headerlink" title="机器级程序中控制和数据的结合"></a>机器级程序中控制和数据的结合</h1><h2 id="理解指针"><a href="#理解指针" class="headerlink" title="理解指针"></a>理解指针</h2><p>指针不是机器代码的一部分，仅仅只是c语言提供的抽象。而&amp;运算符通常是通过leaq来实现。</p>
+<h1 id="数值的分配和访问">数值的分配和访问</h1>
+<h1 id="异质数据结构">异质数据结构</h1>
+<h1 id="机器级程序中控制和数据的结合">机器级程序中控制和数据的结合</h1>
+<h2 id="理解指针">理解指针</h2>
+<p>指针不是机器代码的一部分，仅仅只是c语言提供的抽象。而&amp;运算符通常是通过leaq来实现。</p>
 
     </div>
 
@@ -373,6 +341,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/myblog/tags/csapp/" rel="tag"># csapp</a>
+          </div>
 
         
 
@@ -461,7 +432,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/myblog/archives/">
         
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -474,7 +445,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/myblog/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -563,6 +534,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

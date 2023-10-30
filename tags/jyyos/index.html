@@ -187,6 +187,46 @@
 
       <div class="post-meta">
         <time itemprop="dateCreated"
+              datetime="2023-10-27T16:27:25+08:00"
+              content="2023-10-27">
+          10-27
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/myblog/2023/10/27/OSjyy-M2/" itemprop="url">
+            <span itemprop="name">OSjyy:M2</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-10-09T11:47:38+08:00"
+              content="2023-10-09">
+          10-09
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/myblog/2023/10/09/xv6%E5%AF%BC%E8%AF%BB/" itemprop="url">
+            <span itemprop="name">xv6导读</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
               datetime="2023-10-08T23:47:59+08:00"
               content="2023-10-08">
           10-08
@@ -216,6 +256,26 @@
       <div class="post-title">
           <a class="post-title-link" href="/myblog/2023/09/27/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95/" itemprop="url">
             <span itemprop="name">jyyos代码导读和课程记录（1-16）</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-09-07T09:26:38+08:00"
+              content="2023-09-07">
+          09-07
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/myblog/2023/09/07/OSjyy-M1/" itemprop="url">
+            <span itemprop="name">OSjyy:M1</span>
           </a>
       </div>
 
@@ -295,7 +355,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/myblog/archives/">
         
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -308,7 +368,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/myblog/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -397,6 +457,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
