@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/myblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/myblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/myblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/myblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/myblog/css/main.css">
+
+
+<link rel="stylesheet" href="/myblog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/myblog/lib/pace/pace-theme-bounce.min.css">
+  <script src="/myblog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wujx99.github.io","root":"/myblog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ppt见modern-template-metaprogramming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="modern template metaprogramming">
+<meta property="og:url" content="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/index.html">
+<meta property="og:site_name" content="blogs&amp;record">
+<meta property="og:description" content="ppt见modern-template-metaprogramming">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/img01.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/img02.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/img03.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/img04.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/img05.png">
+<meta property="article:published_time" content="2023-11-04T14:52:10.000Z">
+<meta property="article:modified_time" content="2023-11-06T06:15:06.640Z">
+<meta property="article:author" content="jxWu">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="cppcon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/img01.png">
+
+<link rel="canonical" href="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>modern template metaprogramming | blogs&record</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/myblog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">blogs&record</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/myblog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/myblog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/myblog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/myblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/myblog/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/myblog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/11/04/modern-template-metaprogramming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          modern template metaprogramming
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-04 22:52:10" itemprop="dateCreated datePublished" datetime="2023-11-04T22:52:10+08:00">2023-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-11-06 14:15:06" itemprop="dateModified" datetime="2023-11-06T14:15:06+08:00">2023-11-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>ppt见<a
+href="/引用资源/cppcon/">modern-template-metaprogramming</a></p>
+<span id="more"></span>
+<blockquote>
+<p>当我们使用模板元编程的时候要记住：Keep in mind that
+run-time==compile-time,so can’t rely on:☒mutability,☒virtual functions,
+☒ other RTTI,etc.</p>
+</blockquote>
+<h1 id="把工作转移到compile-time">把工作转移到compile time</h1>
+<h2 id="metafunction">metafunction</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="type">int</span> N&gt;		<span class="comment">//	template param used as the metafctn param</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">abs</span>&#123;	</span><br><span class="line">    <span class="built_in">static_assert</span>(N != INT_MIN);			    <span class="comment">// cpp17-styleguard</span></span><br><span class="line">	<span class="type">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> value = (N &lt; <span class="number">0</span>) ?	–N :N;	 <span class="comment">// “return”</span></span><br><span class="line">&#125;;	</span><br><span class="line"></span><br><span class="line"><span class="comment">//如下的调用</span></span><br><span class="line"><span class="type">int</span>	<span class="type">const</span> n	= … ;		<span class="comment">//	could instead declare as constexpr</span></span><br><span class="line">…abs&lt;n&gt;::value…			<span class="comment">//	instantiation yields a compile-time constant</span></span><br></pre></td></tr></table></figure>
+<p>与cpp的constexpr
+function有什么区别呢？模板<code>abs</code>是一个<code>struct</code>！！！可以在内部进行声明等！</p>
+<h2 id="例子">例子</h2>
+<figure class="highlight cpp"><figcaption><span>compile-time-recursion.cpp</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="type">unsigned</span> M, <span class="type">unsigned</span> N &gt; <span class="keyword">struct</span> <span class="title class_">gcd</span> &#123; <span class="comment">// per Euclid </span></span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> value = gcd&lt;N, M%N&gt;::value; &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//特例化来创建递归基</span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="type">unsigned</span> M &gt; <span class="keyword">struct</span> <span class="title class_">gcd</span> &#123; </span><br><span class="line">    <span class="built_in">static_assert</span>( M != <span class="number">0</span> ); <span class="comment">// gcd(0, 0) is undefined, so disallow </span></span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> value = M; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="定义自己的sizeof输入时类型">定义自己的sizeof（输入时类型）</h2>
+<figure class="highlight cpp"><figcaption><span>my-sizeof.cpp</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template handles scalar (non-array) types as base case: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">rank</span> &#123; <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">size_t</span> value = <span class="number">0u</span>; &#125;; </span><br><span class="line"><span class="comment">// partial specialization recognizes any array type: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">U</span>, <span class="type">size_t</span> N &gt; </span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">rank</span>&lt; U[N] &gt; &#123; <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">size_t</span> value = <span class="number">1u</span> + rank&lt;U&gt;::value; &#125;; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//Usage: </span></span><br><span class="line"> <span class="keyword">using</span> <span class="type">array_t</span> = <span class="type">int</span> [<span class="number">10</span>] [<span class="number">20</span>] [<span class="number">30</span>]; </span><br><span class="line"> … rank&lt;<span class="type">array_t</span>&gt;::value … <span class="comment">// yields 3u (at compile-time)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="metafunction可以返回类型">metafunction可以返回类型</h2>
+<p>去掉顶层const <figure class="highlight cpp"><figcaption><span>remove-top-const.cpp</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template handles types that are not const-qualified: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">remove_const</span> &#123; <span class="keyword">using</span> type = T; &#125;; <span class="comment">// identity </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// partial specialization recognizes const-qualified types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">U</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">remove_const</span>&lt; U <span class="type">const</span> &gt; &#123; <span class="keyword">using</span> type = U; &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//Usages (call syntax): </span></span><br><span class="line">remove_const&lt;T&gt;::type t;   <span class="comment">// ensure t has a mutable type </span></span><br><span class="line"><span class="type">remove_const_t</span>&lt;T&gt; t;       <span class="comment">// cpp14 equivalent; more later</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h2 id="lib-metafunction-convention1">lib metafunction convention#1</h2>
+<ol type="1">
+<li>返回类型的meta function必须要用别名<code>type</code></li>
+</ol>
+<p><strong>一个例子</strong> <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">type_is</span> &#123; <span class="keyword">using</span> type = T; &#125;; </span><br><span class="line"><span class="comment">//Convenient to apply the convention via public inheritance:  </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// primary template handles types that are not volatile-qualified: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">remove_volatile</span> : type_is&lt; T &gt; &#123; &#125;; <span class="comment">// identity </span></span><br><span class="line"><span class="comment">// partial specialization recognizes volatile-qualified types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">U</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">remove_volatile</span>&lt; U <span class="keyword">volatile</span> &gt; : type_is&lt; U &gt; &#123; &#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="compile-time-decision-making">compile-time decision-making</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="type">bool</span> p, <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> <span class="title class_">F</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IF</span> : type_is&lt; … &gt; &#123; &#125;; <span class="comment">// p ? T : F</span></span><br></pre></td></tr></table></figure>
+<p>怎么根据p的值决定类型的是T或者F？还是老办法，默认加模板特例化
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template assumes the bool value is true: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="type">bool</span>, <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> &gt;    <span class="comment">// needn’t name unused param’s </span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IF</span> : type_is&lt; T &gt; &#123; &#125;;       </span><br><span class="line"><span class="comment">// partial specialization recognizes a false value: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> <span class="title class_">F</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IF</span>&lt;<span class="literal">false</span>, T, F&gt; : type_is&lt; F &gt; &#123; &#125;; </span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>在cpp11中<code>IF</code>别命名为<code>conditional</code></p>
+</blockquote>
+<p>上面的一个变种，要么true返回类型，false什么都不返回</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template assumes the bool value is true: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="type">bool</span>, <span class="keyword">class</span> <span class="title class_">T</span> = <span class="type">void</span> &gt; <span class="comment">// default is useful, not essential </span></span><br><span class="line"><span class="keyword">struct</span> enable_if : type_is&lt; T &gt; &#123; &#125;; </span><br><span class="line"><span class="comment">// partial specialization recognizes a false value, computing nothing: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">enable_if</span>&lt;<span class="literal">false</span>, T&gt; &#123; &#125;; <span class="comment">// no member named type! </span></span><br></pre></td></tr></table></figure>
+<p>调用特例化的metafunction会返回error吗？不会！会有一个与模板无关的机制SFINAE:SFINAE:
+Substitution Failure Is Not An Error. (Also sometimes termed explicit
+overload set management.)</p>
+<p>模板实例化过程</p>
+<ol type="1">
+<li>Obtain (or figure out) the template
+arguments.(直接，通过参数推断，默认模板参数三个步骤)</li>
+<li>Replace each template parameter, throughout the template, by its
+corresponding template argument.</li>
+</ol>
+<p>如果上述过程失败了（这不是一个错误），就会被默认的<strong>丢弃掉</strong>！我们要借用SFINAE的特性</p>
+<h2 id="sfinae-in-use">SFINAE in use</h2>
+<p>Example: want one algorithm f taking integral types T, and overload
+it with a second f taking floating-point types T.</p>
+<p>对于下面的两个模板，我们只有一个实例化. <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="type">enable_if_t</span>&lt; is_integral&lt;T&gt;::value, <span class="type">maxint_t</span> &gt; <span class="comment">//返回类型,如果第一个参数是true，那么结果就是第二个参数</span></span><br><span class="line">    <span class="built_in">f</span> ( T val ) &#123; … &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="type">enable_if_t</span>&lt; is_floating_point&lt;T&gt;::value, <span class="type">long</span> <span class="type">double</span> &gt; <span class="comment">//返回类型</span></span><br><span class="line">    <span class="built_in">f</span> ( T val ) &#123; … &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>如果两者都不匹配则会出现错误！！</p>
+<h2 id="concepts">concepts</h2>
+<p>Its “constraints” metaprogramming feature seems likely to reduce or
+obviate many current uses for <strong>SFINAE</strong>, etc.</p>
+<p>比如下面的SFINAE例子对比： <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; <span class="type">enable_if_t</span>&lt; is_integral&lt;T&gt;::value, <span class="type">maxint_t</span> &gt; <span class="comment">// SFINAE </span></span><br><span class="line">    <span class="built_in">f</span> ( T val ) &#123; … &#125;;  </span><br><span class="line"><span class="keyword">template</span>&lt; Integral T &gt; <span class="comment">// constrained template (short form) </span></span><br><span class="line">    <span class="function"><span class="type">maxint_t</span> <span class="title">f</span> <span class="params">( T val )</span> </span>&#123; … &#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="lib-metafunction-convention2">lib metafunction convention#2</h2>
+<ol start="2" type="1">
+<li>这个约定用于的meta function with value result</li>
+</ol>
+<ul>
+<li>A static constexpr member, value, giving its result, and …</li>
+<li>A few convenience member types and constexpr functions.</li>
+</ul>
+<p>下面的就是cpp标准 value-returning metafunction中的例子
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span>, T v &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">integral_constant</span> &#123; </span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> T value = v; </span><br><span class="line">    <span class="function"><span class="keyword">constexpr</span> <span class="keyword">operator</span> <span class="title">T</span> <span class="params">( )</span> <span class="type">const</span> <span class="keyword">noexcept</span> </span>&#123; <span class="keyword">return</span> value; &#125; </span><br><span class="line">    <span class="function"><span class="keyword">constexpr</span> T <span class="title">operator</span> <span class="params">( )</span> <span class="params">( )</span> <span class="type">const</span> <span class="keyword">noexcept</span> </span>&#123; <span class="keyword">return</span> value; &#125; </span><br><span class="line">    … <span class="comment">// remaining members are only occasionally useful </span></span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>我们回看我们的rank metafuction，我们还加入了无界数组的rank
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template handles scalar (non-array) types as base case: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rank</span> : integral_constant&lt; <span class="type">size_t</span>, <span class="number">0u</span> &gt; &#123; &#125;; </span><br><span class="line"><span class="comment">// partial specialization recognizes bounded array types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">U</span>, <span class="type">size_t</span> N &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rank</span>&lt; U[N] &gt; </span><br><span class="line">: integral_constant&lt; <span class="type">size_t</span>, <span class="number">1u</span> + rank&lt;U&gt;::value &gt; &#123; &#125;; </span><br><span class="line"><span class="comment">// partial specialization recognizes unbounded array types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">U</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rank</span>&lt; U[ ] &gt; </span><br><span class="line">: integral_constant&lt; <span class="type">size_t</span>, <span class="number">1u</span> + rank&lt;U&gt;::value &gt; &#123; &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>一些<code>integral_constant</code>方便之处： <img src="/myblog/2023/11/04/modern-template-metaprogramming/img01.png" class=""></p>
+<blockquote>
+<p>什么是变量模板？在上图中有什么用？</p>
+</blockquote>
+<h2 id="using-inheritance-specialization-together">using inheritance +
+specialization together</h2>
+<p>Example 1: given a type, is it a void type?</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template handles non-void types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; <span class="keyword">struct</span> <span class="title class_">is_void</span> : false_type &#123; &#125;; </span><br><span class="line"><span class="comment">// four specializations, one to recognize each of the four void types:</span></span><br><span class="line"> <span class="keyword">template</span>&lt; &gt; <span class="keyword">struct</span> <span class="title class_">is_void</span>&lt;<span class="type">void</span>&gt; : true_type &#123; &#125;; </span><br><span class="line"> <span class="keyword">template</span>&lt; &gt; <span class="keyword">struct</span> <span class="title class_">is_void</span>&lt;<span class="type">void</span> <span class="type">const</span>&gt; : true_type &#123; &#125;; </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>会使用不同的方式判断是否为void，注意总结</p>
+</blockquote>
+<p>Example 2: given two types, are they one and the same?
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template handles dis?nct types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> <span class="title class_">U</span> &gt; <span class="keyword">struct</span> <span class="title class_">is_same</span> : false_type &#123; &#125;; </span><br><span class="line"><span class="comment">// partial specialization recognizes identical types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; <span class="keyword">struct</span> <span class="title class_">is_same</span>&lt;T, T&gt; : true_type &#123; &#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="aliasing-delegation-binding">Aliasing == delegation +
+binding</h2>
+<p>Example: given a type, is it a void type? <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">using</span> remove_cv = remove_volatile&lt; <span class="type">remove_const_t</span>&lt;T&gt; &gt;; </span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">using</span> <span class="type">remove_cv_t</span> = <span class="keyword">typename</span> remove_cv&lt;T&gt;::type;</span><br><span class="line"></span><br><span class="line"><span class="comment">//如下使用上面的定义来判断是否为</span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">using</span> is_void = is_same&lt; <span class="type">remove_cv_t</span>&lt;T&gt; , <span class="type">void</span> &gt;;</span><br><span class="line"></span><br></pre></td></tr></table></figure> &gt;
+太牛了！！</p>
+<h2 id="using-a-parameter-pack-in-a-metafunction">Using a parameter pack
+in a metafunction</h2>
+<p>Example: generalize is_same into is_one_of:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template: is T the same as one of the types P0toN… ? </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span>... P0toN &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_one_of</span>; <span class="comment">// declare the interface only </span></span><br><span class="line"><span class="comment">// base #1: specialization recognizes empty list of types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_one_of</span> : false_type &#123; &#125;; </span><br><span class="line"><span class="comment">// base #2: specialization recognizes match at head of list of types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span>... P1toN &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_one_of</span> : true_type &#123; &#125;; </span><br><span class="line"><span class="comment">// specialization recognizes mismatch at head of list of types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> <span class="title class_">P0</span>, <span class="keyword">class</span>... P1toN &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_one_of</span> : is_one_of &#123; &#125;; <span class="comment">// go inspect list’s tail</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>用了类似递归的方式实现的</p>
+</blockquote>
+<p><strong>再次重写</strong><code>is_void</code>!!! Example: given a
+type, is it a void type? <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">using</span> is_void = is_one_of&lt; T , <span class="type">void</span> , </span><br><span class="line">           <span class="type">void</span> <span class="type">const</span> , <span class="type">void</span> <span class="keyword">volatile</span> , <span class="type">void</span> <span class="type">const</span> <span class="keyword">volatile</span> &gt;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="unevaluated-operands">Unevaluated operands</h2>
+<p><code>sizeof</code>,<code>alignof</code>,<code>typeid</code>,<code>decltype</code>,<code>noexcept</code>都是unevaluated的，所以只需要声明，而不需要定义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">decltype</span>( <span class="built_in">foo</span>( <span class="built_in">declval</span>( ) ) ) <span class="comment">// declval is in &lt;utility&gt;</span></span><br><span class="line">            <span class="comment">// gives foo’s return type, were it called with a T rvalue</span></span><br></pre></td></tr></table></figure>
+<p>下面是一个例子 <img src="/myblog/2023/11/04/modern-template-metaprogramming/img02.png" class=""></p>
+<p>decltype以前的通常使用sizeof在下文，对比一下</p>
+<img src="/myblog/2023/11/04/modern-template-metaprogramming/img03.png" class="">
+<h2 id="proposed-new-type-trait-void_t">Proposed new type trait
+void_t</h2>
+<p>下面的是有问题的 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> ... &gt; </span><br><span class="line"><span class="keyword">using</span> <span class="type">void_t</span> = <span class="type">void</span>;</span><br></pre></td></tr></table></figure></p>
+<h2 id="utility-of-void_t">Utility of void_t</h2>
+<p>Acts as a metafunction call that maps any well-formed type(s) into
+the (predictable!) type void！</p>
+<p>Example: detect the presence/absence of a valid type member named
+T::type (per the metafunction convention):</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// primary template: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span>, <span class="keyword">class</span> = <span class="type">void</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> has_type_member : false_type &#123; &#125;; </span><br><span class="line"><span class="comment">// partial specialization: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">has_type_member</span>&lt; T, <span class="type">void_t</span>&lt; <span class="keyword">typename</span> T::type &gt; &gt; </span><br><span class="line">: true_type &#123; &#125;;</span><br></pre></td></tr></table></figure>
+<p>上面的很难看懂把，看看下面的解释 <img src="/myblog/2023/11/04/modern-template-metaprogramming/img04.png" class=""></p>
+<p>然后我们就可以回过头再看我们的is_copy_assignable</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// recall this helper alias for the result type of a valid copy assignment: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">using</span> <span class="type">copy_assign_t</span> = <span class="keyword">decltype</span>( <span class="built_in">declval</span>&lt;T&amp;&gt;( ) </span><br><span class="line">= <span class="built_in">declval</span>&lt; T <span class="type">const</span>&amp; &gt;( ) ); </span><br><span class="line"><span class="comment">// primary template handles all non-copy-assignable types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> = <span class="type">void</span> &gt; <span class="comment">// default argument is essential </span></span><br><span class="line"><span class="keyword">struct</span> is_copy_assignable : false_type &#123; &#125;; </span><br><span class="line"><span class="comment">// specialization recognizes and validates only copy-assignable types: </span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">T</span> &gt; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_copy_assignable</span>&lt; T, <span class="type">void_t</span>&lt; <span class="type">copy_assign_t</span> &gt; &gt; </span><br><span class="line">: true_type &#123; &#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Want is_move_assignable? Change T const&amp; ➞ T&amp;&amp;.</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>还有一些内容应为时间没有涉及到！ <img src="/myblog/2023/11/04/modern-template-metaprogramming/img05.png" class=""></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/myblog/tags/cpp/" rel="tag"># cpp</a>
+              <a href="/myblog/tags/cppcon/" rel="tag"># cppcon</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/myblog/2023/11/04/3D-Mesh-Process/" rel="prev" title="3D Mesh Process">
+      <i class="fa fa-chevron-left"></i> 3D Mesh Process
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/myblog/2023/11/04/type-traits/" rel="next" title="type traits">
+      type traits <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%8A%E5%B7%A5%E4%BD%9C%E8%BD%AC%E7%A7%BB%E5%88%B0compile-time"><span class="nav-number">1.</span> <span class="nav-text">把工作转移到compile time</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#metafunction"><span class="nav-number">1.1.</span> <span class="nav-text">metafunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">1.2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E8%87%AA%E5%B7%B1%E7%9A%84sizeof%E8%BE%93%E5%85%A5%E6%97%B6%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">定义自己的sizeof（输入时类型）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#metafunction%E5%8F%AF%E4%BB%A5%E8%BF%94%E5%9B%9E%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.4.</span> <span class="nav-text">metafunction可以返回类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lib-metafunction-convention1"><span class="nav-number">1.5.</span> <span class="nav-text">lib metafunction convention#1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-time-decision-making"><span class="nav-number">1.6.</span> <span class="nav-text">compile-time decision-making</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sfinae-in-use"><span class="nav-number">1.7.</span> <span class="nav-text">SFINAE in use</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#concepts"><span class="nav-number">1.8.</span> <span class="nav-text">concepts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lib-metafunction-convention2"><span class="nav-number">1.9.</span> <span class="nav-text">lib metafunction convention#2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#using-inheritance-specialization-together"><span class="nav-number">1.10.</span> <span class="nav-text">using inheritance +
+specialization together</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#aliasing-delegation-binding"><span class="nav-number">1.11.</span> <span class="nav-text">Aliasing &#x3D;&#x3D; delegation +
+binding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#using-a-parameter-pack-in-a-metafunction"><span class="nav-number">1.12.</span> <span class="nav-text">Using a parameter pack
+in a metafunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unevaluated-operands"><span class="nav-number">1.13.</span> <span class="nav-text">Unevaluated operands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proposed-new-type-trait-void_t"><span class="nav-number">1.14.</span> <span class="nav-text">Proposed new type trait
+void_t</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#utility-of-void_t"><span class="nav-number">1.15.</span> <span class="nav-text">Utility of void_t</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.16.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="jxWu"
+      src="/myblog/uploads/myimage.jpg">
+  <p class="site-author-name" itemprop="name">jxWu</p>
+  <div class="site-description" itemprop="description">record and up</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/myblog/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/myblog/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/myblog/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jxWu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/myblog/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/myblog/lib/anime.min.js"></script>
+  <script src="/myblog/lib/velocity/velocity.min.js"></script>
+  <script src="/myblog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/myblog/js/utils.js"></script>
+
+<script src="/myblog/js/motion.js"></script>
+
+
+<script src="/myblog/js/schemes/pisces.js"></script>
+
+
+<script src="/myblog/js/next-boot.js"></script>
+
+
+  <script defer src="/myblog/lib/three/three.min.js"></script>
+    <script defer src="/myblog/lib/three/three-waves.min.js"></script>
+    <script defer src="/myblog/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/myblog/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

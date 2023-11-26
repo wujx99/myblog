@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/myblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/myblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/myblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/myblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/myblog/css/main.css">
+
+
+<link rel="stylesheet" href="/myblog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/myblog/lib/pace/pace-theme-bounce.min.css">
+  <script src="/myblog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wujx99.github.io","root":"/myblog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="overview  EntryPoint Appliacation layer Window layer  Input Event  Render Render API abstraction Debugging support Scripting language Memory Systems Entity Componment system Physics Fi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GameEngine">
+<meta property="og:url" content="https://wujx99.github.io/myblog/2023/11/21/GameEngine/index.html">
+<meta property="og:site_name" content="blogs&amp;record">
+<meta property="og:description" content="overview  EntryPoint Appliacation layer Window layer  Input Event  Render Render API abstraction Debugging support Scripting language Memory Systems Entity Componment system Physics Fi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/11/21/GameEngine/img01.png">
+<meta property="og:image" content="https://wujx99.github.io/myblog/2023/11/21/GameEngine/img02.png">
+<meta property="article:published_time" content="2023-11-21T06:40:42.000Z">
+<meta property="article:modified_time" content="2023-11-26T08:55:43.947Z">
+<meta property="article:author" content="jxWu">
+<meta property="article:tag" content="GameEngine">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wujx99.github.io/myblog/2023/11/21/GameEngine/img01.png">
+
+<link rel="canonical" href="https://wujx99.github.io/myblog/2023/11/21/GameEngine/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>GameEngine | blogs&record</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/myblog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">blogs&record</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/myblog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/myblog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/myblog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/myblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/myblog/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/myblog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/11/21/GameEngine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GameEngine
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-21 14:40:42" itemprop="dateCreated datePublished" datetime="2023-11-21T14:40:42+08:00">2023-11-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-11-26 16:55:43" itemprop="dateModified" datetime="2023-11-26T16:55:43+08:00">2023-11-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="overview">overview</h1>
+<ul>
+<li>EntryPoint</li>
+<li>Appliacation layer</li>
+<li>Window layer
+<ul>
+<li>Input</li>
+<li>Event</li>
+</ul></li>
+<li>Render</li>
+<li>Render API abstraction</li>
+<li>Debugging support</li>
+<li>Scripting language</li>
+<li>Memory Systems</li>
+<li>Entity Componment system</li>
+<li>Physics</li>
+<li>File I/O VFS</li>
+<li>Build systems</li>
+</ul>
+<h1 id="project-setup">Project setup</h1>
+<p>hazel引擎会编译成dll的文件，我们添加exe的Sandbox,依赖于hazel。我们还设置了取消32位和输出目录设置</p>
+<blockquote>
+<p>为什么链接</p>
+</blockquote>
+<figure class="highlight cpp"><figcaption><span>Hazel/src/Test.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Hazel &#123;</span><br><span class="line">	_declspec(dllexport) <span class="function"><span class="type">void</span> <span class="title">Print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><figcaption><span>Hazel/src/Test.cpp</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Test.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Hazel &#123;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">Print</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Welcome to Hazel Engine!\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><figcaption><span>Sandbox/src/Application.cpp</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> Hazel &#123;</span><br><span class="line">	_declspec(dllimport) <span class="function"><span class="type">void</span> <span class="title">Print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Hazel::<span class="built_in">Print</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="entry-point">entry point</h1>
+<p>github的第一次提交可见代码。</p>
+<h1 id="logging">logging</h1>
+<p>把spdlog用给git以子模块的方式加到Hazel/vendor/spdlog。然后添加include
+path。再给Sandbox的exe添加include path。</p>
+<p>接下来把spdlog封装成一个log类。</p>
+<p>然后定义了宏使用</p>
+<h1 id="premake">premake</h1>
+<p>下载解压拷贝premake5.exe和license到Hazel/vendor/premake里。</p>
+<p>编写脚本premake5.lua</p>
+<p>编写脚本执行permake脚本。</p>
+<h1 id="event-sys">event sys</h1>
+<h1 id="precompile-header">precompile header</h1>
+<p>添加 hzpch.h 和 hzpch.cpp(windows必须)。</p>
+<blockquote>
+<p>hzpch.h必须放在最前面！</p>
+</blockquote>
+<h1 id="windows-class-and-glfw">windows class and GLFW</h1>
+<p>在fork的glfw中添加permake5.lua。git拉取成submodule。然后再修改premake5.lua中增加子module。</p>
+<h1 id="window-event">window event</h1>
+<p>我们定义的一些Application的callbac函数，实现了windowswindow和application的互不知晓。低耦合。</p>
+<h1 id="layer-stack">layer stack</h1>
+<p>layer stack是用户自定义的集合，可以响应event。</p>
+<blockquote>
+<p>overlayer 是什么？</p>
+</blockquote>
+<h1 id="glad">GLad</h1>
+<p>GLFW必须放在glad头文件后面。
+如果不这样做的话需要添加预编译的宏GLFW_INCLUDE_NONE保证不会预加载gl函数。</p>
+<h1 id="imgui">imgui</h1>
+<p>imgui很强大，我们可以把他看作是debug的工具！！！</p>
+<h1 id="imgui-event">imgui event</h1>
+<p>我们可以学习imgui的glfw的例子并偷一些代码给imgui
+event。这些event的代码其实可以自己写。</p>
+<h1 id="imput-polling">imput polling</h1>
+<p>input的轮询</p>
+<h1 id="key-and-mouse-code">key and mouse code</h1>
+<p>方案1：通过编译时的宏来控制code
+方案2：runtime查询。这样可以序列化</p>
+<p>不要自作聪明的过早优化！runtime不一定耗时。</p>
+<h1 id="math">math</h1>
+<p>如果要想写好的math lib需要SIMD</p>
+<p>我们选择GLM，这是一个header-only的库，不需要premake。我们把glm/glm下的header和hpp文件包含到hazel的project里！</p>
+<h1 id="imgui-docking-and-viewports">imgui docking and Viewports</h1>
+<p>我们在imgui的子模块确定switch到docking子分支（包含了premake文件）。然后再把在hazel中编译对应的例子。然后重写imguilayer。</p>
+<blockquote>
+<p>ingui是static的，在hazel这个dll中可以被很好的使用。但是在exe文件中会链接出错，这是为什么？我们的sandbox只链接hazel，而hazel是dll，他<strong>只链接使用过</strong>的静态库的符号，并且在<code>imgui.h</code><strong>修改</strong>export符号的宏<code>IMGUI_API</code>编译才可以。
+我们可以hack一下。在imgui预编译输入<code>IMGUI_API=_declspec(dllexport)</code>,然后再hazel定义<code>IMGUI_API=_declspec(dllexport)</code>然后再使用相关的符号来import符号到dll来
+还可以定义hazel的linker的module definition
+file的<code>.def</code>文件来import所有的符号，
+所以我们选择把hazel编译成静态库。因为我们不太需要动态库</p>
+</blockquote>
+<h1 id="intrduction-to-rendering">intrduction to rendering</h1>
+<p>opengl是最简单的。为了实现多api兼容。我们要设计一个抽象层render
+line。并且opengl没有多线程，我们要自己<strong>实现</strong>这个render
+thread！！</p>
+<h1 id="render-architecture">render architecture</h1>
+<img src="/myblog/2023/11/21/GameEngine/img01.png" class="">
+<p>我们还需要一个render command
+queue。vlkan有，而opengl没有。我们就要实现OpenGL的</p>
+<img src="/myblog/2023/11/21/GameEngine/img02.png" class="">
+<h1 id="rendering-and-maintenance">rendering and maintenance</h1>
+<p>这里讨论了把hazel修改成静态库的原因，和上次链接出错的原因。</p>
+<h1 id="static-libraries-and-zero-warnings">static libraries and ZERO
+warnings</h1>
+<p><code>permake5.lua</code>中的<code>staticruntime</code>动态库时候是<code>off</code>的，原因是dll有很多版本，比如debug的版本等，运行时需要链接不同的版本。而静态库就不同了。</p>
+<p>我们修改了很多的lua文件来编译成静态库！并且解决了大部分的warning！amazing！</p>
+<h1 id="render-context">render context</h1>
+<p>先看的<code>windowswindow.cpp</code>的<code>glfwMakeContextCurrent()</code>学习一下OpenGL的window的context
+class的用法</p>
+<h1 id="first-triangle">first triangle</h1>
+<p>一个简单的三角形</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/myblog/tags/GameEngine/" rel="tag"># GameEngine</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/myblog/2023/11/19/render/" rel="prev" title="render">
+      <i class="fa fa-chevron-left"></i> render
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text">overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#project-setup"><span class="nav-number">2.</span> <span class="nav-text">Project setup</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#entry-point"><span class="nav-number">3.</span> <span class="nav-text">entry point</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#logging"><span class="nav-number">4.</span> <span class="nav-text">logging</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#premake"><span class="nav-number">5.</span> <span class="nav-text">premake</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#event-sys"><span class="nav-number">6.</span> <span class="nav-text">event sys</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#precompile-header"><span class="nav-number">7.</span> <span class="nav-text">precompile header</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#windows-class-and-glfw"><span class="nav-number">8.</span> <span class="nav-text">windows class and GLFW</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#window-event"><span class="nav-number">9.</span> <span class="nav-text">window event</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#layer-stack"><span class="nav-number">10.</span> <span class="nav-text">layer stack</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#glad"><span class="nav-number">11.</span> <span class="nav-text">GLad</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#imgui"><span class="nav-number">12.</span> <span class="nav-text">imgui</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#imgui-event"><span class="nav-number">13.</span> <span class="nav-text">imgui event</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#imput-polling"><span class="nav-number">14.</span> <span class="nav-text">imput polling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#key-and-mouse-code"><span class="nav-number">15.</span> <span class="nav-text">key and mouse code</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#math"><span class="nav-number">16.</span> <span class="nav-text">math</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#imgui-docking-and-viewports"><span class="nav-number">17.</span> <span class="nav-text">imgui docking and Viewports</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#intrduction-to-rendering"><span class="nav-number">18.</span> <span class="nav-text">intrduction to rendering</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#render-architecture"><span class="nav-number">19.</span> <span class="nav-text">render architecture</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rendering-and-maintenance"><span class="nav-number">20.</span> <span class="nav-text">rendering and maintenance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#static-libraries-and-zero-warnings"><span class="nav-number">21.</span> <span class="nav-text">static libraries and ZERO
+warnings</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#render-context"><span class="nav-number">22.</span> <span class="nav-text">render context</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#first-triangle"><span class="nav-number">23.</span> <span class="nav-text">first triangle</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="jxWu"
+      src="/myblog/uploads/myimage.jpg">
+  <p class="site-author-name" itemprop="name">jxWu</p>
+  <div class="site-description" itemprop="description">record and up</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/myblog/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/myblog/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/myblog/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jxWu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/myblog/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/myblog/lib/anime.min.js"></script>
+  <script src="/myblog/lib/velocity/velocity.min.js"></script>
+  <script src="/myblog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/myblog/js/utils.js"></script>
+
+<script src="/myblog/js/motion.js"></script>
+
+
+<script src="/myblog/js/schemes/pisces.js"></script>
+
+
+<script src="/myblog/js/next-boot.js"></script>
+
+
+  <script defer src="/myblog/lib/three/three.min.js"></script>
+    <script defer src="/myblog/lib/three/three-waves.min.js"></script>
+    <script defer src="/myblog/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/myblog/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -117,7 +117,7 @@
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img86.png">
 <meta property="og:image" content="https://wujx99.github.io/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img87.png">
 <meta property="article:published_time" content="2023-10-08T15:47:59.000Z">
-<meta property="article:modified_time" content="2023-10-25T04:03:47.603Z">
+<meta property="article:modified_time" content="2023-10-31T05:53:38.266Z">
 <meta property="article:author" content="jxWu">
 <meta property="article:tag" content="操作系统">
 <meta property="article:tag" content="jyyos">
@@ -292,7 +292,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-25 12:03:47" itemprop="dateModified" datetime="2023-10-25T12:03:47+08:00">2023-10-25</time>
+                <time title="修改时间：2023-10-31 13:53:38" itemprop="dateModified" datetime="2023-10-31T13:53:38+08:00">2023-10-31</time>
               </span>
 
           
@@ -306,7 +306,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>下半部分 <span id="more"></span> # lecture17</p>
+        <p>下半部分 <span id="more"></span></p>
+<h1 id="lecture17-进程地址空间">lecture17 进程地址空间</h1>
 <p>进程的这个状态机可以用（M，R）来表示，R 很简单，但是 M 是什么呢？
 有两个基本的问题</p>
 <ol type="1">
@@ -327,8 +328,11 @@
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img03.png" class="">
 <h2 id="mmap-alloc">mmap-alloc</h2>
 <p>瞬间分配</p>
-<h1 id="lecture18">lecture18</h1>
+<h2 id="knight">knight</h2>
 <h2 id="dsu">dsu</h2>
+<h2 id="hack">hack</h2>
+<h1 id="lecture18-os实验生存指南">lecture18 os实验生存指南</h1>
+<h2 id="dsu-1">dsu</h2>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img04.png" class="">
 <blockquote>
 <p>里面有一个彩蛋，padding 的代码时做测试用的，为的是能够触发 func
@@ -357,7 +361,8 @@ state in GDB?</p>
 <p>更进一步我们可以做任何事情 tui window api &amp; gdbgui</p>
 <p>再有想象力一点： <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img10.png" class=""></p>
 <p>最后我们一个总结 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img11.png" class=""></p>
-<h1 id="lecture19">lecture19</h1>
+<h1 id="lecture19-系统调用和unix-shell">lecture19 系统调用和unix
+shell</h1>
 <p>UNIX shell os（kernel） = API + 对象</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img12.png" class="">
 <p>shell 是一门把用户指令翻译成系统调用的<strong>编程语言</strong></p>
@@ -369,16 +374,17 @@ state in GDB?</p>
 <li>job control(类似于 window 窗口的 X，[], --) how to use? &gt; jyy
 推荐的手册<code>man sh</code></li>
 </ol>
-<h2 id="sh">sh</h2>
+<h2 id="linux">linux</h2>
 <p>复刻经典：一个 freestanding 的 shell，看 Makefile
 可以看到是没有任何库函数的，直接 ld sh.o</p>
 <p>怎么阅读这个<code>sh.c</code>的代码？ <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img14.png" class=""></p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img15.png" class="">
-<p>除了用 strace，还有 gdb，下面展示管道 syscall
-是怎么实现的.查看<code>init.gdb</code>,再查看我们的脚本<code>visualize.py</code>
+<h2 id="sh">sh</h2>
+<p>除了用 strace，还有
+gdb，下面展示管道是怎么实现的,下面展示<code>ls | wc</code>.查看<code>init.gdb</code>,再查看我们的脚本<code>visualize.py</code>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img16.png" class=""> <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img17.png" class=""> <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img18.png" class=""> <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img19.png" class="">
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img20.png" class=""></p>
-<h1 id="lecture20">lecture20</h1>
+<h1 id="lecture20-c标准库和实现">lecture20 c标准库和实现</h1>
 <p>如何使用 musl 作为我们的 libc 呢？ask GPT <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img21.png" class=""></p>
 <blockquote>
 <p>任务：调试出 musl 的源码 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img22.png" class=""></p>
@@ -398,8 +404,10 @@ state in GDB?</p>
 <p>libc 最重要的是对 os 对象的封装 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img23.png" class=""></p>
 <p>在下面的代码中</p>
 <figure class="highlight c"><figcaption><span>env.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">char</span> **environ;</span><br></pre></td></tr></table></figure>
-<p><code>environ</code>这个变量是谁赋值的？肯定不是 os，在 debug musl
-的代码可以找到一个<code>start_c</code>的函数按照手册做了这个事情。</p>
+<p><code>environ</code>这个变量是谁赋值的？肯定不是
+os，在gdb中<code>starti</code>的时候可以发现这个地址没有值。os只是把<code>environ</code>放到了一个位置，在
+debug musl
+的代码可以找到libc中的<code>crt/crt1.c</code>一个<code>start_c</code>的函数按照手册做了赋值这个事情。</p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img24.png" class="">
 <blockquote>
 <p>启示，先调 musl 的代码，不懂的地方看手册</p>
@@ -409,12 +417,12 @@ state in GDB?</p>
 <p>everything is file 在计算机里数据就是 everything</p>
 <p>可执行文件就是描述状态机初始状态的数据结构。那环境变量是怎么设置？上一节的<code>env</code>已经给出了答案。
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img25.png" class=""></p>
-<p>ELF 文件时谁生成的？是 gcc
+<p>ELF（ELF有多种格式，如可执行，可重定位） 文件是谁生成的？是 gcc
 一个一个字节写的，但是多个文件还需要链接，这也带来如下的复杂性。
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img27.png" class=""> <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img28.png" class=""></p>
 <p>ELF 不好读是因为违背了数据的局部性原则</p>
 <h2 id="loader-flat">loader-flat</h2>
-<p>字符串（minimal.S）直接加载到内存里面去运行它！这个<code>minimal.S</code>是一个位置无关的代码，并且用<code>objcopy</code>仅仅复制<code>.o</code>的代码部分</p>
+<p>字符串（minimal.S）直接加载到内存里面去运行它！这个<code>minimal.S</code>是一个<strong>位置无关</strong>的代码，并且用<code>objcopy</code>仅仅复制<code>.o</code>的代码部分</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./loader minimal.bin</span><br></pre></td></tr></table></figure>
 <p>所有的 loader 都是这个原理</p>
 <h2 id="loader-static">*loader-static</h2>
@@ -431,6 +439,9 @@ state in GDB?</p>
 <p>框架代码也有一个 ELF
 文件的加载器，启动加载器<code>boot-main</code>，只不过没有
 mmap，但可以用 io 代替。</p>
+<blockquote>
+<p>这个loader有一个<strong>隐含的假设</strong>就是静态链接loader的地址空间和所要load的程序的地址空间要错开。或者是动态链接的loader。</p>
+</blockquote>
 <h2 id="dlbox">*dlbox</h2>
 <p>实现运行库和代码分离,例如 linux 只有一份
 libc（通过虚拟内存的共享实现的，只有动态链接的查表才能实现），并且可以实现补丁和加载。所有也就有了版本号，来进行依赖。</p>
@@ -455,17 +466,19 @@ libc（通过虚拟内存的共享实现的，只有动态链接的查表才能�
 </blockquote>
 <h2 id="custom-loader">custom-loader</h2>
 <p>更多的细节，现在是真正的 loader 了。</p>
-<p>动态链接的二进制危机，execve 后第一条指令在哪里？ld 的 starti。</p>
+<p>动态链接的二进制文件，execve 后第一条指令在哪里？ld 的 starti。</p>
 <p>ask GPT：What are the first a few steps exected after execve() of a
 ELF dynamic link binary? <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img38.png" class=""></p>
 <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img37.png" class="">
 <p>ask GPT：How can I compile an ELF binary that use an alternative
 dynamic loader than the default ld.so?</p>
-<p>所以我们能让计算机执行 ld.S 作为“loader” <img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img39.png" class=""></p>
+<p>所以我们能让计算机执行 ld.S
+作为“loader”(这说明了我们可以把任何的指令序列作为loader运行)
+<img src="/myblog/2023/10/08/jyyos%E8%AF%BE%E7%A8%8B%E8%AE%B0%E5%BD%95%E4%B8%8B/img39.png" class=""></p>
 <blockquote>
 <p>readelf 输出终于可以看的懂了！</p>
 </blockquote>
-<p>为什么不在加载的时候执行静态链接？</p>
+<p>为什么不在加载的时候执行静态链接？也就是不要用跳转表PLT了，直接load的时候把地址填入！这也是有代价的，所以我们可以设计一种新的数据结构来实现两种操作的选择。</p>
 <p>代码解决了，那数据呢？</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> FILE *<span class="built_in">stdout</span>;  <span class="comment">//库一般不共享数据，所以stdout的FILE *一般保存在a.out,而不是libc</span></span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> *__lib_private;</span><br></pre></td></tr></table></figure>
 <p>也有两种情况，一种是在本地库里（gcc 链接），一个是在外部库（loader
@@ -699,11 +712,12 @@ device</strong>。</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#minimal"><span class="nav-number">1.</span> <span class="nav-text">minimal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap-alloc"><span class="nav-number">2.</span> <span class="nav-text">mmap-alloc</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture18"><span class="nav-number"></span> <span class="nav-text">lecture18</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dsu"><span class="nav-number">1.</span> <span class="nav-text">dsu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#calc"><span class="nav-number">2.</span> <span class="nav-text">calc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-os"><span class="nav-number">3.</span> <span class="nav-text">*thread-os</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture19"><span class="nav-number"></span> <span class="nav-text">lecture19</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sh"><span class="nav-number">1.</span> <span class="nav-text">sh</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture20"><span class="nav-number"></span> <span class="nav-text">lecture20</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#musl"><span class="nav-number">1.</span> <span class="nav-text">musl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memset"><span class="nav-number">2.</span> <span class="nav-text">memset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#env"><span class="nav-number">3.</span> <span class="nav-text">env</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture21-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E5%8A%A0%E8%BD%BD%E4%B8%8A"><span class="nav-number"></span> <span class="nav-text">lecture21
-可执行文件和加载(上)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#loader-flat"><span class="nav-number">1.</span> <span class="nav-text">loader-flat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loader-static"><span class="nav-number">2.</span> <span class="nav-text">*loader-static</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dlbox"><span class="nav-number">3.</span> <span class="nav-text">*dlbox</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture22-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E5%8A%A0%E8%BD%BD%E4%B8%8B"><span class="nav-number"></span> <span class="nav-text">lecture22
-可执行文件和加载(下)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dlbox-1"><span class="nav-number">1.</span> <span class="nav-text">dlbox</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#custom-loader"><span class="nav-number">2.</span> <span class="nav-text">custom-loader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hook"><span class="nav-number">3.</span> <span class="nav-text">*hook</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture23-%E5%BA%94%E7%94%A8%E8%A7%86%E8%A7%92%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9B%9E%E9%A1%BE"><span class="nav-number"></span> <span class="nav-text">lecture23
-应用视角的操作系统(回顾)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture24-%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number"></span> <span class="nav-text">lecture24 进程的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-os-1"><span class="nav-number">1.</span> <span class="nav-text">thread-os</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#large"><span class="nav-number">2.</span> <span class="nav-text">large</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vm"><span class="nav-number">3.</span> <span class="nav-text">vm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cow-test"><span class="nav-number">4.</span> <span class="nav-text">cow-test</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture25-%E5%AD%98%E5%82%A8%E8%AE%BE%E5%A4%87%E5%8E%9F%E7%90%86"><span class="nav-number"></span> <span class="nav-text">lecture25 存储设备原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture26-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E8%AE%BE%E5%A4%87"><span class="nav-number"></span> <span class="nav-text">lecture26 输入输出设备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture27-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number"></span> <span class="nav-text">lecture27
-设备驱动程序与文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#launcher"><span class="nav-number">1.</span> <span class="nav-text">launcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fish"><span class="nav-number">2.</span> <span class="nav-text">fish</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture28-fat%E5%92%8Cunix%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number"></span> <span class="nav-text">lecture28 FAT和UNIX文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fat-tree"><span class="nav-number">1.</span> <span class="nav-text">fat-tree</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture29%E6%8C%81%E4%B9%85%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number"></span> <span class="nav-text">lecture29持久数据的可靠性</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture17-%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-number">1.</span> <span class="nav-text">lecture17 进程地址空间</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#minimal"><span class="nav-number">1.1.</span> <span class="nav-text">minimal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap-alloc"><span class="nav-number">1.2.</span> <span class="nav-text">mmap-alloc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#knight"><span class="nav-number">1.3.</span> <span class="nav-text">knight</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dsu"><span class="nav-number">1.4.</span> <span class="nav-text">dsu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hack"><span class="nav-number">1.5.</span> <span class="nav-text">hack</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture18-os%E5%AE%9E%E9%AA%8C%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">lecture18 os实验生存指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dsu-1"><span class="nav-number">2.1.</span> <span class="nav-text">dsu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#calc"><span class="nav-number">2.2.</span> <span class="nav-text">calc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-os"><span class="nav-number">2.3.</span> <span class="nav-text">*thread-os</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture19-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8Cunix-shell"><span class="nav-number">3.</span> <span class="nav-text">lecture19 系统调用和unix
+shell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#linux"><span class="nav-number">3.1.</span> <span class="nav-text">linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sh"><span class="nav-number">3.2.</span> <span class="nav-text">sh</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture20-c%E6%A0%87%E5%87%86%E5%BA%93%E5%92%8C%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">lecture20 c标准库和实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#musl"><span class="nav-number">4.1.</span> <span class="nav-text">musl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memset"><span class="nav-number">4.2.</span> <span class="nav-text">memset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#env"><span class="nav-number">4.3.</span> <span class="nav-text">env</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture21-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E5%8A%A0%E8%BD%BD%E4%B8%8A"><span class="nav-number">5.</span> <span class="nav-text">lecture21
+可执行文件和加载(上)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#loader-flat"><span class="nav-number">5.1.</span> <span class="nav-text">loader-flat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loader-static"><span class="nav-number">5.2.</span> <span class="nav-text">*loader-static</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dlbox"><span class="nav-number">5.3.</span> <span class="nav-text">*dlbox</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture22-%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E5%8A%A0%E8%BD%BD%E4%B8%8B"><span class="nav-number">6.</span> <span class="nav-text">lecture22
+可执行文件和加载(下)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dlbox-1"><span class="nav-number">6.1.</span> <span class="nav-text">dlbox</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#custom-loader"><span class="nav-number">6.2.</span> <span class="nav-text">custom-loader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hook"><span class="nav-number">6.3.</span> <span class="nav-text">*hook</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture23-%E5%BA%94%E7%94%A8%E8%A7%86%E8%A7%92%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9B%9E%E9%A1%BE"><span class="nav-number">7.</span> <span class="nav-text">lecture23
+应用视角的操作系统(回顾)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture24-%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">8.</span> <span class="nav-text">lecture24 进程的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-os-1"><span class="nav-number">8.1.</span> <span class="nav-text">thread-os</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#large"><span class="nav-number">8.2.</span> <span class="nav-text">large</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vm"><span class="nav-number">8.3.</span> <span class="nav-text">vm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cow-test"><span class="nav-number">8.4.</span> <span class="nav-text">cow-test</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture25-%E5%AD%98%E5%82%A8%E8%AE%BE%E5%A4%87%E5%8E%9F%E7%90%86"><span class="nav-number">9.</span> <span class="nav-text">lecture25 存储设备原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture26-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E8%AE%BE%E5%A4%87"><span class="nav-number">10.</span> <span class="nav-text">lecture26 输入输出设备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture27-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">11.</span> <span class="nav-text">lecture27
+设备驱动程序与文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#launcher"><span class="nav-number">11.1.</span> <span class="nav-text">launcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fish"><span class="nav-number">11.2.</span> <span class="nav-text">fish</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture28-fat%E5%92%8Cunix%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">12.</span> <span class="nav-text">lecture28 FAT和UNIX文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fat-tree"><span class="nav-number">12.1.</span> <span class="nav-text">fat-tree</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lecture29%E6%8C%81%E4%B9%85%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">13.</span> <span class="nav-text">lecture29持久数据的可靠性</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -719,7 +733,7 @@ device</strong>。</p>
       <div class="site-state-item site-state-posts">
           <a href="/myblog/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -732,7 +746,7 @@ device</strong>。</p>
       <div class="site-state-item site-state-tags">
             <a href="/myblog/tags/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
