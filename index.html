@@ -169,6 +169,322 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2024/01/03/%E6%A6%82%E7%8E%87%E8%AE%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/myblog/2024/01/03/%E6%A6%82%E7%8E%87%E8%AE%BA/" class="post-title-link" itemprop="url">概率论</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-03 14:55:37 / 修改时间：15:18:14" itemprop="dateCreated datePublished" datetime="2024-01-03T14:55:37+08:00">2024-01-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="熵">熵</h1>
+<p>熵是一种不确定性度量。由下面的离散形式下的公式就能知道概率越小的事件<span
+class="math inline">\(-p_{i}ln(p_{i})\)</span>越大。</p>
+<p><span class="math display">\[ H(p) = - \sum_{i} p_{i} ln(p_{i})
+\]</span></p>
+<p>假如有三个事件概率分别位{1, 0, 0}, {1/3, 1/3,
+1/3}熵分别达到最大或最小。</p>
+<p>Differential Entropy则是上面公式的连续形式： <span
+class="math display">\[ H(x) = -  \int_{- \infty}^{\infty }
+xp(x)\mathrm{d}x  \]</span></p>
+<p>Gaussian Distribution的differential entropy的证明可见于 <a
+target="_blank" rel="noopener" href="https://proofwiki.org/wiki/Differential_Entropy_of_Gaussian_Distribution">Differential_Entropy_of_Gaussian_Distribution</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2024/01/02/Decentralized-Quasi-Newton-Methods/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/myblog/2024/01/02/Decentralized-Quasi-Newton-Methods/" class="post-title-link" itemprop="url">Decentralized Quasi-Newton Methods</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-02 20:39:32" itemprop="dateCreated datePublished" datetime="2024-01-02T20:39:32+08:00">2024-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-01-03 23:38:34" itemprop="dateModified" datetime="2024-01-03T23:38:34+08:00">2024-01-03</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="问题">问题</h1>
+<p>each node has local variable <span class="math inline">\(x_{i} \in
+R^{p}\)</span>, communication graph <span class="math inline">\(G =
+(\nu, \epsilon)\)</span> ; <span class="math inline">\(n_{i} = {j |
+(j=i) v ((i, j) \in \epsilon)}\)</span>, <span
+class="math inline">\(m_{i} = | n_{i} |\)</span>.</p>
+<p>我们要提出能够局部更新的的迭代法：</p>
+<p><span class="math display">\[ x_{i}(t + 1) = x_{i} + \epsilon(t)
+d_{i}(t) \]</span></p>
+<p>方法基于下面的local structure：</p>
+<p><span class="math display">\[ X^{*} = arg\min_{x \in R^{np}} f(x),
+with \bigtriangledown _{i} f(x) = \bigtriangledown _{i}
+f(\hat{x}_{n_{i}}) \]</span></p>
+<p>这里很容易的证明Gradient descent在满足上面的条件下可以局部更新。</p>
+<h1 id="bfgs">BFGS</h1>
+<p>记号<span class="math inline">\(v(t) = x(t + 1) - x(t)\)</span>,
+<span class="math inline">\(r(t) = g(t+1) - g(t)\)</span>
+我们根据下面的Gaussian differential entropy来获得<span
+class="math inline">\(B(t+1)\)</span></p>
+<p><span class="math display">\[ B(t+1) = arg \min_{Z} tr[B(t)^{-1}Z] -
+log det[B(t)^{-1}Z] - n\]</span> <span class="math display">\[
+s.t.  \qquad Zv(t) = r(t), z \succeq 0 \]</span></p>
+<h1 id="d-bfgs">D-BFGS</h1>
+<p>记号<span class="math inline">\(\tilde{ v}_{n_{i}} (t) = D_{n_{i}}
+[x_{n_{i}}(t + 1) - x_{n_{i}}(t)]\)</span>, <span
+class="math inline">\(\tilde{r}_{n_{i}}(t) = g_{n_{i}}(t+1) -
+g_{n_{i}}(t) - \gamma\tilde{ v}_{n_{i}}(t)\)</span></p>
+<p>然后如下选择<span class="math inline">\(B^{i}(t+1)\)</span></p>
+<p><span class="math display">\[ B^{i}(t+1) = arg \min_{Z}
+tr[B^{i}(t)^{-1}(Z - \gamma I)] - log det[B^{i}(t)^{-1}(Z- \gamma I)] -
+n\]</span> <span class="math display">\[ s.t.  \qquad Z\tilde{
+v}_{n_{i}} (t) = \tilde{r}_{n_{i}}(t), z \succeq 0 \]</span></p>
+<p>然后 <span class="math display">\[ e^{i}_{n_{i}}(t) = -(B^{i}(t)^{-1}
++ \Gamma D_{n_{i}})g_{n_{i}}(t) \]</span> <span class="math display">\[
+d_{i}(t) = \sum_{j \in n_{i}} e^{j}_{i}(t) \]</span></p>
+<img src="/myblog/2024/01/02/Decentralized-Quasi-Newton-Methods/img01.png" class="">
+<h1 id="熵">熵</h1>
+<p>熵是一种不确定性度量。由下面的离散形式下的公式就能知道概率越小的事件<span
+class="math inline">\(-p_{i}ln(p_{i})\)</span>越大。</p>
+<p><span class="math display">\[ H(p) = - \sum_{i} p_{i} ln(p_{i})
+\]</span></p>
+<p>假如有三个事件概率分别位{1, 0, 0}, {1/3, 1/3,
+1/3}熵分别达到最大或最小。</p>
+<p>Differential Entropy则是上面公式的连续形式： <span
+class="math display">\[ H(x) = -  \int_{- \infty}^{\infty }
+xp(x)\mathrm{d}x  \]</span></p>
+<p>Gaussian Distribution的differential entropy的证明可见于 <a
+target="_blank" rel="noopener" href="https://proofwiki.org/wiki/Differential_Entropy_of_Gaussian_Distribution">Differential_Entropy_of_Gaussian_Distribution</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/12/06/ADAL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/myblog/2023/12/06/ADAL/" class="post-title-link" itemprop="url">ADAL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-12-06 09:14:14" itemprop="dateCreated datePublished" datetime="2023-12-06T09:14:14+08:00">2023-12-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-01-02 20:42:26" itemprop="dateModified" datetime="2024-01-02T20:42:26+08:00">2024-01-02</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/12/04/The-Cherno-CppSeries/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
+      <meta itemprop="name" content="jxWu">
+      <meta itemprop="description" content="record and up">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blogs&record">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/myblog/2023/12/04/The-Cherno-CppSeries/" class="post-title-link" itemprop="url">The Cherno CppSeries</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-12-04 11:51:08 / 修改时间：19:30:22" itemprop="dateCreated datePublished" datetime="2023-12-04T11:51:08+08:00">2023-12-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这是cherno的cpp教程，很实用的技巧和细致的讲解。 知乎有总结： - <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/553387258">最好的c++教程上篇</a> - <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/553405837">最好的c++教程下篇</a></p>
+<p>这里我仅仅对自己感兴趣的部分和不熟悉的部分进行一个整理和记录。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/myblog/2023/12/04/The-Cherno-CppSeries/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/11/21/GameEngine/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -200,7 +516,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-11-26 16:55:43" itemprop="dateModified" datetime="2023-11-26T16:55:43+08:00">2023-11-26</time>
+                <time title="修改时间：2024-01-06 20:57:03" itemprop="dateModified" datetime="2024-01-06T20:57:03+08:00">2024-01-06</time>
               </span>
 
           
@@ -313,6 +629,214 @@ warnings</h1>
 class的用法</p>
 <h1 id="first-triangle">first triangle</h1>
 <p>一个简单的三角形</p>
+<h1 id="opengl-shaders">OpenGL Shaders</h1>
+<p>我们要做的是给gpu传递data，并且告诉gpu怎么处理数据！vertex
+shader输入顶点，对每个顶点处理。fragment shader接受vertex
+shader的输出并对每个像素做处理。</p>
+<p>先看完OpenGL官网的文章<a
+target="_blank" rel="noopener" href="https://www.khronos.org/opengl/wiki/Shader_Compilation">shaderCompilation</a></p>
+<p>然后实现一个opengl的shader，这只是暂时的，后面会解释怎么实现不同的api并抽象。</p>
+<h1 id="render-api-abstraction">Render API Abstraction</h1>
+<p>我们的接口类<code>VertexBuffer</code>不提供constructor的原因是我们想选择类型！提供static的<code>creat</code>函数来创建对象。子类有constructor。</p>
+<p>我们的Render类的getAPI和setAPI可以设置想要的render api。</p>
+<p>然后通过Buffer.cpp可以通过宏来控制包含特定的文件和case！</p>
+<p>opengl的buffer的bind和creat要放在一起，分开放到两个方法会导致我呢提。</p>
+<h1 id="bufferlayout">*bufferlayout</h1>
+<p>这个抽象值得学习！</p>
+<p>initializer_list的用法值得学习！</p>
+<p>用{}把东西括起来，确保离开作用域被销毁。</p>
+<h1 id="vertex-arrays">vertex arrays</h1>
+<h1 id="renderer-flow-and-submission">renderer flow and submission</h1>
+<p>我们renderer类是我们渲染的部分。rendererCommand是我们的命令。rendererAPI是我们comand需要的api接口，OpenGLrendererAPI是对应平台的实现。</p>
+<h1 id="cameras">CAMERAS</h1>
+<p>mvp矩阵，camera相关的矩阵是vp矩阵。m矩阵和每个物体相关。</p>
+<h1 id="orth-cameras">orth cameras</h1>
+<h1 id="move-to-sandbox-app">move to sandbox app</h1>
+<p>我们重构了程序，并把“肉”任务交给了。只在engine内部保留了“骨”。并且让响应event。</p>
+<blockquote>
+<p>在响应event移动的时候我们知道了delta
+time的重要性。event的handle的作用是阻塞的作用。</p>
+</blockquote>
+<p>我们要把响应按键的行为放到onupdata中用input轮询<strong>而不是</strong>event
+system。这样会更加的smooth</p>
+<h1 id="timestep">timestep</h1>
+<p>我们的vsyn设置更新频率。timestep类有个隐式转换运算符。</p>
+<h1 id="transform">transform</h1>
+<p>每个我们的对象在世界空间的摆放位置可以不同，不一定都放在原点位置。所以给我们的世界一个model矩阵，这里我们称为transform。</p>
+<h1 id="material-system">material system</h1>
+<p>怎么合适的把所有的东西tie在一起</p>
+<p>我们的shader是一个程序。我们希望不仅仅是输出，还能对这个程序进行合适的输入。如前面设置的uniform。</p>
+<p>我们material经常是和geometry绑定在一起的。</p>
+<p>我们的material类<strong>不能</strong>决定所有的uniform。比如project
+mat就是由render决定的。所以我们要决定所有的。</p>
+<h1 id="shader-and-uniform-abstraction">shader and uniform
+abstraction</h1>
+<p>我们是怎么样动态更新uniform的</p>
+<p>我们要重构shader，因为我们要跨平台。shader的设计遵循buffer的设计形式。</p>
+<p>通用的shader类如何传递各种不同类型的uniform？</p>
+<p>通过imgui去控制变量的值！</p>
+<h1 id="refs-scopes-and-smart-points">refs, Scopes and Smart Points</h1>
+<p>smart points不仅仅是自动delete的和自动ref
+count。更多的是ownership的问题。
+在本节定义了别名Ref和Scope。我们只需要在engine里使用这个别名，而log等就不需要了。</p>
+<p>以后会有自己的asset manager来管理ownership。这和smart
+point的工作方式像而不同。</p>
+<h1 id="texture">texture</h1>
+<p>加载一个图片，然后render进一个四边形内是这次的任务。</p>
+<p>shader的代码是在
+gpu上执行的，所以我们不能输出到console。所以我们要visualization我们的结果来证明validation。</p>
+<p>后面应该会有更加有用的debug的工具来实现。</p>
+<p>我们如何传递我们的texture到sampler，通过uploaduniformint要传递sampler的slot值。</p>
+<blockquote>
+<p>注意stb_img和opengl的对图像数据编码的方式是不同的。我们要进行反转。</p>
+</blockquote>
+<h1 id="blending">blending</h1>
+<p>如果我们把两个纹理都显示，怎么样采样不乱。如下图的状态</p>
+<img src="/myblog/2023/11/21/GameEngine/img03.png" class="">
+<p>因为load的时候channel的数目不同。所有的数据都是一个数组。只是根据不同的channel的数目去解释。rgb的每三个算一个单元。rgba每四个算一个单元。</p>
+<p>我们设置支持rgb和rgba。学会了一种assert的方法！！assert必须赋值！</p>
+<p>我们得到了一个很奇怪的结果。 <img src="/myblog/2023/11/21/GameEngine/img04.png" class="">
+所以我们要设置opengl的blend方式。<strong>由此</strong>引申出了我们要initialize
+我们的renderer，当我们创建的时候。</p>
+<p>我们在application的construct里设置<code>Renderer::Init()</code>然后在这里enable
+blend。</p>
+<h1 id="shader-asset-files">shader asset files</h1>
+<p>我们把所有的shader都写进了<code>.glsl</code>文件里。并对其进行了处理。</p>
+<h1 id="shader-library">shader library</h1>
+<p>存储所有的shader的library。让我们没有负担去管理shader的ownership。并且面向用户去思考我们要做什么让client更浅显的使用。</p>
+<p>我们自动的load，并且自动的去还能load一些诊断纹理来。</p>
+<h1 id="build-2d-renderer">build 2D renderer</h1>
+<p>我们好像已经有了一个renderer的实际的代码了。我们怎么把这些东西抽象起来？</p>
+<p>我们的2d
+renderer不太需要一些submit。我们并不过多的需要顶点。我们可能<strong>只需要</strong>纹理加上一个四边形。所以我们的<code>Renderer::Submit()</code>就可以替换成<code>Renderer::DrawQuad()</code></p>
+<blockquote>
+<p>这里引申出了我们需要batch
+rendering的技术来实现很多四边形的绘制。我们一个一个的draw
+call就不合适了。通过bacth的技术把所有的draw call化为一个draw call。</p>
+</blockquote>
+<p>流程： - Renderer::BeginScene(camera) -
+Renderer::DrawQuad(pos,shader,color,texture) - batch renderer -
+animation - ui-layout system 我们要适应不同的屏幕比例，resize等 - post
+effect 粒子效果等 - interaction
+：scrpting，在ECS系统很有用，因为一个object<strong>不是通过继承</strong>组成，而是component。比如一个player
+entity由transfrom component，2D renderer component，input
+component（hook key input）等。</p>
+<blockquote>
+<p>这里介绍了3D的一个vlog，可以去看看。</p>
+</blockquote>
+<h1 id="camera-controler">camera controler</h1>
+<p>我们camera在后面的过程中更像是一个entity。在lua等的script中写出来。</p>
+<p>我们的controller是要给camera class一些输出。我们的camera
+class是纯数据和math。我们恰恰是需要这样的封装。</p>
+<p>我们为什么要给camera设置aspect ration啊？</p>
+<p>mouse event和resize
+event都不放进<code>OnUpdate</code>里处理，因为已经很smooth了。也可以放在onupdate里也可以。</p>
+<h1 id="window-resize">window resize</h1>
+<p>我们现在resize这个部分。</p>
+<p>我们的rendering buffer先储存在一个地方，然后输出到他能输出到的window
+pixel上。我们resize的时候需要OpenGL的viewport来帮助我们。resize之后我们的相机怎么办，直接放大还是选择显示更多的内容？</p>
+<blockquote>
+<p>后面我们要有自己的framebuffer。并且也要让resize在自定义的framebuffer也能适用。</p>
+</blockquote>
+<p>当我们resize窗口大小为0，我们应该停止render。但是保持render imgui
+layer。</p>
+<h1 id="maintenance">maintenance</h1>
+<ol type="1">
+<li>move to vs2019</li>
+<li>organiztion files</li>
+</ol>
+<p>我们把<code>.bat</code>脚本放到文件夹<code>scripts</code>里。</p>
+<h1 id="preparing-for-2d-rendering">Preparing for 2D rendering</h1>
+<p>定义一个sandbox2D的layer来test。并且里面的<code>ondetch``onattach</code>函数相当于是我们的deconstructor和construcor函数。</p>
+<blockquote>
+<p>我们定义这些的<strong>仿</strong>构造器析构器。<strong>目的</strong>是显示构造<strong>或者</strong>不能实例化的时候实例化子对象。</p>
+</blockquote>
+<p>我们重构的sandbox2D需要更少的data，以后还会更少。</p>
+<blockquote>
+<p>我们的hazel.h
+不能包含entrypoint.h。不然在创建render2D的时候会包含main函数</p>
+</blockquote>
+<p>我们得到了一个很干净的layer的实现。下一步是让这些更加的clean。全都装进render里</p>
+<h1 id="starting-our-2d-rendering">starting our 2D rendering</h1>
+<p>如上节我们让我们的layer更加的clean，能够给我们一个很好的test
+environment。可以像vs一样观察内存</p>
+<blockquote>
+<p>custom memory
+allocation.使用instrument去观察函数执行时间去profile</p>
+</blockquote>
+<blockquote>
+<p>介绍了benchmark in c++的视频</p>
+</blockquote>
+<p>我们的renderer2D是一个super
+static。就是说没有任何的storage。也没有任何private。只是最基本的一些command。我们把他封装成类只是更加的结构化，是GPU
+render
+command的wrapper。我们可以用一个namespace去<strong>替代</strong>这个class。</p>
+<ul>
+<li><code>Init</code>和<code>Shutdown</code>是构造析构类似物</li>
+<li><code>BeginScene</code>和<code>EndScene</code>是开始场景</li>
+<li>一些primitives</li>
+</ul>
+<blockquote>
+<p>为什么renderer2D要是static？static的意思就是函数不指向具体的data。static
+class意思是我们自己管理数据（可以定义static的数据）。</p>
+</blockquote>
+<blockquote>
+<p>static的renderer2Dstorage的内存管理也是一个大学问!我们可以保存很多份renderer2D的data的数据。</p>
+</blockquote>
+<blockquote>
+<p>我们的<code>s_data</code>为什么要是raw pointer或者是</p>
+</blockquote>
+<h1 id="d-renderer-transform">2D renderer Transform</h1>
+<p>先解决dynamic cast到openglshader的问题，然后解决transform的问题</p>
+<h1 id="d-renderer-texture">2D renderer texture</h1>
+<p>我们可以新重载一个函数<code>DrawQuad</code>来用纹理去代替颜色。我们不用struct和class来表示shape的原因是那样太复杂了。</p>
+<p>展示了debug的过程和test的过程</p>
+<h1 id="single-shader-2d-renderer">single shader 2D renderer</h1>
+<p>我们应该避免更换shader。所以我们把two
+shader变成一个shader。但是多个texture，一个纯白的1<em>1texture采样表示以u_color为最终颜色，非1</em>1texture表示用这个纹理采样，把u_color设为1.0</p>
+<p>我们怎么获得1*1大小的纹理？用gpu产生最方便。我们在<code>Texture2D</code>设置新的constructor，然后在<code>Texture</code>添加SetData函数设置数据。</p>
+<h1 id="introduce-to-profiling">introduce to profiling</h1>
+<p>通过RAII的技术。我们使用<code>const char *</code>而不是<code>std::string</code>是因为我们不想使用。这个lamda表达式传递函数和模板结合也可以学习一下，然后再使用宏。</p>
+<h1 id="visualize-the-profile">visualize the profile</h1>
+<p>在另一个视频提到了如何visualization，基本照抄一下。</p>
+<h1 id="instrumentation">instrumentation</h1>
+<p>我们的profile会带来性能的大幅度下降，有大量的io操作。我们可能需要一个bottom来开关profile。</p>
+<p>我们要设计一个bottom能够获取指定数量frame的数据。</p>
+<blockquote>
+<p>一个难点是我们在哪里怎么profile宏。还可以添加另外的下一级宏开关来决定打开哪个宏。</p>
+</blockquote>
+<h1 id="batch-rendering">BATCH RENDERING</h1>
+<p>已经有视频介绍了bacth rendering，可以去看一下。</p>
+<h1 id="scene-viewport">Scene Viewport</h1>
+<p>先要imgui的viewportpanel的大小与framebuffer绑定。再在framebuffer的bind中用glviewport来绑定实际的大小。然后就是相机来保证resize的时候比例保持一定。</p>
+<h1 id="ecs-system">ECS system</h1>
+<p>用来organize我们的scene</p>
+<p>只使用继承来实现我们的功能显然是不现实的。
+我们可以使用组合的方式来实现我们的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Entity</span></span><br><span class="line">&#123;</span><br><span class="line">	glm::mat4 Transform;</span><br><span class="line">	std::string Tag;</span><br><span class="line"></span><br><span class="line">	std::vector&lt;Component*&gt; Components;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Component</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Mesh</span> : <span class="keyword">public</span> Component</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Audio</span> : <span class="keyword">public</span> Component</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的方式也有缺陷!那就是performance。比如我们想要找到所有的有mesh
+component的entity就很难办。
+如果我们有<code>Scene::OnUpdate()</code>,我们要遍历所有entity并且对每个component做判断。这会导致多次的indireact。</p>
+<img src="/myblog/2023/11/21/GameEngine/img05.png" class="">
+<p>我们保证我们的component只有数据，把functional的部分交给system，
+system来遍历我们的data然后做出相应的functional。</p>
+<h1 id="imguizmo">imGUizmo</h1>
+<p>我们使用的这个库也如同glm一样，用git
+submodule去下载，但是不需要单独的premake去编译成一个project。像glm一样在XEngine内部去编译。因为pch的原因，我们需要给ImGuizmo.cpp做一些配置，使其不需要包含pch。</p>
+<p>我们用glm拷贝代码来封装我们的math库。</p>
+<p>我们的gizmo支持snapping！snapping就是每次的变化范围。</p>
+<h1 id="editor-camera">editor Camera</h1>
+<p>我们要区分runtime和editor。在xeditor，我们并不想要有camera
+entity。我们将把scene类中的render函数分为render runtime和render
+editor，在不同的阶段使用不同的camera。</p>
+<p>我们为了editor的方便，比如方便的选择物体。我们实现了3d camera。</p>
+<p>实现了editor camera后imguizmo可能有些奇怪，需要修复。</p>
+<h1 id="mouse-picking">mouse picking</h1>
+<p>我们的目的是实现mouse pick。我们需要一些准备工作。</p>
+<p>我们受到了vertexbuffer的bufferlayout的启发。来重新设计了framebuffer的api。获得了一个mutil
+render target的specification的api。有多个color attachment和一个depth
+attachment。</p>
+<p>我们可以在shader中输出两个color来验证。</p>
 
       
     </div>
@@ -745,394 +1269,6 @@ normal map等等。</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/11/14/google-cpp-styleguide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
-      <meta itemprop="name" content="jxWu">
-      <meta itemprop="description" content="record and up">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blogs&record">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/myblog/2023/11/14/google-cpp-styleguide/" class="post-title-link" itemprop="url">google cpp styleguide</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-11-14 10:13:42" itemprop="dateCreated datePublished" datetime="2023-11-14T10:13:42+08:00">2023-11-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/11/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
-      <meta itemprop="name" content="jxWu">
-      <meta itemprop="description" content="record and up">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blogs&record">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/myblog/2023/11/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98/" class="post-title-link" itemprop="url">数据结构刷题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-11-11 22:01:37" itemprop="dateCreated datePublished" datetime="2023-11-11T22:01:37+08:00">2023-11-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-11-18 21:48:50" itemprop="dateModified" datetime="2023-11-18T21:48:50+08:00">2023-11-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数组">数组</h1>
-<ol type="1">
-<li>704</li>
-<li>27</li>
-<li>977</li>
-<li>209</li>
-<li>59</li>
-</ol>
-<p><img
-src="https://img-blog.csdnimg.cn/bf968c91628641aab976061ef84b40a7.png"
-alt="在这里插入图片描述" /> # 链表 1. 203：<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-linked-list-elements/">移除链表元素</a>
-2. 707：<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/design-linked-list/">设计链表</a> 3.
-206：<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-linked-list/">反转列表</a> 4.
-24：<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/swap-nodes-in-pairs/">成对交换节点</a>
-5. 19：<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/">删除倒数第n个节点</a>
-6. <a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/">链表相交</a>
-7. 142: <a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/linked-list-cycle-ii/">环形链表</a>
-<img
-src="https://img-blog.csdnimg.cn/e9e1f43fb4014c52b81cf387d1718a14.png"
-alt="在这里插入图片描述" /> &gt;设置哑节点很有用</p>
-<h1 id="hash-table">hash table</h1>
-<ul>
-<li>242<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/valid-anagram/">有效字母异位词</a></li>
-<li>349<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/intersection-of-two-arrays/">两个数组的交集</a></li>
-<li>202<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/happy-number/">快乐数</a></li>
-<li>1<a href="">两数之和</a>：还是解答的逻辑更好一些！</li>
-<li>454<a
-href="">四数相加</a>：个数和返回指标集还是不一样的！所以能够有更好的方法！答案比我写的简洁的多。</li>
-<li>383<a href="">赎金信</a></li>
-<li>*15<a
-href="">三数之和</a>，对于有些数字相关的，先做一个排序会极大的简化问题！！这道题的去重相当的麻烦！这道题一定要实现到O(n2)的复杂度！对同一线性数据结构操作要立即想到双指针法。</li>
-<li>18<a href="">四数之和</a>再加一层循环 # 字符串</li>
-<li>344<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-string/">反转字符串</a></li>
-<li>514<a href="">反转字符串2</a></li>
-<li>54<a href="">替换数字</a>经典的双指针的应用！！！</li>
-<li>151<a
-href="">翻转字符串里的单词</a>我的思路还是不能实现最优的复杂度！并且代码的功能划分也不是很好。处理翻转的统一思路。</li>
-<li><a
-href="/codefiled/leetcode/rightrotation">右旋字符串</a>遇到字符串反转的题目要记住，要么先整体翻转，再局部。要么先局部在整体翻转。</li>
-<li>28<a href="">字符串第一个匹配模式的下标</a>
-我自己用普通的办法做出来了，他介绍了KMP！！要学会这种写法！</li>
-<li>459<a
-href="">重复子字符串</a>我也是用的暴力的方法做的！这里他也使用了KMP。</li>
-</ul>
-<blockquote>
-<p>总结这里的认识了字符串，有字符串的反转，字符串的双指针，和KMP算法！！</p>
-</blockquote>
-<h1 id="双指针法">双指针法</h1>
-<ul>
-<li>27<a href="">移除元素</a>前面已经做过了</li>
-<li>344<a href="">反转字符串</a>同上</li>
-<li><a href="">替换数字</a>同上</li>
-<li>151<a
-href="">翻转字符串里的单词</a>同上，我是用map暴力破解，双指针版本还没有实现。</li>
-<li>206：<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-linked-list/">反转列表</a>已做过</li>
-<li></li>
-</ul>
-<h1 id="栈和队列">栈和队列</h1>
-<p>关于栈： 1. C++中stack 是容器么？不是容器，是容器适配器。 2.
-我们使用的stack是属于哪个版本的STL？不同版本的stl实现的方式不同。 3.
-我们使用的STL中stack是如何实现的？可以用vector，deque，list实现。 4.
-stack 提供迭代器来遍历stack空间么？不提供</p>
-<ul>
-<li>232<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/implement-queue-using-stacks/">用栈实现队列</a></li>
-<li>225<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/implement-stack-using-queues/">用队列实现栈</a></li>
-<li>29<a
-href="">有效的括号</a>我的实现很丑陋，如果有很多的内部嵌套的if-else就用if-elseif-else。这里还有技巧可以避免使用map。</li>
-<li>1047<a href="">删除相同重复项</a>:也可以直接用字符串模拟栈！</li>
-<li></li>
-</ul>
-<h1 id="二叉树">二叉树</h1>
-<h2 id="在这里插入图片描述"><img
-src="https://img-blog.csdnimg.cn/e2845dc77c2f460082fca2ad3ca8f5e2.png"
-alt="在这里插入图片描述" /></h2>
-<h2 id="遍历方式">遍历方式</h2>
-<ul>
-<li>144<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-preorder-traversal/submissions/">前序遍历</a>递归遍历简单，迭代遍历用栈来实现。</li>
-<li>145<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-postorder-traversal/">后序遍历</a></li>
-<li>92<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-inorder-traversal/">中序遍历</a>迭代遍历需要指针来访问！</li>
-<li><a
-href="">二叉树的层序遍历</a>有两个版本，有时间可以去写一下递归的版本。这个模板可以一次性解决十道问题！！</li>
-</ul>
-<h2 id="属性">属性</h2>
-<h1 id="回溯算法">回溯算法</h1>
-<figure>
-<img
-src="https://img-blog.csdnimg.cn/f547d47670684332ba2b0c439091da83.png"
-alt="在这里插入图片描述" />
-<figcaption aria-hidden="true">在这里插入图片描述</figcaption>
-</figure>
-<ul>
-<li></li>
-</ul>
-<h1 id="贪心算法">贪心算法</h1>
-<figure>
-<img
-src="https://img-blog.csdnimg.cn/ac24f10ee15b4525b974230a34409e4a.png"
-alt="在这里插入图片描述" />
-<figcaption aria-hidden="true">在这里插入图片描述</figcaption>
-</figure>
-<h1 id="动态规划">动态规划</h1>
-<figure>
-<img
-src="https://img-blog.csdnimg.cn/5fe9820742284fbaacb834fca403caed.png"
-alt="在这里插入图片描述" />
-<figcaption aria-hidden="true">在这里插入图片描述</figcaption>
-</figure>
-<h1 id="单调栈">单调栈</h1>
-<h1 id="图">图</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/11/06/classic-STL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
-      <meta itemprop="name" content="jxWu">
-      <meta itemprop="description" content="record and up">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blogs&record">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/myblog/2023/11/06/classic-STL/" class="post-title-link" itemprop="url">classic STL</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-11-06 14:10:55 / 修改时间：19:37:01" itemprop="dateCreated datePublished" datetime="2023-11-06T14:10:55+08:00">2023-11-06</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>ppt见<a href="/引用资源/cppcon/">stl</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/myblog/2023/11/06/classic-STL/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://wujx99.github.io/myblog/2023/11/05/Concepts-The-Future-of-Generic-Programming/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/myblog/uploads/myimage.jpg">
-      <meta itemprop="name" content="jxWu">
-      <meta itemprop="description" content="record and up">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blogs&record">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/myblog/2023/11/05/Concepts-The-Future-of-Generic-Programming/" class="post-title-link" itemprop="url">Concepts: The Future of Generic Programming</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-11-05 21:31:36" itemprop="dateCreated datePublished" datetime="2023-11-05T21:31:36+08:00">2023-11-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-11-06 11:27:28" itemprop="dateModified" datetime="2023-11-06T11:27:28+08:00">2023-11-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>ppt见<a href="/引用资源/cppcon/">concept</a></p>
-<p>还有一个知乎的详解<a
-target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266086040">concept概念详解</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/myblog/2023/11/05/Concepts-The-Future-of-Generic-Programming/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1204,7 +1340,7 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266086040">con
       <div class="site-state-item site-state-posts">
           <a href="/myblog/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1243,8 +1379,8 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266086040">con
 
 <div class="copyright">
   
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  &copy; 2023 – 
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
